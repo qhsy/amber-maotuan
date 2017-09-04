@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">毛团儿</string>
+    <string name="string_netconnect_nonet">当前网络不可用，请检查网络连接</string>
+    <string name="string_netconnect_timeout">毛团儿开小差，请刷新页面</string>
+    <string name="modify_trolley_num">修改购买数量</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+
+    <!-- Strings related to login -->
+    <string name="login_loginphonehint">请输入手机号</string>
+    <string name="login_loginverifycodehint">请输入短信验证码</string>
+    <string name="login_loginphoneverify_tip">短信验证码登录</string>
+    <string name="login_getverify">获取验证码</string>
+    <string name="loading">正在加载中...</string>
+
+    <string name="string_tips_phonenumerror">请正确填写手机号</string>
+    <string name="string_tips_addresspostcodeerror">请正确填写6位邮编</string>
+
+    <string name="pull_down_refresh_label">下拉刷新</string>
+
+
+    <!-- 分享相关  start-->
+    <string name="copyplateshowname">复制链接</string>
+    <string name="copyplatename">copy</string>
+    <string name="resplateshowname">素材获取</string>
+    <string name="resyplatename">resource</string>
+    <string name="paycodeplatformshowname">生成付款码</string>
+    <string name="paycodeplatname">paycode</string>
+    <string name="resourcetext">正在为您保存素材(%1$s)</string>
+
+
+    <string name="popup_kabi_hint">咖币是AMBer达人专属奖励\r\n可到个人账户按1:1提现</string>
+    <string name="yongjin">佣金</string>
+    <!-- 达人相关-->
+    <string name="string_applygeek">成为达人</string>
+    <string name="string_isgeek">达人</string>
+    <string name="string_geek_dialoglable_count">(%1$d/6)</string>
+
+    <string name="task_product_post_num">共%1$d篇相关内容</string>
+    <!-- 任务收藏 -->
+    <string name="collect_cancel">已取消收藏</string>
+    <string name="collect_success">收藏成功</string>
+
+    <!-- 任务操作状态 -->
+    <string name="task_daishenhezizhi">待审核资质</string>
+    <string name="task_zizhiweitongguo">资质审核未通过</string>
+    <string name="task_daishenheneirong">待审核内容</string>
+    <string name="task_yiwancheng">已完成</string>
+    <string name="task_daishangchuanneirong">待上传内容</string>
+    <string name="task_daichongxinshangchuan">待重新上传</string>
+
+    <!-- 首页 任务列表 任务参与人数 和剩余时间-->
+    <string name="task_partakenumbern_resttime">参与 %1$d 人　剩余 %2$d 天</string>
+    <string name="task_partakenumbern">参与 %1$d 人</string>
+
+    <!-- 任务订单列表 item content -->
+    <string name="task_list_item_yishouhuo">
+        <Data><![CDATA[用户 <font color="#cba162">%1$s</font> 通过您分享的链接购买的 <font color="#cba162">%2$d</font> 件商品已确认收货，您的 <font color="#cba162">%3$s</font> 元佣金将在7天后可以提现。]]></Data>
+    </string>
+    <string name="task_list_item_yifukuan">
+        <Data><![CDATA[用户 <font color="#cba162">%1$s</font> 通过您分享的链接购买了 <font color="#cba162">%2$d</font> 件商品，确认收货后您将获得 <font color="#cba162">%3$s</font> 元佣金。]]></Data>
+    </string>
+    <string name="task_list_item_weifukuan">
+        <Data><![CDATA[用户 <font color="#cba162">%1$s</font> 通过您分享的链接购买的 <font color="#cba162">%2$d</font> 件商品已下单，付款后您可获得 <font color="#cba162">%3$s</font> 元佣金。]]></Data>
+    </string>
+
+    <!-- 任务详情 参与人数 入选人数-->
+    <string name="task_detail_partcount">已有%1$d人报名</string>
+    <string name="task_detail_select_count">已有%1$d入选</string>
+</resources>

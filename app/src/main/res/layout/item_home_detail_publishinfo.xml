@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/color_white"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="15dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp">
+
+            <ImageView
+                android:id="@+id/detail_collect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/collect_selected"/>
+
+            <TextView
+                android:id="@+id/detail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@id/detail_collect"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="世界喊最受欢迎的猫咪，中国也有一种古老的猫咪西红柿哪个班。"
+                android:textColor="@color/color_btn_black"
+                android:textSize="@dimen/textsize_15"/>
+        </RelativeLayout>
+
+        <com.ichsy.hrys.common.view.FolderTextView
+            android:id="@+id/detail_descripe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:lineSpacingExtra="6dp"
+            android:text=""
+            android:textColor="@color/color_btn_gray2"
+            android:textSize="@dimen/textsize_12"
+            app:canFoldAgain="false"
+            app:foldLine="2"
+            app:tailTextColor="@color/color_blue1"
+            app:unFoldText="展开"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="17dp">
+
+            <ImageView
+                android:id="@+id/detail_person_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
+                android:layout_toLeftOf="@+id/detail_person_count"
+                android:layout_toRightOf="@id/detail_person_icon"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/detail_person_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="古晨"
+                    android:textColor="@color/color_text_mediumcolor"
+                    android:textSize="@dimen/textsize_13"/>
+
+                <TextView
+                    android:id="@+id/detail_person_mark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="辣妈、名模"
+                    android:textColor="@color/color_btn_gray2"
+                    android:textSize="@dimen/textsize_10"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/detail_person_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="30dp"
+                android:drawableLeft="@drawable/icon_count"
+                android:drawablePadding="6dp"
+                android:text="13672"
+                android:textColor="@color/color_btn_gray2"
+                android:textSize="@dimen/textsize_13"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/devide_view"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/devide_gray"></View>
+</LinearLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="refresh_pics">
+        <item>@drawable/loading_1</item>
+        <item>@drawable/loading_2</item>
+        <item>@drawable/loading_3</item>
+        <item>@drawable/loading_4</item>
+        <item>@drawable/loading_5</item>
+        <item>@drawable/loading_6</item>
+        <item>@drawable/loading_7</item>
+        <item>@drawable/loading_8</item>
+        <item>@drawable/loading_9</item>
+        <item>@drawable/loading_10</item>
+    </integer-array>
+</resources>

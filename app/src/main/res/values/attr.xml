@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ConvenientBanner">
+        <attr name="canLoop" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="ExpandableTextView">
+        <attr name="maxCollapsedLines" format="integer"/>
+        <attr name="animDuration" format="integer"/>
+        <attr name="animAlphaStart" format="float"/>
+        <attr name="expandDrawable" format="reference"/>
+        <attr name="collapseDrawable" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="FolderTextView">
+        <attr name="foldText" format="string"/>
+        <attr name="unFoldText" format="string"/>
+        <attr name="foldLine" format="integer"/>
+        <attr name="tailTextColor" format="color"/>
+        <attr name="canFoldAgain" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="ClipSquareImageView">
+        <attr name="ClipSquareIV_BorderDistance" format="dimension"/>
+        <attr name="ClipSquareIV_BorderWidth" format="dimension"/>
+        <attr name="ClipSquareIV_BorderColor" format="color"/>
+        <attr name="ClipSquareIV_OutsideColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="ReloadWHGridView">
+        <attr name="draw_border" format="boolean"/>
+        <attr name="divider_color" format="reference|color"/>
+        <attr name="divider_width" format="reference|dimension"/>
+    </declare-styleable>
+</resources>

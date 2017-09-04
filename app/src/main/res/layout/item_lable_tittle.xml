@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="32dp">
+
+    <TextView
+        android:id="@+id/tv_lableactivity_alllabletitle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/color_background_divider_eb"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text="请选择您的标签"
+        android:textColor="@color/color_btn_gray"
+        android:textSize="@dimen/textsize_13"/>
+
+</LinearLayout>

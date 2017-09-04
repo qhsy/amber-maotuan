@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/shape_rectbtn_domainlable_normalstyle" android:state_selected="false"/>
+    <item android:drawable="@drawable/shape_rectbtn_domainlable_selectedstyle" android:state_selected="true"/>
+    <item android:drawable="@drawable/shape_rectbtn_domainlable_normalstyle"/>
+</selector>

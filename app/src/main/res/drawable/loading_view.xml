@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:drawable="@drawable/dialogloading1"
+        android:duration="250">
+    </item>
+    <item
+        android:drawable="@drawable/dialogloading2"
+        android:duration="250">
+    </item>
+    <item
+        android:drawable="@drawable/dialogloading3"
+        android:duration="250">
+    </item>
+    <item
+        android:drawable="@drawable/dialogloading4"
+        android:duration="250">
+    </item>
+
+</animation-list>

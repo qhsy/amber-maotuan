@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 个人主页 -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.ichsy.hrys.common.view.refreshview.RefreshLay
+        android:id="@+id/srl_personal_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/devide_gray"
+        android:layout_above="@+id/btn_psersonal_info_contact"
+        android:addStatesFromChildren="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true">
+
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:id="@+id/collapsing_toolbar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:contentScrim="@color/color_black"
+                    app:expandedTitleMarginStart="1dp"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <com.ichsy.hrys.model.person.view.PersonalInfoHeadView
+                        android:id="@+id/item_personal_info_head"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_scrollFlags="scroll"/>
+
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dip"
+                        android:layout_marginRight="100dip"
+                        app:layout_collapseMode="pin"/>
+                </android.support.design.widget.CollapsingToolbarLayout>
+            </android.support.design.widget.AppBarLayout>
+
+            <com.ichsy.hrys.common.view.ScrollingPauseLoadImageRecyclerView
+                android:id="@+id/rl_personal_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="@null"
+                android:scrollbars="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_scrollFlags="scroll"/>
+        </android.support.design.widget.CoordinatorLayout>
+    </com.ichsy.hrys.common.view.refreshview.RefreshLay>
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:src="@drawable/icon_back_white"/>
+
+    <TextView
+        android:id="@+id/tv_personal_top_name"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="昵称"
+        android:textColor="@color/color_white"
+        android:textSize="@dimen/textsize_16"/>
+
+    <Button
+        android:id="@+id/btn_psersonal_info_contact"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_btn_black"
+        android:text="联系TA"
+        android:textColor="@color/color_white"
+        android:visibility="gone"/>
+
+</RelativeLayout>

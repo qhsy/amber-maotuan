@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_view_commondialog_rootview"
+    android:layout_width="281dp"
+    android:layout_height="150dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/shape_rect_graybg_deepgrayborad">
+
+    <RelativeLayout
+        android:id="@+id/rl_commondialogview_tittlelay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_commondialogview_tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="11dp"
+            android:gravity="center"
+            android:text="温馨提示"
+            android:textColor="@color/color_text_deepcolor"
+            android:textSize="@dimen/textsize_14"
+             />
+
+        <Button
+            android:id="@+id/btn_commondialogview_close"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/icon_guanbi" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_commondialogview_btnlay"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/oneline_topandbottomradius_gray"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_commondialogview_twobtnlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_commondialogview_leftbtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/oneline_righttopbkgline_and_letbottomradius_gray"
+                android:gravity="center"
+                android:text="确认"
+                android:textColor="@color/color_text_deepcolor"
+                android:textSize="@dimen/textsize_14"
+                />
+
+            <TextView
+                android:id="@+id/tv_commondialogview_rightbtn"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:background="@drawable/oneline_topbkg_and_rightbottomradius_gray"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="@color/color_text_deepcolor"
+                android:textSize="@dimen/textsize_14"
+                 />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_ommondialogview_center"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:background="@drawable/oneline_topbkg_and_rightbottomradius_gray"
+            android:gravity="center"
+            android:text="知道了"
+            android:textColor="@color/color_text_deepcolor"
+            android:textSize="@dimen/textsize_14"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_commondialogview_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll_commondialogview_btnlay"
+        android:layout_below="@id/rl_commondialogview_tittlelay"
+        android:gravity="center"
+        android:paddingLeft="47dp"
+        android:paddingRight="47dp"
+        android:text="确定要取消订单吗?取消订单将影响您以后的接单哦~"
+        android:textColor="@color/color_text_deepcolor"
+        android:textSize="@dimen/textsize_14"/>
+
+</RelativeLayout>

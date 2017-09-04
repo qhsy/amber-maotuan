@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_white"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+    <ImageView
+        android:id="@+id/iv_aboutactivity_logo"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/about"
+        />
+    <TextView
+        android:id="@+id/tv_aboutactivity_appname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_aboutactivity_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="毛团儿"
+        android:textColor="@color/color_text_deepcolor"
+        android:textSize="@dimen/textsize_17"
+        />
+    <TextView
+        android:id="@+id/tv_aboutactivity_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_aboutactivity_appname"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="For Android"
+        android:textColor="@color/color_text_mediumcolor"
+        android:textSize="@dimen/textsize_14"
+        />
+
+    <TextView
+        android:id="@+id/tv_about_companydetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="北京万创优品文化传媒有限公司\nCopyright©2016-2017 @MTE 版权所有"
+        android:textColor="@color/color_text_mediumcolor"
+        android:textSize="@dimen/textsize_14"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_about_companydetail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="21dp"
+        android:gravity="center"
+        android:text="客服邮箱：mte@ichsy.com"
+        android:textColor="@color/color_btn_gray"
+        android:textSize="@dimen/textsize_13"
+        />
+</RelativeLayout>

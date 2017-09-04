@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="15dp">
+
+    <com.ichsy.hrys.common.view.ReloadWHGridView
+        android:id="@+id/gridview_child_lable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnWidth="71dp"
+        android:horizontalSpacing="15dp"
+        android:numColumns="4"
+        android:stretchMode="spacingWidth"
+        android:verticalSpacing="10dp"/>
+
+</LinearLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/color_white"
+              android:padding="15dp">
+
+    <ImageView
+        android:id="@+id/detail_comment_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/icon_wode"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp">
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="2017-4-15 12:25"
+                android:textColor="@color/color_btn_gray2"
+                android:textSize="@dimen/textsize_13"/>
+
+            <TextView
+                android:id="@+id/detail_comment_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@id/time"
+                android:text="mackkill"
+                android:textColor="@color/color_btn_gray2"
+                android:textSize="@dimen/textsize_13"/>
+        </RelativeLayout>
+
+        <com.ichsy.hrys.common.view.FolderTextView
+            android:id="@+id/detail_comment_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="3dp"
+            android:text=""
+            android:textColor="@color/color_btn_black"
+            app:tailTextColor="@color/color_blue1"
+            android:textSize="@dimen/textsize_14"
+            app:canFoldAgain="false"
+            app:unFoldText="全部"
+            app:foldLine="4" />
+    </LinearLayout>
+</LinearLayout>

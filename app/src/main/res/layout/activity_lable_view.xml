@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_lable_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background_divider_eb"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_lableactivity_selectedlabletitle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text="已选择 (0/0)"
+        android:textColor="@color/color_btn_gray"
+        android:textSize="@dimen/textsize_13"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp">
+
+        <TextView
+            android:id="@+id/tv_activitylables_tips"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center"
+            android:text="您还没有选择标签"
+            android:textColor="@color/color_btn_gray"
+            android:textSize="@dimen/textsize_16"/>
+
+        <GridView
+            android:id="@+id/tlv_lableacitivity_selectedlableview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:columnWidth="100dp"
+            android:horizontalSpacing="15dp"
+            android:numColumns="3"
+            android:stretchMode="spacingWidth"
+            android:verticalSpacing="10dp"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ll_lableactivity_alllables"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/color_white"/>
+
+    </ScrollView>
+</LinearLayout>

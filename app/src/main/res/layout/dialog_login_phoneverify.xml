@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_white_circular"
+    android:orientation="vertical"
+    android:layout_marginLeft="11dp"
+    android:layout_marginRight="11dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:text="@string/login_loginphoneverify_tip"
+            android:textColor="@color/color_text_deepcolor"
+            android:textSize="@dimen/textsize_20" />
+
+        <Button
+            android:id="@+id/btn_dialoglogin_close"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="11dp"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/icon_guanbi" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_dialoglogin_phone"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="@dimen/textsize_14"
+        android:layout_marginTop="30dp"
+        android:hint="@string/login_loginphonehint"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/oneline_downbkg_white"
+        android:maxLength="11"
+        android:inputType="phone"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/oneline_downbkg_white">
+        <EditText
+            android:id="@+id/ev_dialoglogin_verifycode"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textSize="@dimen/textsize_14"
+            android:layout_marginTop="15dp"
+            android:hint="@string/login_loginverifycodehint"
+            android:background="@null"
+            android:inputType="number"
+            android:maxLength="6"
+            />
+        <Button
+            android:id="@+id/btn_dialog_getverify"
+            android:layout_width="88dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/shape_rectbtn__grayborder"
+            android:textColor="@color/color_blue"
+            android:textSize="@dimen/textsize_14"
+            android:text="@string/login_getverify"
+            />
+    </RelativeLayout>
+    
+    <TextView
+        android:id="@+id/tv_dialoglogin_login"
+        android:layout_width="158dp"
+        android:layout_height="39dp"
+        android:text="加入毛团儿"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="23dp"
+        android:gravity="center"
+        android:textSize="@dimen/textsize_16"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_btn_roundcorner_fullblue_0px"
+        android:layout_marginBottom="16dp"
+        />
+</LinearLayout>

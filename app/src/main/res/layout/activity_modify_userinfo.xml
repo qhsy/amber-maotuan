@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background_divider_eb">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="127dp"
+            android:background="@drawable/jibenziliao" />
+
+        <RelativeLayout
+            android:id="@+id/rl_activitymodifyuserinfo_head"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:background="@color/color_white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:text="头像"
+                android:textColor="@color/color_text_mediumcolor"
+                android:textSize="@dimen/textsize_14" />
+
+            <ImageView
+                android:id="@+id/iv_modifyuserinfoacitivity_iconarrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/icon_jiantou" />
+
+            <ImageView
+                android:id="@+id/iv_modifyuserinfoactivity_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="11dp"
+                android:layout_toLeftOf="@id/iv_modifyuserinfoacitivity_iconarrow" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="15dp"
+                android:background="@color/color_standard_20" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_activitymodifyuserinfo_nicklay"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:background="@color/color_white">
+
+            <TextView
+                android:id="@+id/tv_modifyuserinfoactivity_nicktips"
+                android:layout_width="wrap_content"
+                android:layout_height="51dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="昵称"
+                android:textColor="@color/color_text_mediumcolor"
+                android:textSize="@dimen/textsize_14" />
+
+
+            <EditText
+                android:id="@+id/et_modifyuserinfoactivity_nick"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="15dp"
+                android:layout_toRightOf="@id/tv_modifyuserinfoactivity_nicktips"
+                android:ellipsize="end"
+                android:gravity="center_vertical|right"
+                android:maxLines="1"
+                android:textColorHint="@color/color_btn_gray"
+                android:textColor="@color/color_text_mediumcolor"
+                android:background="@null"
+                android:hint="请输入昵称"
+                android:textSize="@dimen/textsize_14"
+                android:maxLength="11"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="15dp"
+                android:background="@color/color_standard_20" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_activitymodifyuserinfo_sexlay"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:background="@color/color_white">
+
+            <TextView
+                android:id="@+id/tv_modifyuserinfoactivity_sextips"
+                android:layout_width="wrap_content"
+                android:layout_height="51dp"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="性别"
+                android:textColor="@color/color_text_mediumcolor"
+                android:textSize="@dimen/textsize_14" />
+
+            <ImageView
+                android:id="@+id/iv_modifyuserinfoacitivity_sexarrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/icon_jiantou" />
+
+            <TextView
+                android:id="@+id/tv_userinfoactivity_sex"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="11dp"
+                android:layout_toLeftOf="@id/iv_modifyuserinfoacitivity_sexarrow"
+                android:layout_toRightOf="@id/tv_modifyuserinfoactivity_sextips"
+                android:gravity="center_vertical|right"
+                android:hint="请选择您的性别"
+                android:textColor="@color/color_text_mediumcolor"
+                android:textColorHint="@color/color_btn_gray"
+                android:textSize="@dimen/textsize_14" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="15dp"
+                android:background="@color/color_standard_20" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_activitymodifyuserinfo_instroducelay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_white"
+            android:minHeight="51dp">
+
+            <TextView
+                android:id="@+id/tv_modifyuserinfoactivity_instroducetips"
+                android:layout_width="wrap_content"
+                android:layout_height="51dp"
+                android:layout_marginLeft="15dp"
+                android:paddingTop="16dp"
+                android:text="个人简介"
+                android:textColor="@color/color_text_mediumcolor"
+                android:textSize="@dimen/textsize_14" />
+
+
+            <EditText
+                android:id="@+id/et_modifyuserinfoactivity_instroduce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="15dp"
+                android:layout_toRightOf="@id/tv_modifyuserinfoactivity_instroducetips"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:textColor="@color/color_text_mediumcolor"
+                android:textColorHint="@color/color_btn_gray"
+                android:hint="请输入您的个人简介"
+                android:background="@null"
+                android:gravity="right|top"
+                android:textSize="@dimen/textsize_14"
+                android:inputType="text"
+                android:maxLength="20"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_activitymodifyuserinfo_lableslay"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_white"
+            android:minHeight="51dp"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:id="@+id/tv_modifyuserinfoactivity_lablestips"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:text="标签"
+                android:gravity="center"
+                android:textColor="@color/color_text_mediumcolor"
+                android:textSize="@dimen/textsize_14" />
+
+            <ImageView
+                android:id="@+id/iv_modifyuserinfoacitivity_lablsarrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_jiantou" />
+
+            <TextView
+                android:id="@+id/tv_modifyuserinfoactivity_lables"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="11dp"
+                android:paddingLeft="15dp"
+                android:layout_toLeftOf="@id/iv_modifyuserinfoacitivity_lablsarrow"
+                android:layout_toRightOf="@id/tv_modifyuserinfoactivity_lablestips"
+                android:gravity="right|center_vertical"
+                android:paddingBottom="16dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:paddingTop="16dp"
+                android:textColor="@color/color_text_mediumcolor"
+                android:textColorHint="@color/color_btn_gray"
+                android:hint="请选择您的个人标签"
+                android:textSize="@dimen/textsize_14" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

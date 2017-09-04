@@ -1,0 +1,95 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_text_lightcolor"
+    android:gravity="center_horizontal">
+
+    <SurfaceView
+        android:id="@+id/vv_login_video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageButton
+        android:id="@+id/iv_login_defaultimg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/loginimage"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_login_agreement"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/ll_activitylogin_loginbywx"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/shape_btn_roundcorner_fullblue"
+            android:gravity="center"
+            android:text="微信登录"
+            android:textColor="@color/color_white"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_activitylogin_logintext"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/shape_btn_roundcorner_whiteborder"
+            android:gravity="center"
+            android:text="手机登录"
+            android:textColor="@color/color_white"
+            android:textSize="16sp"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_loginactivity_close"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/icon_close"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="108dip"
+        android:background="@drawable/bg_amber"/>
+
+    <LinearLayout
+        android:id="@+id/ll_login_agreement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dip"
+        android:layout_marginTop="20dip"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dip"
+            android:text="登录即代表您同意"
+            android:textColor="@color/color_standard_28"
+            android:textSize="@dimen/textsize_13"/>
+
+        <TextView
+            android:id="@+id/tv_login_agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="《AMBer平台服务使用协议》"
+            android:textColor="@color/color_text_gold"
+            android:textSize="@dimen/textsize_13"/>
+    </LinearLayout>
+
+</RelativeLayout>

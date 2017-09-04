@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 圆角 灰色背景 矩形 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="20dp"/>
+    <stroke
+        android:width="0.5dp"
+        android:color="@color/color_standard_30"/>
+    <solid android:color="@color/color_standard_30"/>
+</shape>

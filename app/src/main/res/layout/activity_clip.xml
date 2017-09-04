@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ClipSquareImageView="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <com.ichsy.hrys.common.view.clip.ClipSquareImageView
+        android:id="@+id/clipSquareIV"
+        ClipSquareImageView:ClipSquareIV_BorderDistance="0dp"
+        ClipSquareImageView:ClipSquareIV_OutsideColor="#e6ffffff"
+        ClipSquareImageView:ClipSquareIV_BorderColor="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>

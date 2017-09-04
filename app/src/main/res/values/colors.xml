@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="color_blue">#5b76d2</color>
+    <color name="color_blue1">#819af0</color>
+    <!-- tittle栏 背景颜色-->
+    <color name="color_tittle_bg">#ffffff</color>
+
+    <!-- 整体背景色-->
+    <color name="color_global_background">#f2f2f2</color>
+
+    <!-- 黑色-->
+    <color name="color_black">#000000</color>
+    <color name="color_white">#ffffff</color>
+    <!-- 透明 -->
+    <color name="color_transparent">#00000000</color>
+    <color name="color_global_colorscheme">@color/color_white</color>
+    <color name="color_global_colorblack6">@color/color_standard_1</color>
+
+    <!-- 文字色-->
+    <color name="color_text_deepcolor">#191919</color>
+    <color name="color_text_mediumcolor">#555555</color>
+    <color name="color_text_lightcolor">#bebebe</color>
+    <color name="color_btn_gray">#9d9d9d</color>
+    <color name="color_btn_gray2">#9c9c9c</color>
+
+    <color name="color_text_gold">#cba163</color>
+
+    <color name="color_btn_black">#333333</color>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="devide_gray">#eaebf1</color>
+
+    <color name="color_background_ef">#efefef</color>
+    <!--背景色为#f2f2f2时 分割线颜色 -->
+    <color name="color_background_divider_eb">#ebebeb</color>
+    <!-- 红色文字 -->
+    <color name="color_text_red">#dc4040</color>
+
+    <color name="dialog_domainlable_bg">#f8f8f8</color>
+
+    <!-- 公用颜色 Start -->
+    <color name="color_standard_1">@color/color_text_deepcolor</color>
+    <color name="color_standard_2">@color/color_btn_gray</color>
+    <color name="color_standard_3">@color/color_text_mediumcolor</color>
+    <color name="color_standard_4">@color/color_background_divider_eb</color>
+    <color name="color_standard_5">#ffd267</color>
+    <color name="color_standard_6">#9e9e9e</color>
+    <color name="color_standard_7">#282828</color>
+    <color name="color_standard_8">@color/color_text_lightcolor</color>
+    <color name="color_standard_9">@color/color_global_background</color>
+    <color name="color_standard_10">#151515</color>
+    <color name="color_standard_12">#ebebeb</color>
+    <color name="color_standard_13">#cfcfcf</color>
+    <color name="color_standard_14">#dddddd</color>
+    <color name="color_standard_15">#d32929</color>
+    <color name="color_standard_16">#707070</color>
+    <color name="color_standard_17">#fcfcfc</color>
+    <color name="color_standard_18">#999999</color>
+    <color name="color_standard_19">#474747</color>
+    <color name="color_standard_20">#e5e5e5</color>
+    <color name="color_standard_21">#d3b17f</color>
+    <color name="color_standard_22">#bdbdbd</color>
+    <color name="color_standard_23">#f5f5f5</color>
+    <color name="color_standard_24">#fdfdfd</color>
+    <color name="color_standard_25">#f3603e</color>
+    <color name="color_standard_26">#c2c2c2</color>
+    <color name="color_standard_27">#60a90d</color>
+    <color name="color_standard_28">#bbbbbb</color>
+    <color name="color_standard_29">#f9f9f9</color>
+    <color name="color_standard_30">#e9e9e9</color>
+    <!-- 公用颜色 End -->
+
+    <color name="color_withdrawsuccesscolor">#cccccc</color>
+    <color name="color_btn_fullblack">#565656</color>
+</resources>
