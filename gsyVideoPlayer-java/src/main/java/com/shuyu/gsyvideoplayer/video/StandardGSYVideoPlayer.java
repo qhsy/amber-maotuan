@@ -659,11 +659,6 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
     }
 
-    @Override
-    protected void insertPictureOnSeekBar() {
-
-    }
-
     /**
      * 底部进度条-弹出的
      */
@@ -713,6 +708,10 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     public void setStandardVideoAllCallBack(StandardVideoAllCallBack standardVideoAllCallBack) {
         this.mStandardVideoAllCallBack = standardVideoAllCallBack;
         setVideoAllCallBack(standardVideoAllCallBack);
+    }
+
+    @Override
+    protected void insertPictureOnSeekBar() {
     }
 
 }
