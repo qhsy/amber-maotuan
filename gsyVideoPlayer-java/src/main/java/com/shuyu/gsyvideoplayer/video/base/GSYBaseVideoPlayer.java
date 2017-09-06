@@ -2,6 +2,8 @@ package com.shuyu.gsyvideoplayer.video.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.util.AttributeSet;
@@ -17,6 +19,7 @@ import com.shuyu.gsyvideoplayer.SmallVideoTouch;
 import com.shuyu.gsyvideoplayer.utils.CommonUtil;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.transitionseverywhere.TransitionManager;
 
 import java.lang.reflect.Constructor;
@@ -105,21 +108,21 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
      **/
     @Override
     protected void setSmallVideoTextureView() {
-        if(mProgressBar != null) {
+        if (mProgressBar != null) {
             mProgressBar.setOnTouchListener(null);
             mProgressBar.setVisibility(INVISIBLE);
         }
-        if(mFullscreenButton != null) {
+        if (mFullscreenButton != null) {
             mFullscreenButton.setOnTouchListener(null);
             mFullscreenButton.setVisibility(INVISIBLE);
         }
-        if(mCurrentTimeTextView != null) {
+        if (mCurrentTimeTextView != null) {
             mCurrentTimeTextView.setVisibility(INVISIBLE);
         }
-        if(mTextureViewContainer != null) {
+        if (mTextureViewContainer != null) {
             mTextureViewContainer.setOnClickListener(null);
         }
-        if(mSmallClose != null) {
+        if (mSmallClose != null) {
             mSmallClose.setVisibility(VISIBLE);
             mSmallClose.setOnClickListener(new OnClickListener() {
                 @Override
@@ -199,10 +202,12 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         to.mEnlargeImageRes = from.mEnlargeImageRes;
         to.mRotate = from.mRotate;
         to.mShowPauseCover = from.mShowPauseCover;
+        to.mDismissControlTime = from.mDismissControlTime;
         to.mSeekRatio = from.mSeekRatio;
         to.mNetChanged = from.mNetChanged;
         to.mNetSate = from.mNetSate;
         to.mRotateWithSystem = from.mRotateWithSystem;
+        to.mBackUpPlayingBufferState = from.mBackUpPlayingBufferState;
         to.setUp(from.mOriginUrl, from.mCache, from.mCachePath, from.mMapHeadData, from.mTitle);
         to.setStateAndUi(from.mCurrentState);
     }
@@ -286,6 +291,8 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             mVideoAllCallBack.onEnterFullscreen(mOriginUrl, mTitle, gsyVideoPlayer);
         }
         mIfCurrentIsFullscreen = true;
+
+        checkoutState();
     }
 
     /**
@@ -318,8 +325,6 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         getFullscreenButton().setImageResource(getEnlargeImageRes());
         insertPictureOnSeekBar();
     }
-
-
 
 
     /**
@@ -396,7 +401,55 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
         }
     }
 
+    protected Runnable mCheckoutTask = new Runnable() {
+        @Override
+        public void run() {
+            GSYVideoPlayer gsyVideoPlayer = getFullWindowPlayer();
+            if (gsyVideoPlayer != null
+                    && gsyVideoPlayer.mCurrentState != mCurrentState) {
+                if (gsyVideoPlayer.mCurrentState == CURRENT_STATE_PLAYING_BUFFERING_START
+                        && mCurrentState != CURRENT_STATE_PREPAREING) {
+                    gsyVideoPlayer.setStateAndUi(mCurrentState);
+                }
+            }
+        }
+    };
+
+    /**
+     * 检查状态
+     */
+    protected void checkoutState() {
+        removeCallbacks(mCheckoutTask);
+        postDelayed(mCheckoutTask, 500);
+    }
+
     /************************* 开放接口 *************************/
+
+    /**
+     * 旋转处理
+     *
+     * @param activity         页面
+     * @param newConfig        配置
+     * @param orientationUtils 旋转工具类
+     */
+    public void onConfigurationChanged(Activity activity, Configuration newConfig, OrientationUtils orientationUtils) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_USER) {
+            if (!isIfCurrentIsFullscreen()) {
+                startWindowFullscreen(activity, true, true);
+            }
+        } else {
+            //新版本isIfCurrentIsFullscreen的标志位内部提前设置了，所以不会和手动点击冲突
+            if (isIfCurrentIsFullscreen()) {
+                StandardGSYVideoPlayer.backFromWindowFull(activity);
+            }
+            if (orientationUtils != null) {
+                orientationUtils.setEnable(true);
+            }
+        }
+
+    }
 
     /**
      * 利用window层播放全屏效果
@@ -464,6 +517,26 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
 
             cloneParams(this, gsyVideoPlayer);
 
+            if (gsyVideoPlayer.getFullscreenButton() != null) {
+                gsyVideoPlayer.getFullscreenButton().setImageResource(getShrinkImageRes());
+                gsyVideoPlayer.getFullscreenButton().setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clearFullscreenLayout();
+                    }
+                });
+            }
+
+            if (gsyVideoPlayer.getBackButton() != null) {
+                gsyVideoPlayer.getBackButton().setVisibility(VISIBLE);
+                gsyVideoPlayer.getBackButton().setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clearFullscreenLayout();
+                    }
+                });
+            }
+
             final LayoutParams lpParent = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             final FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Color.BLACK);
@@ -493,24 +566,10 @@ public abstract class GSYBaseVideoPlayer extends GSYVideoControlView {
             gsyVideoPlayer.addTextureView();
             gsyVideoPlayer.insertPictureOnSeekBar();
 
-            gsyVideoPlayer.getFullscreenButton().setImageResource(getShrinkImageRes());
-            gsyVideoPlayer.getFullscreenButton().setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clearFullscreenLayout();
-                }
-            });
-
-            gsyVideoPlayer.getBackButton().setVisibility(VISIBLE);
-            gsyVideoPlayer.getBackButton().setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    clearFullscreenLayout();
-                }
-            });
-
             GSYVideoManager.instance().setLastListener(this);
             GSYVideoManager.instance().setListener(gsyVideoPlayer);
+
+            checkoutState();
             return gsyVideoPlayer;
         } catch (Exception e) {
             e.printStackTrace();

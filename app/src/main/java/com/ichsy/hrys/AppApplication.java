@@ -114,4 +114,8 @@ public class AppApplication extends Application {
     private void initCenterBus(){
         CenterEventBus.getInstance().registers(new Class[]{LoginManager.class});
     }
+
+    public static Context getAppContext() {
+        return mContext;
+    }
 }

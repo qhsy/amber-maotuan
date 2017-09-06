@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -268,6 +268,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
     @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        cancelProgressTimer();
+        cancelDismissControlViewTimer();
+    }
+
+    @Override
     public void onAutoCompletion() {
         super.onAutoCompletion();
         if (mLockCurScreen) {
@@ -392,6 +399,17 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
     /**
+     * 双击
+     */
+    protected GestureDetector gestureDetector = new GestureDetector(getContext(),new GestureDetector.SimpleOnGestureListener(){
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            touchDoubleUp();
+            return super.onDoubleTap(e);
+        }
+    });
+
+    /**
      * 亮度、进度、音频
      */
     @Override
@@ -440,12 +458,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                     touchSurfaceUp();
 
                     startProgressTimer();
+
                     //不要和隐藏虚拟按键后，滑出虚拟按键冲突
                     if (mHideKey && mShowVKey) {
                         return true;
                     }
                     break;
             }
+            gestureDetector.onTouchEvent(event);
         } else if (id == R.id.progress) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -509,7 +529,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
             } else {
                 if (mFullscreenButton != null)
                     mFullscreenButton.setImageResource(getEnlargeImageRes());
-                setViewShowState(mBackButton, GONE);
             }
             return true;
         }
@@ -588,9 +607,13 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
     protected void touchSurfaceMove(float deltaX, float deltaY, float y) {
+
+        int curWidth = CommonUtil.getCurrentScreenLand((Activity) getActivityContext()) ? mScreenHeight : mScreenWidth;
+        int curHeight = CommonUtil.getCurrentScreenLand((Activity) getActivityContext()) ? mScreenWidth : mScreenHeight;
+
         if (mChangePosition) {
             int totalTimeDuration = getDuration();
-            mSeekTimePosition = (int) (mDownPosition + (deltaX * totalTimeDuration / mScreenWidth) / mSeekRatio);
+            mSeekTimePosition = (int) (mDownPosition + (deltaX * totalTimeDuration / curWidth) / mSeekRatio);
             if (mSeekTimePosition > totalTimeDuration)
                 mSeekTimePosition = totalTimeDuration;
             String seekTime = CommonUtil.stringForTime(mSeekTimePosition);
@@ -599,14 +622,14 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         } else if (mChangeVolume) {
             deltaY = -deltaY;
             int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-            int deltaV = (int) (max * deltaY * 3 / mScreenHeight);
+            int deltaV = (int) (max * deltaY * 3 / curHeight);
             mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mGestureDownVolume + deltaV, 0);
-            int volumePercent = (int) (mGestureDownVolume * 100 / max + deltaY * 3 * 100 / mScreenHeight);
+            int volumePercent = (int) (mGestureDownVolume * 100 / max + deltaY * 3 * 100 / curHeight);
 
             showVolumeDialog(-deltaY, volumePercent);
         } else if (!mChangePosition && mBrightness) {
             if (Math.abs(deltaY) > mThreshold) {
-                float percent = (-deltaY / mScreenHeight);
+                float percent = (-deltaY / curHeight);
                 onBrightnessSlide(percent);
                 mDownY = y;
             }
@@ -614,6 +637,10 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     }
 
     protected void touchSurfaceMoveFullLogic(float absDeltaX, float absDeltaY) {
+
+
+        int curWidth = CommonUtil.getCurrentScreenLand((Activity) getActivityContext()) ? mScreenHeight : mScreenWidth;
+
         if (absDeltaX > mThreshold || absDeltaY > mThreshold) {
             cancelProgressTimer();
             if (absDeltaX >= mThreshold) {
@@ -629,7 +656,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 int screenHeight = CommonUtil.getScreenHeight(getContext());
                 boolean noEnd = Math.abs(screenHeight - mDownY) > mSeekEndOffset;
                 if (mFirstTouch) {
-                    mBrightness = (mDownX < mScreenWidth * 0.5f) && noEnd;
+                    mBrightness = (mDownX < curWidth * 0.5f) && noEnd;
                     mFirstTouch = false;
                 }
                 if (!mBrightness) {
@@ -679,6 +706,17 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
                 mVideoAllCallBack.onTouchScreenSeekVolume(mOriginUrl, mTitle, this);
             }
         }
+    }
+
+    /**
+     * 双击暂停/播放
+     * 如果不需要，重载为空方法即可
+     */
+    protected void touchDoubleUp() {
+        if (!mHadPlay) {
+            return;
+        }
+        clickStartIcon();
     }
 
     /**
@@ -787,9 +825,11 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
     protected void cancelProgressTimer() {
         if (updateProcessTimer != null) {
             updateProcessTimer.cancel();
+            updateProcessTimer = null;
         }
         if (mProgressTimerTask != null) {
             mProgressTimerTask.cancel();
+            mProgressTimerTask = null;
         }
 
     }
@@ -856,7 +896,6 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected void startDismissControlViewTimer() {
         cancelDismissControlViewTimer();
-        Log.i("TAG", "startDismissControlViewTimer: "+mDismissControlTime);
         mDismissControlViewTimer = new Timer();
         mDismissControlViewTimerTask = new DismissControlViewTimerTask();
         mDismissControlViewTimer.schedule(mDismissControlViewTimerTask, mDismissControlTime);
@@ -877,6 +916,7 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
 
     protected void resolveThumbImage(View thumb) {
         if (mThumbImageViewLayout != null) {
+            mThumbImageViewLayout.removeAllViews();
             mThumbImageViewLayout.addView(thumb);
             ViewGroup.LayoutParams layoutParams = thumb.getLayoutParams();
             layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -1194,7 +1234,4 @@ public abstract class GSYVideoControlView extends GSYVideoView implements View.O
         return mDismissControlTime;
     }
 
-    public SeekBar getProgressBar() {
-        return mProgressBar;
-    }
 }

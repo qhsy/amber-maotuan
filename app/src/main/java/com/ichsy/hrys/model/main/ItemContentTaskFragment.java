@@ -1,6 +1,7 @@
 package com.ichsy.hrys.model.main;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.ichsy.hrys.common.utils.http.HttpContext;
 import com.ichsy.hrys.common.utils.otto.OttoController;
 import com.ichsy.hrys.common.utils.otto.OttoEventEntity;
 import com.ichsy.hrys.common.utils.otto.OttoEventType;
+import com.ichsy.hrys.common.view.DividerItemDecoration;
 import com.ichsy.hrys.common.view.ScrollingPauseLoadImageRecyclerView;
 import com.ichsy.hrys.common.view.convenientbanner.ConvenientBanner;
 import com.ichsy.hrys.common.view.convenientbanner.holder.CBViewHolderCreator;
@@ -88,7 +90,8 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
         mRecyclerView.setHasFixedSize(true);
         homeAdapter = new HomeAdapter(getContext());
         mRecyclerView.setAdapter(homeAdapter);
-        refreshLay.getRefreshHeader().setBackgroundColor(getResources().getColor(R.color.color_blue));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, hasHeadView()));
+        refreshLay.getRefreshHeader().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_blue));
 
         refreshLay.setRefreshListener(this);
         homeAdapter.setOnLoadMoreListener(this, mRecyclerView);
@@ -152,6 +155,9 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
     @Override
     public void onHttpRequestSuccess(String url, HttpContext httpContext) {
         super.onHttpRequestSuccess(url, httpContext);
+        if (!isAdded()) {
+            return;
+        }
         ArtGetVideoListResult result = httpContext.getResponseObject();
         if (result.status == 1) {
             if (mRequestParams.pageOption.pageNum == 0) {
@@ -165,10 +171,10 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
                         bannerinfoList.addAll(result.promotionPhotoList);
                         mTopBanner.notifyDataSetChanged();
                     } else {
-                        lp.height = ScreenUtil.dip2px(getContext(), 1);
+                        lp.height = ScreenUtil.dip2px(getContext(), 0.5f);
                     }
                 } else {
-                    lp.height = ScreenUtil.dip2px(getContext(), 1);
+                    lp.height = ScreenUtil.dip2px(getContext(), 0.5f);
                 }
                 bannerMainLayout.setLayoutParams(lp);
                 }
@@ -215,9 +221,17 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
     }
 
     private void initBanner(List<ArtVideoPromotionDetail> bannerinfoList) {
-        if (mRequestParams.type.equals("1") || mRequestParams.type.equals("3")) {
+        if (hasHeadView()) {
             homeAdapter.addHeaderView(getHeadView(bannerinfoList));
         }
+    }
+
+    /**
+     * 是否添加headview
+     * @return
+     */
+    private boolean hasHeadView() {
+        return mRequestParams.type.equals("1") || mRequestParams.type.equals("3");
     }
 
     /**
@@ -268,7 +282,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
     @Override
     public void OnReceiveEvent(OttoEventEntity eventEntity) {
         if (eventEntity.getType() == OttoEventType.TASK_COLLECT_STATUS) {
-            onRefresh();
+//            onRefresh();
         }
     }
 

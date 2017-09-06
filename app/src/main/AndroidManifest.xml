@@ -86,7 +86,11 @@
 
         <activity android:name=".model.splash.WelcomeActivity" />
 
-        <activity android:name=".model.details.VideoDetailActivity" />
+        <activity android:name=".model.details.VideoDetailActivity"
+                  android:configChanges="orientation|keyboardHidden|screenSize"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/Theme.AppCompat.Translucent"/>
+
         <activity android:name=".model.person.PersonalInfoActivity" />
         <activity android:name=".model.user.MyNotifactionActivity" />
         <activity android:name=".model.user.MyCollectionsActivity" />

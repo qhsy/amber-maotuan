@@ -378,6 +378,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
      * @param isCancleable
      */
     public void showLoadingDialog(boolean isCancleable) {
+        if (hasWindowFocus()) {
+
         if (progressDialog == null){
 
             progressDialog = ProgressDialogUtils.getProgressDialog(getContext(), isCancleable);
@@ -396,6 +398,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
                         }
                     }
                 });
+
+        }
     }
 
     /**

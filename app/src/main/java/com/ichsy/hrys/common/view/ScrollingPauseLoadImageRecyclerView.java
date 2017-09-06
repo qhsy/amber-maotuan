@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import com.bumptech.glide.Glide;
+import com.ichsy.hrys.AppApplication;
 
 /**
  * 功能：滚动时不加载图片（目前只设置了快滑不加载  慢滑依旧加载）
@@ -50,22 +51,22 @@ public class ScrollingPauseLoadImageRecyclerView extends RecyclerView {
             if(getContext() != null){
                 switch (newState) {
                     case 0:
-                        Glide.with(getContext()).resumeRequests();
+                        Glide.with(AppApplication.getAppContext()).resumeRequests();
                         break;
 
                     case 1:
                         if (pauseOnScroll) {
-                            Glide.with(getContext()).pauseRequests();
+                            Glide.with(AppApplication.getAppContext()).pauseRequests();
                         } else {
-                            Glide.with(getContext()).resumeRequests();
+                            Glide.with(AppApplication.getAppContext()).resumeRequests();
                         }
                         break;
 
                     case 2:
                         if (pauseOnFling) {
-                            Glide.with(getContext()).pauseRequests();
+                            Glide.with(AppApplication.getAppContext()).pauseRequests();
                         } else {
-                            Glide.with(getContext()).resumeRequests();
+                            Glide.with(AppApplication.getAppContext()).resumeRequests();
                         }
                         break;
                 }

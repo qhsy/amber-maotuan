@@ -1,6 +1,5 @@
 package com.ichsy.hrys;
 
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
@@ -122,7 +121,7 @@ public class MainActivity extends BaseActivity {
         GridLayoutManager manager = new GridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(userAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST, false));
         userAdapter.setNewData(itemList);
     }
 
@@ -132,8 +131,9 @@ public class MainActivity extends BaseActivity {
 //        Bundle args = new Bundle();
 //        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
 //        fragment.setArguments(args);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.content_frame, fragment).commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().add(R.id.content_frame, fragment).commit();
+        replaceFragment(fragment, fragment.getClass().getSimpleName(), R.id.content_frame);
     }
 
     @Override

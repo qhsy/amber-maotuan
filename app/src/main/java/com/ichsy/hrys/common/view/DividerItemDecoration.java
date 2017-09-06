@@ -26,11 +26,14 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mOrientation;
 
-    public DividerItemDecoration(Context context, int orientation) {
+    private boolean hasHeadView;
+
+    public DividerItemDecoration(Context context, int orientation, boolean hasHeadView) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
         setOrientation(orientation);
+        this.hasHeadView = hasHeadView;
     }
 
     public void setOrientation(int orientation) {
@@ -85,9 +88,27 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
         if (mOrientation == VERTICAL_LIST) {
-            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+            if (isDrawDivider(itemPosition)) {
+                outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+            }
         } else {
             outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
         }
+    }
+
+    /**
+     * 区分是否有headview时是否画分割线
+     * @param itemPosition
+     * @return
+     */
+    private boolean isDrawDivider(int itemPosition) {
+        if (hasHeadView) {
+            if (itemPosition != 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 }

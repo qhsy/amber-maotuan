@@ -427,6 +427,7 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
      * @param isCancleable
      */
     public void showLoadingDialog(boolean isCancleable) {
+        if (isAdded()) {
         if (progressDialog == null){
 
             progressDialog = ProgressDialogUtils.getProgressDialog(getContext(), isCancleable);
@@ -445,6 +446,7 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
                         }
                     }
                 });
+        }
     }
 
     /**
@@ -562,7 +564,6 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
         if (NetUtil.checkNetWork(getContext())){
             return true;
         }else{
-
             ToastUtils.showShortToast(R.string.string_netconnect_nonet);
             return false;
         }

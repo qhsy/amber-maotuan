@@ -1,9 +1,8 @@
 package com.ichsy.hrys.model.details;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -51,10 +50,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import zz.mk.utilslibrary.LogUtil;
 import zz.mk.utilslibrary.ScreenUtil;
 import zz.mk.utilslibrary.ToastUtils;
-import zz.mk.utilslibrary.net.NetUtil;
 import zz.mk.utilslibrary.system.InputMethodUtils;
 
 import static com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity.COMMENT_LIST;
@@ -86,6 +83,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
     public CommentView cvCommentLayer;
 
     private OrientationUtils orientationUtils;
+    private boolean isPause;
 
     ArtGetVideoInfoInput mRequestParams;
     ArtVideoInfo mArtTask;
@@ -133,26 +131,10 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         ImageLoaderUtils.loadViewImage(getContext(), imageView, artVideoInfo.getVideoCover());
         videoPlayer.setThumbImageView(imageView);
         //初始化不打开外部的旋转
-        orientationUtils.setEnable(false);
-        videoPlayer.setRotateViewAuto(false);
-        videoPlayer.setLockLand(false);
-//        videoPlayer.setDismissControlTime(10000);
-        if (NetUtil.isWifi(context)) {
-            videoPlayer.startPlayLogic();
-        } else {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-            dialog.setTitle("提示").setMessage("当前未连接Wifi,确定继续播放吗？").setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    videoPlayer.startPlayLogic();
-                }
-            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            }).create().show();
-        }
+//        orientationUtils.setEnable(false);
+//        videoPlayer.setRotateViewAuto(false);
+//        videoPlayer.setLockLand(false);
+        videoPlayer.startPlayLogic();
 
         // 统计视频播放次数
         ArtCensusVideoPlayInput mParam = new ArtCensusVideoPlayInput();
@@ -160,6 +142,15 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         mParam.userCode = userCode;
         mParam.videoId = mArtTask.getVideoNumber();
         RequestUtils.getVideoPlayCount(getRequestUnicode(), mParam, null);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //如果旋转了就全屏
+        if (!isPause) {
+            videoPlayer.onConfigurationChanged(this, newConfig, orientationUtils);
+        }
     }
 
     private void setCommentAdapter() {
@@ -253,6 +244,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
 
                 mAdapter.setNewData(mData);
 
+                //下拉刷新的时候不刷新视频
                 if (isPullDownRefresh) {
                     return;
                 }
@@ -284,9 +276,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         }
     }
 
-    /**
-     * 评论列表
-     */
+    // 评论列表
     private List<ArtVideoCommentInfoMultiItemEntity> getTodayRedPersonItemEntity(List<ArtVideoCommentInfo> videoCommentInfoList) {
         List<ArtVideoCommentInfoMultiItemEntity> list = new ArrayList<>();
         for (ArtVideoCommentInfo commentList : videoCommentInfoList) {
@@ -383,7 +373,6 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
                     @Override
                     public void onError(SHARE_MEDIA share_media, Throwable throwable) {
                         ToastUtils.showShortToast("分享失败");
-                        LogUtil.zLog().i("*****************************share: "+throwable.getMessage());
                     }
 
                     @Override
@@ -430,7 +419,14 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
     @Override
     protected void onPause() {
         super.onPause();
+        isPause = true;
         videoPlayer.onVideoPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isPause = false;
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.ichsy.hrys.AppApplication;
 import com.ichsy.hrys.R;
 import com.ichsy.hrys.common.utils.RequestUtils;
 import com.ichsy.hrys.common.utils.SharedPreferencesUtils;
@@ -64,7 +65,7 @@ public class SplashActivity extends BaseActivity {
                         if (TextUtils.isEmpty(loadingInfo.getLocalUrl())){
 
                             ImageLoaderUtils.loadViewImage(getContext(),secondPage,loadingInfo.getConfigUrl(), R.drawable.splash);
-                            ImageLoaderUtils.downloadImage(getContext(),loadingInfo.getConfigUrl(),null);
+                            ImageLoaderUtils.downloadImage(AppApplication.getAppContext(),loadingInfo.getConfigUrl(),null);
                         }else{
                             ImageLoaderUtils.loadViewImage(getContext(),secondPage,loadingInfo.getLocalUrl(),R.drawable.splash);
                         }
@@ -276,4 +277,8 @@ public class SplashActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

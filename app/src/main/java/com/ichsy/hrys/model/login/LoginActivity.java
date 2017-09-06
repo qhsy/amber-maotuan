@@ -107,7 +107,7 @@ public class LoginActivity extends BaseActivity implements LoginByVerifyDialogVi
                 break;
             case R.id.ll_activitylogin_loginbywx:
                 if (NetUtil.checkNetWork(context)) {
-                    doUMOauth(SHARE_MEDIA.WEIXIN );
+                    doUMOauth(SHARE_MEDIA.WEIXIN);
                 } else {
                     ToastUtils.showShortToast(getString(R.string.string_netconnect_nonet));
                 }

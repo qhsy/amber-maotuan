@@ -101,7 +101,7 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
         if (artVideoInfo.getVideoUserInfo() != null) {
             final ArtVideoUserInfo videoUserInfo = artVideoInfo.getVideoUserInfo();
             ImageView publish_icon = helper.getView(R.id.detail_person_icon);
-            ImageLoaderUtils.loadViewImage(mContext, publish_icon, videoUserInfo.getUserIconThumburl(),R.drawable.head_placeholder, R.drawable.icon_wode,ImageStyleType.CropCircle);
+            ImageLoaderUtils.loadViewImage(activity, publish_icon, videoUserInfo.getUserIconThumburl(),R.drawable.head_placeholder, R.drawable.icon_wode,ImageStyleType.CropCircle);
             helper.setText(R.id.detail_person_name, videoUserInfo.getUserName());
             helper.setText(R.id.detail_person_mark, videoUserInfo.getUserIntroduction());
 
@@ -157,7 +157,7 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
         helper.setText(R.id.detail_comment_content, item.getCommentContent());
         helper.setText(R.id.time, DateUtil.getTime(item.getCommentTime(),"yyyy-MM-dd HH:mm"));
 
-        ImageLoaderUtils.loadViewImage(mContext,(ImageView) helper.getView(R.id.detail_comment_icon),userInfo.getUserIconThumburl(),R.drawable.head_placeholder, R.drawable.icon_wode, ImageStyleType.CropCircle);
+        ImageLoaderUtils.loadViewImage(activity,(ImageView) helper.getView(R.id.detail_comment_icon),userInfo.getUserIconThumburl(),R.drawable.head_placeholder, R.drawable.icon_wode, ImageStyleType.CropCircle);
         helper.setText(R.id.detail_comment_name, userInfo.getUserName());
     }
 
