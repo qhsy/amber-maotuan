@@ -40,8 +40,6 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
     @BindView(refresh)
     RefreshLay refreshLay;
 
-    // TODO: 2017/8/25 clean
-
     private OnlyPageRequestEntity mRequestParams;
 
     HomeAdapter mAdapter;

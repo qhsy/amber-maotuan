@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="gsyVideoPlayer-arm64-2.0.4">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/a411dd507c7a0691f21ab6afb7e8cfc3febc4f90/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/a411dd507c7a0691f21ab6afb7e8cfc3febc4f90/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/de084b27925ad12c613b9f4200f5cc1f9ea2c39c/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/de084b27925ad12c613b9f4200f5cc1f9ea2c39c/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

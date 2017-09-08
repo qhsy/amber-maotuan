@@ -1,84 +1,63 @@
 package com.ichsy.hrys.entity;
 
-import java.util.List;
-
 /**
  * author: zhu on 2017/8/25 15:55
  * email: mackkilled@gmail.com
  */
 
 public class ArtVideoNotifactionMessage {
-    private String commentContent;//评论内容 ,
-    private String commentId;//评论Id ,
-    private String commentSenderImgUrl;//评论发布者的头像地址 ,
-    private String commentSenderTittle;//评论发布者的的昵称 ,
-    private String commentTime;//评论发布的时间 ,
-    private String userCodeSender;//评论发布者Code ,
-    private String videoId;// 评论关联的视频Id
+    private ArtVideoCommentMessage commentMessage;// 关联原评论内容 ,
+    private String replyContent;//回复的内容 ,
+    private String replyId;// 回复Id ,
+    private ArtVideoUserInfo replyReceiverUserInfo;// 回复接受者信息 ,
+    private ArtVideoUserInfo replySenderUserInfo;// 回复发送者信息 ,
+    private String replyTime;// 回复的时间
 
-    private List<ArtVideoCommentReply> replyMessageList;//回复信息 ,
-
-    public String getCommentContent() {
-        return commentContent;
+    public ArtVideoCommentMessage getCommentMessage() {
+        return commentMessage;
     }
 
-    public void setCommentContent(String commentContent) {
-        this.commentContent = commentContent;
+    public void setCommentMessage(ArtVideoCommentMessage commentMessage) {
+        this.commentMessage = commentMessage;
     }
 
-    public String getCommentId() {
-        return commentId;
+    public String getReplyContent() {
+        return replyContent;
     }
 
-    public void setCommentId(String commentId) {
-        this.commentId = commentId;
+    public void setReplyContent(String replyContent) {
+        this.replyContent = replyContent;
     }
 
-    public String getCommentSenderImgUrl() {
-        return commentSenderImgUrl;
+    public String getReplyId() {
+        return replyId;
     }
 
-    public void setCommentSenderImgUrl(String commentSenderImgUrl) {
-        this.commentSenderImgUrl = commentSenderImgUrl;
+    public void setReplyId(String replyId) {
+        this.replyId = replyId;
     }
 
-    public String getCommentSenderTittle() {
-        return commentSenderTittle;
+    public ArtVideoUserInfo getReplyReceiverUserInfo() {
+        return replyReceiverUserInfo;
     }
 
-    public void setCommentSenderTittle(String commentSenderTittle) {
-        this.commentSenderTittle = commentSenderTittle;
+    public void setReplyReceiverUserInfo(ArtVideoUserInfo replyReceiverUserInfo) {
+        this.replyReceiverUserInfo = replyReceiverUserInfo;
     }
 
-    public String getCommentTime() {
-        return commentTime;
+    public ArtVideoUserInfo getReplySenderUserInfo() {
+        return replySenderUserInfo;
     }
 
-    public void setCommentTime(String commentTime) {
-        this.commentTime = commentTime;
+    public void setReplySenderUserInfo(ArtVideoUserInfo replySenderUserInfo) {
+        this.replySenderUserInfo = replySenderUserInfo;
     }
 
-    public String getUserCodeSender() {
-        return userCodeSender;
+    public String getReplyTime() {
+        return replyTime;
     }
 
-    public void setUserCodeSender(String userCodeSender) {
-        this.userCodeSender = userCodeSender;
-    }
-
-    public String getVideoId() {
-        return videoId;
-    }
-
-    public void setVideoId(String videoId) {
-        this.videoId = videoId;
-    }
-
-    public List<ArtVideoCommentReply> getReplyMessageList() {
-        return replyMessageList;
-    }
-
-    public void setReplyMessageList(List<ArtVideoCommentReply> replyMessageList) {
-        this.replyMessageList = replyMessageList;
+    public void setReplyTime(String replyTime) {
+        this.replyTime = replyTime;
     }
 }

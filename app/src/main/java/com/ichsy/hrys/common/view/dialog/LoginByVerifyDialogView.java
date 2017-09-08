@@ -112,7 +112,6 @@ public class LoginByVerifyDialogView extends Dialog implements View.OnClickListe
                             if (loginResponseEntity.userInfo != null){
 
                                 loginResponseEntity.userInfo.setUserToken(loginResponseEntity.getUserToken());
-                                //TODO  affected
                                 loginResponseEntity.userInfo.isLogin = true;
 
                                 SharedPreferencesUtils.saveUserMsg(context,loginResponseEntity.userInfo);

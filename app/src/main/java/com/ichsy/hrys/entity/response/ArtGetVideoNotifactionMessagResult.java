@@ -10,7 +10,6 @@ import java.util.List;
  * author: zhu on 2017/8/25 15:46
  * email: mackkilled@gmail.com
  */
-// TODO: 2017/8/25
 // 获取消息列表
 public class ArtGetVideoNotifactionMessagResult extends BaseResponse{
     /**
