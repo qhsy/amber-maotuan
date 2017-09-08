@@ -17,30 +17,49 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
         android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp">
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:text="2017-4-15 12:25"
-                android:textColor="@color/color_btn_gray2"
-                android:textSize="@dimen/textsize_13"/>
 
-            <TextView
-                android:id="@+id/detail_comment_name"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@id/time"
-                android:text="mackkill"
-                android:textColor="@color/color_btn_gray2"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/detail_comment_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="mackkill"
+                    android:textColor="@color/color_btn_gray2"
+                    android:textSize="@dimen/textsize_13"/>
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="2017-4-15 12:25"
+                    android:textColor="@color/color_btn_gray2"
+                    android:textSize="@dimen/textsize_13"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/detail_comment_thumbsup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/icon_yizan"
+                android:drawablePadding="3dp"
+                android:gravity="center"
+                android:text="625"
+                android:textColor="@color/text_gray_blue"
                 android:textSize="@dimen/textsize_13"/>
+
         </RelativeLayout>
 
         <com.ichsy.hrys.common.view.FolderTextView
@@ -50,10 +69,39 @@
             android:lineSpacingExtra="3dp"
             android:text=""
             android:textColor="@color/color_btn_black"
-            app:tailTextColor="@color/color_blue1"
             android:textSize="@dimen/textsize_14"
             app:canFoldAgain="false"
-            app:unFoldText="全部"
-            app:foldLine="4" />
+            app:foldLine="4"
+            app:tailTextColor="@color/color_blue1"
+            app:unFoldText="全部"/>
+
+        <LinearLayout
+            android:id="@+id/detail_comment_reply_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@color/color_standard_32"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/detail_comment_reply_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cacheColorHint="@null"
+                android:scrollbars="none">
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/detail_comment_findall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableRight="@drawable/icon_ckqb"
+                android:text="查看全部"
+                android:textColor="@color/color_blue1"
+                android:textSize="@dimen/textsize_12"
+                android:visibility="gone"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

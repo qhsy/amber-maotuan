@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.Selection;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -73,7 +72,6 @@ public class InputMethodUtils {
             int[] leftTop = {0, 0};
             v.getLocationInWindow(leftTop);
             int left = leftTop[0], top = leftTop[1], bottom = top + v.getHeight(), right = left + v.getWidth();
-            Log.i("TAG", "isShouldHideInput: left:"+left+"   top:"+top+"  right:"+right);
             if (event.getX() > left && event.getX() < right && event.getY() > top && event.getY() < bottom) {
                 // 保留点击EditText的事件
                 return false;

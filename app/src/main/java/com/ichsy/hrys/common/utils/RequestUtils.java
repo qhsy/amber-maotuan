@@ -6,6 +6,8 @@ import com.ichsy.hrys.common.utils.http.retrofit.RequestService;
 import com.ichsy.hrys.common.utils.http.retrofit.RequestSubscriber;
 import com.ichsy.hrys.config.config.ServiceConfig;
 import com.ichsy.hrys.entity.request.ArtCensusVideoPlayInput;
+import com.ichsy.hrys.entity.request.ArtCommentThumbsUpDownInput;
+import com.ichsy.hrys.entity.request.ArtDeleteVideoCommentInput;
 import com.ichsy.hrys.entity.request.ArtGetVideoInfoInput;
 import com.ichsy.hrys.entity.request.ArtGetVideoListInputEntity;
 import com.ichsy.hrys.entity.request.ArtPersonalHomepageInput;
@@ -222,6 +224,34 @@ public class RequestUtils {
                 reuqestUnicode
                 ,RequestService.getInstance().sendVideoComment(requestEntity)
                 ,ServiceConfig.SEND_VIDEO_COMMENT
+                ,listener);
+    }
+
+    /**
+     * 删除评论回复接口
+     * @param reuqestUnicode
+     * @param requestEntity
+     * @param listener
+     */
+    public static void deleteVideoComment(String reuqestUnicode, ArtDeleteVideoCommentInput requestEntity, RequestListener listener){
+        sendRequest(
+                reuqestUnicode
+                ,RequestService.getInstance().deleteVideoComment(requestEntity)
+                ,ServiceConfig.DELETE_VIDEO_COMMENT
+                ,listener);
+    }
+
+    /**
+     * 是点赞视频
+     * @param reuqestUnicode
+     * @param requestEntity
+     * @param listener
+     */
+    public static void videoThumbsUpDown(String reuqestUnicode, ArtCommentThumbsUpDownInput requestEntity, RequestListener listener){
+        sendRequest(
+                reuqestUnicode
+                ,RequestService.getInstance().taskThumbsUpDown(requestEntity)
+                ,ServiceConfig.VIDEO_THUMBSUPDOWN
                 ,listener);
     }
 

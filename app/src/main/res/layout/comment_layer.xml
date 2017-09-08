@@ -25,6 +25,8 @@
             android:layout_weight="1"
             android:background="@drawable/roundcorner_rect_gray"
             android:hint="请输入评论"
+            android:textColorHint="@color/color_btn_gray2"
+            android:textColor="@color/color_btn_black"
             android:maxLength="140"
             android:paddingLeft="10dp"
             android:textSize="@dimen/textsize_14"/>

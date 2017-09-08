@@ -2,6 +2,9 @@ package com.ichsy.hrys.entity;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * author: zhu on 2017/8/28 10:34
  * email: mackkilled@gmail.com
@@ -29,6 +32,8 @@ public class ArtVideoCommentInfoMultiItemEntity extends MultiItemEntity{
     public ArtVideoCommentInfo videoCommentInfo = new ArtVideoCommentInfo(); //评论信息
 
     public ArtVideoInfo videoInfo = new ArtVideoInfo(); //视频信息
+
+    public List<ArtVideoReplyInfo> commentReplyList = new ArrayList<>(); //回复列表
 
     public ArtVideoCommentInfoMultiItemEntity(int itemType) {
         super(itemType);

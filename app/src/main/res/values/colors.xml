@@ -73,6 +73,8 @@
     <color name="color_standard_28">#bbbbbb</color>
     <color name="color_standard_29">#f9f9f9</color>
     <color name="color_standard_30">#e9e9e9</color>
+    <color name="color_standard_31">#cc4f4f</color>
+    <color name="color_standard_32">#f3f3f3</color>
     <!-- 公用颜色 End -->
 
     <color name="color_withdrawsuccesscolor">#cccccc</color>

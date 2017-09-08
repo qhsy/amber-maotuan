@@ -1,8 +1,8 @@
 package com.ichsy.hrys.model.main;
 
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ichsy.hrys.R;
 import com.ichsy.hrys.common.interfaces.OnReceiveOttoEventInterface;
-import com.ichsy.hrys.common.utils.IntentUtils;
 import com.ichsy.hrys.common.utils.RequestUtils;
 import com.ichsy.hrys.common.utils.http.HttpContext;
 import com.ichsy.hrys.common.utils.otto.OttoController;
@@ -26,15 +25,15 @@ import com.ichsy.hrys.common.view.convenientbanner.holder.CBViewHolderCreator;
 import com.ichsy.hrys.common.view.convenientbanner.listener.OnItemClickListener;
 import com.ichsy.hrys.common.view.refreshview.RefreshLay;
 import com.ichsy.hrys.config.constants.StringConstant;
-import com.ichsy.hrys.entity.ArtVideoInfo;
 import com.ichsy.hrys.entity.ArtVideoPromotionDetail;
 import com.ichsy.hrys.entity.request.ArtGetVideoListInputEntity;
 import com.ichsy.hrys.entity.response.ArtGetVideoListResult;
 import com.ichsy.hrys.model.base.BaseFragment;
-import com.ichsy.hrys.model.details.VideoDetailActivity;
 import com.ichsy.hrys.model.main.adapters.BannerImageHolderView;
 import com.ichsy.hrys.model.main.adapters.HomeAdapter;
 import com.ichsy.hrys.model.main.controller.TaskController;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -60,6 +59,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
     ArtGetVideoListInputEntity mRequestParams;
 
     HomeAdapter homeAdapter;
+    LinearLayoutManager layoutManager;
 
     /**
      * 用于标识 第一次从NewContentTaskFragment进入后，第一个tab无需请求数据
@@ -85,7 +85,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
         mRequestParams.pageOption.pageNum = 0;
         mRequestParams.pageOption.itemCount = 5;
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         homeAdapter = new HomeAdapter(getContext());
@@ -95,7 +95,6 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
 
         refreshLay.setRefreshListener(this);
         homeAdapter.setOnLoadMoreListener(this, mRecyclerView);
-        homeAdapter.setEnableLoadMore(false);
         initBanner(bannerinfoList);
         addEmptyView();
     }
@@ -105,10 +104,45 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Bundle bundle = new Bundle();
-                ArtVideoInfo data = homeAdapter.getData().get(position);
-                bundle.putSerializable(StringConstant.TASK_OBJ, data);
-                IntentUtils.startActivity(context, VideoDetailActivity.class, bundle);
+                TaskController.openVideoDetail(context, homeAdapter.getData().get(position));
+            }
+        });
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            int firstVisibleItem, lastVisibleItem;
+            
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                firstVisibleItem   = layoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                //大于0说明有播放
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                    //当前播放的位置
+                    int position = GSYVideoManager.instance().getPlayPosition();
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance().getPlayTag().equals(HomeAdapter.TAG) && (position < firstVisibleItem || position > lastVisibleItem)) {
+                        GSYVideoManager.onPause();
+                    }
+                    if (!recyclerView.canScrollVertically(-1)) {
+                        //toTop
+                    } else if (!recyclerView.canScrollVertically(1)) {
+                        //toBottom
+                    } else if (dy < 0) {
+                        //onScrolledUp 上滑
+                        if (position > firstVisibleItem && position < lastVisibleItem) {
+                            GSYVideoManager.onResume();
+                        }
+                    } else if (dy > 0) {
+                        //onScrolledDown 下滑
+                    }
+                }
+
             }
         });
     }
@@ -162,22 +196,8 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
         if (result.status == 1) {
             if (mRequestParams.pageOption.pageNum == 0) {
                 homeAdapter.getData().clear();
-                if (bannerMainLayout != null) {
-                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) bannerMainLayout.getLayoutParams();
-                if (result.promotionPhotoList != null) {
-                    bannerinfoList.clear();
-                    if (result.promotionPhotoList.size() > 0) {
-                        lp.height = ScreenUtil.dip2px(getContext(), 192);
-                        bannerinfoList.addAll(result.promotionPhotoList);
-                        mTopBanner.notifyDataSetChanged();
-                    } else {
-                        lp.height = ScreenUtil.dip2px(getContext(), 0.5f);
-                    }
-                } else {
-                    lp.height = ScreenUtil.dip2px(getContext(), 0.5f);
-                }
-                bannerMainLayout.setLayoutParams(lp);
-                }
+                bindBannerData(result);
+
                 if (result.videoList != null && result.videoList.size() > 0) {
                     homeAdapter.setNewData(result.videoList);
                 }
@@ -191,6 +211,29 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
                 }
                 homeAdapter.loadMoreEnd(true);
             }
+        }
+    }
+
+    /**
+     * 控制banner高度
+     * @param result
+     */
+    private void bindBannerData(ArtGetVideoListResult result) {
+        if (bannerMainLayout != null) {
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) bannerMainLayout.getLayoutParams();
+        if (result.promotionPhotoList != null) {
+            bannerinfoList.clear();
+            if (result.promotionPhotoList.size() > 0) {
+                lp.height = ScreenUtil.dip2px(getContext(), 192);
+                bannerinfoList.addAll(result.promotionPhotoList);
+                mTopBanner.notifyDataSetChanged();
+            } else {
+                lp.height = ScreenUtil.dip2px(getContext(), 0.5f);
+            }
+        } else {
+            lp.height = ScreenUtil.dip2px(getContext(), 0.5f);
+        }
+        bannerMainLayout.setLayoutParams(lp);
         }
     }
 
@@ -267,6 +310,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
     @Override
     public void onResume() {
         super.onResume();
+        GSYVideoManager.onResume();
         if (mTopBanner != null)
             mTopBanner.startTurning(5000);
     }
@@ -274,6 +318,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
     @Override
     public void onPause() {
         super.onPause();
+        GSYVideoManager.onPause();
         if (mTopBanner != null)
             mTopBanner.stopTurning();
     }
@@ -289,6 +334,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
     @Override
     public void onDestroy() {
         super.onDestroy();
+        GSYVideoPlayer.releaseAllVideos();
         OttoController.unregister(this);
     }
 

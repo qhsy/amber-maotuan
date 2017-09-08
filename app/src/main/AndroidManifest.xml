@@ -88,6 +88,7 @@
 
         <activity android:name=".model.details.VideoDetailActivity"
                   android:configChanges="orientation|keyboardHidden|screenSize"
+                  android:windowSoftInputMode="adjustResize"
                   android:screenOrientation="portrait"
                   android:theme="@style/Theme.AppCompat.Translucent"/>
 

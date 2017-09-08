@@ -13,13 +13,18 @@
         android:layout_height="186dp"
         android:layout_marginBottom="15dp">
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/item_videourl"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="186dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher" />-->
+        <com.ichsy.hrys.common.view.video.PictureGSYVideoPlayer
+            android:id="@+id/video_item_player"
+            android:layout_width="match_parent"
+            android:layout_height="186dp"
+            android:background="@drawable/roundcorner_rect_white_12px"/>
 
             <TextView
                 android:id="@+id/item_videotime"

@@ -18,19 +18,19 @@ public interface ServiceConfig {
     /**
      * 获取用户信息 --我的页面
      */
-    String GETUSERACCOUNTINFO= "/api/artUserController/getUserAccountInfo";
+    String GETUSERACCOUNTINFO = "/api/artUserController/getUserAccountInfo";
 
     /**
      * 微信登录接口
      */
-    String  LOGINWITHWX = "/api/artUserController/loginWithWX";
+    String LOGINWITHWX = "/api/artUserController/loginWithWX";
     /**
      * 绑定手机号
      */
     String BANDPHONE = "/api/artUserController/bandMobileNum";
 
     /**
-     *app更新
+     * app更新
      */
     String CHECKUPDATE = "/api/artUserController/versionInfo";
     /**
@@ -67,6 +67,11 @@ public interface ServiceConfig {
     String VIDEO_COLLECTION = "/api/artshortvideo/collectingVideo";
 
     /**
+     * 是点赞video
+     */
+    String VIDEO_THUMBSUPDOWN = "/api/artshortvideo/commetThumbsUpDown";
+
+    /**
      * 获取首页视频列表
      */
     String GET_VIDEO_LIST = "/api/artshortvideo/getVideoList";
@@ -78,19 +83,21 @@ public interface ServiceConfig {
 
     /**
      * 评论视频
-     *
      */
     String SEND_VIDEO_COMMENT = "/api/artshortvideo/sendVideoComment";
 
     /**
+     *删除评论回复接口
+     */
+    String DELETE_VIDEO_COMMENT="/api/artshortvideo/deleteVideoComment";
+
+    /**
      * 统计视频播放次数接口
-     *
      */
     String VIDEO_PLAYCOUNT = "/api/artshortvideo/censusVideoPlay";
 
     /**
      * 统计视频分享次数接口
-     *
      */
     String VIDEO_SHARECOUNT = "/api/artshortvideo/videoShare";
 

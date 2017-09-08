@@ -1,6 +1,8 @@
 package com.ichsy.hrys.model.details;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -15,13 +17,17 @@ import android.widget.RelativeLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ichsy.centerbus.CenterEventBus;
 import com.ichsy.hrys.R;
+import com.ichsy.hrys.common.utils.DialogUtils;
 import com.ichsy.hrys.common.utils.LoginUtils;
 import com.ichsy.hrys.common.utils.RequestUtils;
+import com.ichsy.hrys.common.utils.SharedPreferencesUtils;
 import com.ichsy.hrys.common.utils.UMAnalyticsUtils;
 import com.ichsy.hrys.common.utils.http.HttpContext;
+import com.ichsy.hrys.common.utils.http.SimpleRequestListener;
 import com.ichsy.hrys.common.utils.imageloadutils.ImageLoaderUtils;
 import com.ichsy.hrys.common.view.CommentView;
 import com.ichsy.hrys.common.view.ScrollingPauseLoadImageRecyclerView;
+import com.ichsy.hrys.common.view.dialog.SimpleDialogViewThree;
 import com.ichsy.hrys.common.view.refreshview.RefreshLay;
 import com.ichsy.hrys.common.view.video.PictureGSYVideoPlayer;
 import com.ichsy.hrys.config.constants.StringConstant;
@@ -30,9 +36,12 @@ import com.ichsy.hrys.entity.ArtVideoCommentInfo;
 import com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity;
 import com.ichsy.hrys.entity.ArtVideoInfo;
 import com.ichsy.hrys.entity.request.ArtCensusVideoPlayInput;
+import com.ichsy.hrys.entity.request.ArtDeleteVideoCommentInput;
 import com.ichsy.hrys.entity.request.ArtGetVideoInfoInput;
+import com.ichsy.hrys.entity.request.ArtSendVideoCommentInput;
 import com.ichsy.hrys.entity.request.ArtVideoShareInput;
 import com.ichsy.hrys.entity.response.ArtGetVideoInfoResult;
+import com.ichsy.hrys.entity.response.BaseResponse;
 import com.ichsy.hrys.model.base.BaseActivity;
 import com.ichsy.hrys.model.details.adapter.CommentAdapter;
 import com.ichsy.hrys.model.login.LoginEvent;
@@ -50,10 +59,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import zz.mk.utilslibrary.ClipUtil;
 import zz.mk.utilslibrary.ScreenUtil;
 import zz.mk.utilslibrary.ToastUtils;
 import zz.mk.utilslibrary.system.InputMethodUtils;
 
+import static com.ichsy.hrys.config.constants.StringConstant.COMMENT_COMMENT;
+import static com.ichsy.hrys.config.constants.StringConstant.COMMENT_REPLY;
 import static com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity.COMMENT_LIST;
 import static com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity.COMMENT_NUM;
 import static com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity.NO_DATA;
@@ -67,7 +79,9 @@ import static zz.mk.utilslibrary.system.InputMethodUtils.isShouldHideInput;
  * email: mackkilled@gmail.com
  */
 
-public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnLayoutChangeListener {
+    @BindView(R.id.rl_rootview)
+    View mRootView;
     @BindView(R.id.back_iv)
     ImageView backIv;
     @BindView(R.id.detail_video)
@@ -86,6 +100,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
     private boolean isPause;
 
     ArtGetVideoInfoInput mRequestParams;
+
     ArtVideoInfo mArtTask;
     String userCode;
     CommentAdapter mAdapter;
@@ -97,6 +112,11 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
 
     //权限申请
     RxPermissions rxPermissions;
+
+    //发送评论
+    ArtSendVideoCommentInput commentEntity;
+
+    private Dialog commentDialog;
 
     private List<ArtVideoCommentInfoMultiItemEntity> mData = new ArrayList<>();
 
@@ -110,6 +130,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         rxPermissions = new RxPermissions(getContext());
         hiddenTitlebar();
         mRequestParams = new ArtGetVideoInfoInput();
+        commentEntity = new ArtSendVideoCommentInput();
         mArtTask = (ArtVideoInfo) getIntent().getSerializableExtra(StringConstant.TASK_OBJ);
         if (mArtTask == null) {
             mArtTask = new ArtVideoInfo();
@@ -117,6 +138,9 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         mRequestParams.videoNumber = mArtTask.getVideoNumber();
         mRequestParams.pageOption.pageNum = 0;
         mRequestParams.pageOption.itemCount = 5;
+
+        //默认视频评论
+        commentEntity.publishType = COMMENT_COMMENT;
         setCommentAdapter();
         request();
     }
@@ -169,38 +193,133 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
 
     @Override
     public void loadListener() {
+        mRootView.addOnLayoutChangeListener(this);
+
+        cvCommentLayer.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    if (!LoginUtils.isLogin(context)) {
+                        LoginParams params = new LoginParams(context, LoginEvent.LOGIN);
+                        CenterEventBus.getInstance().postTask(params);
+                        return;
+                    }
+                }
+                ToastUtils.showShortToast("commentEntity.publishType:" + commentEntity.publishType);
+            }
+        });
         videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 videoPlayer.startWindowFullscreen(VideoDetailActivity.this, true, true);
             }
         });
-//        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                String userName = mAdapter.getData().get(position).videoCommentInfo.getSenderInfo().getUserName();
-//                cvCommentLayer.getEditText().setHint("回复:" + userName);
-//                showKeyBoard(cvCommentLayer.getEditText());
-//            }
-//        });
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (position == 0 || position == 1) return;
+                if (!LoginUtils.isLogin(context)) {
+                    LoginParams params = new LoginParams(context, LoginEvent.LOGIN);
+                    CenterEventBus.getInstance().postTask(params);
+                    return;
+                }
+                if ((SharedPreferencesUtils.getUserInfo(context).getUserCode()).equals(mAdapter.getData().get(position).videoCommentInfo.getSenderInfo().getUserCode())) {
+                    ToastUtils.showShortToast("不能回复自己!");
+                    return;
+                }
+
+                if (commentDialog != null) {
+                    commentDialog = null;
+                }
+                commentDialog = getHeaderViewDialo(getContext(), position);
+                commentDialog.show();
+            }
+        });
         cvCommentLayer.setOnSendCommentListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (LoginUtils.isLogin(context)) {
-                    if (TextUtils.isEmpty(cvCommentLayer.getCommentText())) {
-                        ToastUtils.showShortToast("回复内容不能为空!");
-                        return;
-                    }
-                    if (!checkNet()) return;
-                    mAdapter.sendComment(cvCommentLayer.getCommentText(), mArtTask.getVideoNumber());
-                    cvCommentLayer.clearContent();
-                    InputMethodUtils.closeSoftKeyboard(getContext());
-                } else {
+                if (!LoginUtils.isLogin(context)) {
                     LoginParams params = new LoginParams(context, LoginEvent.LOGIN);
                     CenterEventBus.getInstance().postTask(params);
+                    return;
                 }
+
+                if (TextUtils.isEmpty(cvCommentLayer.getCommentText())) {
+                    ToastUtils.showShortToast("回复内容不能为空!");
+                    return;
+                }
+                if (!checkNet()) return;
+                //发送添加评论请求
+                commentEntity.videoId = mArtTask.getVideoNumber();
+                commentEntity.commentContent = cvCommentLayer.getCommentText();
+
+                mAdapter.sendComment(commentEntity);
+                cvCommentLayer.clearContent();
+                InputMethodUtils.closeSoftKeyboard(getContext());
             }
         });
+    }
+
+    /**
+     * 获取头像选择的弹框
+     *
+     * @param context
+     * @return
+     */
+    public Dialog getHeaderViewDialo(final Context context, final int position) {
+        SimpleDialogViewThree view = new SimpleDialogViewThree(context);
+        view.getTopTV().setText("回复");
+        view.getCenterTV().setText("复制");
+        view.getLastTV().setText("删除");
+        view.getBottomTV().setText("取消");
+
+        final Dialog headerViewDialog = DialogUtils.getBottomDialog(context, view, true);
+        view.getTopTV().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                headerViewDialog.dismiss();
+                String userName = mAdapter.getData().get(position).videoCommentInfo.getSenderInfo().getUserName();
+                commentEntity.publishType = COMMENT_REPLY;
+                commentEntity.commentId = mAdapter.getData().get(position).videoCommentInfo.getCommentId();
+                commentEntity.receiverCode = mAdapter.getData().get(position).videoCommentInfo.getSenderInfo().getUserCode();
+                ToastUtils.showShortToast("commentEntity.publishType:" + commentEntity.publishType);
+                cvCommentLayer.getEditText().setHint("回复:" + userName);
+                showKeyBoard(cvCommentLayer.getEditText());
+            }
+        });
+        view.getCenterTV().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                headerViewDialog.dismiss();
+                ClipUtil.copy(getContext(), mAdapter.getData().get(position).videoCommentInfo.getCommentContent());
+                ToastUtils.showShortToast("内容已复制到剪切板");
+            }
+        });
+        view.getLastTV().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArtDeleteVideoCommentInput entity = new ArtDeleteVideoCommentInput();
+                entity.commentId = mAdapter.getData().get(position).videoCommentInfo.getCommentId();
+                RequestUtils.deleteVideoComment(getRequestUnicode(), entity, new SimpleRequestListener(){
+                    @Override
+                    public void onHttpRequestComplete(String url, HttpContext httpContext) {
+                        BaseResponse result = httpContext.getResponseObject();
+                        if (result.status == 1) {
+                            onRefresh();
+                            ToastUtils.showShortToast("删除成功！");
+                        }
+                    }
+                });
+            }
+        });
+        view.getBottomTV().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                headerViewDialog.dismiss();
+            }
+        });
+
+        return headerViewDialog;
     }
 
     @Override
@@ -402,13 +521,14 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         request();
     }
 
+    //触碰其他区域关闭键盘
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
 //            View v = getCurrentFocus();
             View v = cvCommentLayer;
             if (isShouldHideInput(v, ev)) {
-                if(hideInputMethod(this, v)) {
+                if (hideInputMethod(this, v)) {
                     return true; //隐藏键盘时，其他控件不响应点击事件==》注释则不拦截点击事件
                 }
             }
@@ -442,5 +562,17 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > 0)) {
+
+        } else if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > 0)) {
+            cvCommentLayer.clearContent();
+            cvCommentLayer.resetHintContent();
+            commentEntity.publishType = COMMENT_COMMENT;
+            ToastUtils.showShortToast("收起");
+        }
     }
 }

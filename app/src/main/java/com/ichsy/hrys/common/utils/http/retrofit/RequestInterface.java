@@ -3,6 +3,8 @@ package com.ichsy.hrys.common.utils.http.retrofit;
 
 import com.ichsy.hrys.config.config.ServiceConfig;
 import com.ichsy.hrys.entity.request.ArtCensusVideoPlayInput;
+import com.ichsy.hrys.entity.request.ArtCommentThumbsUpDownInput;
+import com.ichsy.hrys.entity.request.ArtDeleteVideoCommentInput;
 import com.ichsy.hrys.entity.request.ArtGetVideoInfoInput;
 import com.ichsy.hrys.entity.request.ArtGetVideoListInputEntity;
 import com.ichsy.hrys.entity.request.ArtPersonalHomepageInput;
@@ -18,6 +20,7 @@ import com.ichsy.hrys.entity.request.LoginRequestEntity;
 import com.ichsy.hrys.entity.request.LoginWithWXRequestEntity;
 import com.ichsy.hrys.entity.request.ModifyUserInfoRequestEntity;
 import com.ichsy.hrys.entity.request.OnlyPageRequestEntity;
+import com.ichsy.hrys.entity.response.ArtCommentThumbsUpDownResult;
 import com.ichsy.hrys.entity.response.ArtGetPersonalInfoResult;
 import com.ichsy.hrys.entity.response.ArtGetVideoInfoResult;
 import com.ichsy.hrys.entity.response.ArtGetVideoListResult;
@@ -104,6 +107,12 @@ public interface RequestInterface {
     @POST(ServiceConfig.VIDEO_COLLECTION)
     Observable<BaseResponse> taskCollection(@Body ArtVideoOperationOfCollectingInput requestEntity);
 
+    /**
+     * 是赞video
+     */
+    @POST(ServiceConfig.VIDEO_THUMBSUPDOWN)
+    Observable<ArtCommentThumbsUpDownResult> taskThumbsUpDown(@Body ArtCommentThumbsUpDownInput requestEntity);
+
     // 获取首页列表接口
     @POST(ServiceConfig.GET_VIDEO_LIST)
     Observable<ArtGetVideoListResult> getHomePageInfo(@Body ArtGetVideoListInputEntity entity);
@@ -115,6 +124,10 @@ public interface RequestInterface {
     // 评论视频详细页
     @POST(ServiceConfig.SEND_VIDEO_COMMENT)
     Observable<BaseResponse> sendVideoComment(@Body ArtSendVideoCommentInput entity);
+
+    // 删除评论回复接口
+    @POST(ServiceConfig.SEND_VIDEO_COMMENT)
+    Observable<BaseResponse> deleteVideoComment(@Body ArtDeleteVideoCommentInput entity);
 
     // 统计视频播放次数
     @POST(ServiceConfig.VIDEO_PLAYCOUNT)

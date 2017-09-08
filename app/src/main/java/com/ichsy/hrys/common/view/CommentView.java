@@ -59,6 +59,10 @@ public class CommentView extends RelativeLayout {
         mEtComment.setText("");
     }
 
+    public void resetHintContent() {
+        mEtComment.setHint("请输入评论");
+    }
+
     public EditText getEditText() {
         return mEtComment;
     }

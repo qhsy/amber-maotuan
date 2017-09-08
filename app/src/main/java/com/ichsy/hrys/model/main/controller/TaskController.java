@@ -14,7 +14,9 @@ import com.ichsy.hrys.config.constants.IntConstant;
 import com.ichsy.hrys.config.constants.StringConstant;
 import com.ichsy.hrys.entity.ArtVideoInfo;
 import com.ichsy.hrys.entity.ArtVideoPromotionDetail;
+import com.ichsy.hrys.entity.request.ArtCommentThumbsUpDownInput;
 import com.ichsy.hrys.entity.request.ArtVideoOperationOfCollectingInput;
+import com.ichsy.hrys.entity.response.ArtCommentThumbsUpDownResult;
 import com.ichsy.hrys.entity.response.BaseResponse;
 import com.ichsy.hrys.model.base.CommonWebViewActivity;
 import com.ichsy.hrys.model.details.VideoDetailActivity;
@@ -98,14 +100,42 @@ public class TaskController {
             CenterEventBus.getInstance().postTask(params);
             return false;
         }
+    }
 
+    /**
+     * 是否点赞
+     *
+     */
+    public static boolean zanTask(Context context, String requestUnicode, String commentId, final boolean zanOption, final CollectCallBack callBack) {
+        if (LoginUtils.isLogin(context)) {
+            ArtCommentThumbsUpDownInput entity = new ArtCommentThumbsUpDownInput ();
+            entity.commentId = commentId;
+            if (zanOption) {
+                entity.thumbsType = "1";
+            } else {
+                entity.thumbsType = "0";
+            }
+            RequestUtils.videoThumbsUpDown(requestUnicode, entity, new SimpleRequestListener() {
+
+                @Override
+                public void onHttpRequestComplete(String url, HttpContext httpContext) {
+                    ArtCommentThumbsUpDownResult result = httpContext.getResponseObject();
+                    callBack.onResult(result != null && result.status == 1, zanOption);
+                }
+            });
+            return true;
+        } else {
+            LoginParams params = new LoginParams(context, LoginEvent.LOGIN);
+            CenterEventBus.getInstance().postTask(params);
+            return false;
+        }
     }
 
     public interface CollectCallBack {
         /**
          * 收藏回调
          *
-         * @param collcetResult 是否收藏成功
+         * @param collcetResult 是否收藏,点赞成功
          * @param collectOption 是什么操作（true:收藏操作  false:取消收藏操作）
          */
         void onResult(boolean collcetResult, boolean collectOption);

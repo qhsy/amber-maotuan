@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="15dp"
+              android:background="@color/color_transparent"
+              android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/roundcorner_rect_white_82px"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_viewsimpledialogview_topitem"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:gravity="center"
+            android:textColor="@color/color_text_mediumcolor"
+            android:textSize="@dimen/textsize_17"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_standard_14"
+            />
+        <TextView
+            android:id="@+id/tv_viewsimpledialogview_centreitem"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:gravity="center"
+            android:textColor="@color/color_text_mediumcolor"
+            android:textSize="@dimen/textsize_17"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_standard_14"
+            />
+        <TextView
+            android:id="@+id/tv_viewsimpledialogview_lastitem"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:gravity="center"
+            android:textColor="@color/color_standard_31"
+            android:textSize="@dimen/textsize_17"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_viewsimpledialogview_bottomitem"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_btn_roundcorner_white_25"
+        android:gravity="center"
+        android:textColor="@color/color_text_mediumcolor"
+        android:textSize="@dimen/textsize_17"
+        />
+
+</LinearLayout>

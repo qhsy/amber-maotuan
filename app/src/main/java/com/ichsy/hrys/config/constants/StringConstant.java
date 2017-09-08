@@ -271,6 +271,12 @@ public interface StringConstant {
     String COMMENT_POST = "dzsd4029100100110001";
     //评论的评论
     String COMMENT_USER = "dzsd4029100100110002";
+
+    //视屏的评论
+    String COMMENT_COMMENT = "0";
+    //评论人
+    String COMMENT_REPLY = "1";
+
     /**
      * 跳转查看头像页面的数据传递
      */

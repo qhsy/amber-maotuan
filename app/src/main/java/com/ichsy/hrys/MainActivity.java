@@ -36,6 +36,7 @@ import com.ichsy.hrys.model.user.MyCollectionsActivity;
 import com.ichsy.hrys.model.user.MyNotifactionActivity;
 import com.ichsy.hrys.model.user.adapter.UserCenterGridAdapter;
 import com.ichsy.hrys.model.user.bean.UserCenterItemBean;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -259,6 +260,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            backVideoWindowFull();
             exit();
             return false;
         }
@@ -276,5 +278,12 @@ public class MainActivity extends BaseActivity {
             android.os.Process.killProcess(android.os.Process.myPid());
             finish();
         }
+    }
+
+    public boolean backVideoWindowFull() {
+         if (StandardGSYVideoPlayer.backFromWindowFull(this)){
+            return false;
+        }
+        return true;
     }
 }

@@ -3,6 +3,8 @@ package com.ichsy.hrys.model.details.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,17 +19,17 @@ import com.ichsy.hrys.common.utils.http.HttpContext;
 import com.ichsy.hrys.common.utils.http.SimpleRequestListener;
 import com.ichsy.hrys.common.utils.imageloadutils.ImageLoaderUtils;
 import com.ichsy.hrys.common.utils.imageloadutils.ImageStyleType;
-import com.ichsy.hrys.common.utils.otto.OttoController;
-import com.ichsy.hrys.common.utils.otto.OttoEventType;
 import com.ichsy.hrys.entity.ArtVideoCommentInfo;
 import com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity;
 import com.ichsy.hrys.entity.ArtVideoInfo;
+import com.ichsy.hrys.entity.ArtVideoReplyInfo;
 import com.ichsy.hrys.entity.ArtVideoUserInfo;
 import com.ichsy.hrys.entity.request.ArtSendVideoCommentInput;
 import com.ichsy.hrys.entity.response.BaseResponse;
 import com.ichsy.hrys.model.details.VideoDetailActivity;
 import com.ichsy.hrys.model.main.controller.TaskController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import zz.mk.utilslibrary.DateUtil;
@@ -47,6 +49,8 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
     private Context activity;
     //收藏状态
     boolean collectStatus = false;
+    //赞
+    boolean zanStatus = false;
 
     public CommentAdapter(Context activity, List<ArtVideoCommentInfoMultiItemEntity> data) {
         super(data);
@@ -128,7 +132,6 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
                             } else {
                                 ToastUtils.showShortToast(activity.getString(R.string.collect_cancel));
                             }
-                            OttoController.post(collectOption, OttoEventType.TASK_COLLECT_STATUS, "");
                         }
                     }
                 });
@@ -159,21 +162,59 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
 
         ImageLoaderUtils.loadViewImage(activity,(ImageView) helper.getView(R.id.detail_comment_icon),userInfo.getUserIconThumburl(),R.drawable.head_placeholder, R.drawable.icon_wode, ImageStyleType.CropCircle);
         helper.setText(R.id.detail_comment_name, userInfo.getUserName());
+
+        //点赞
+        TextView zan = helper.getView(R.id.detail_comment_thumbsup);
+
+
+        //回复列表 只显示两条
+        if (pItem.commentReplyList.size() > 0) {
+            List<ArtVideoReplyInfo> commentReplyList = new ArrayList<>();
+            commentReplyList.clear();
+            helper.setVisible(R.id.detail_comment_reply_ll, true);
+            if (pItem.commentReplyList.size() > 2) {
+                helper.setVisible(R.id.detail_comment_findall, true);
+                for (int i = 0; i < 2; i++) {
+                    commentReplyList.add(pItem.commentReplyList.get(i));
+                }
+                setCommentReplyAdapter((RecyclerView) helper.getView(R.id.detail_comment_reply_list), commentReplyList);
+            } else {
+                helper.setVisible(R.id.detail_comment_findall, false);
+            }
+        } else {
+            helper.setVisible(R.id.detail_comment_reply_ll, false);
+        }
+
+        zan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TaskController.zanTask(activity, getRequestUnicode(), "", false, new TaskController.CollectCallBack() {
+                    @Override
+                    public void onResult(boolean collcetResult, boolean collectOption) {
+
+                    }
+                });
+            }
+        });
+    }
+
+    // 回复列表
+    private void setCommentReplyAdapter(RecyclerView mRecyclerView, List<ArtVideoReplyInfo> commentReplyList) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
+        CommentReplyAdapter mAdapter = new CommentReplyAdapter(mContext);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setNewData(commentReplyList);
     }
 
     /**
      * 发送评论
-     * @param commentText
-     * @param videoId
+     * @param entity
      */
-    public void sendComment(String commentText, String videoId) {
+    public void sendComment(ArtSendVideoCommentInput entity) {
         //本地添加假数据
 //        addComment(SharedPreferencesUtils.getUserInfo(mContext), receiverInfo, commentText, receiverInfo == null);
-        //发送添加评论请求
-        ArtSendVideoCommentInput entity = new ArtSendVideoCommentInput();
-        entity.videoId = videoId;
-        entity.commentContent = commentText;
-        entity.publishType = "0";
 
         RequestUtils.sendVideoComment(getRequestUnicode(), entity, new SimpleRequestListener() {
 
