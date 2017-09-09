@@ -19,6 +19,7 @@ import com.ichsy.hrys.common.utils.http.HttpContext;
 import com.ichsy.hrys.common.utils.http.SimpleRequestListener;
 import com.ichsy.hrys.common.utils.imageloadutils.ImageLoaderUtils;
 import com.ichsy.hrys.common.utils.imageloadutils.ImageStyleType;
+import com.ichsy.hrys.common.view.AvatorView;
 import com.ichsy.hrys.entity.ArtVideoCommentInfo;
 import com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity;
 import com.ichsy.hrys.entity.ArtVideoInfo;
@@ -41,6 +42,7 @@ import static com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity.NO_DATA;
 import static com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity.PUBLISH_INFO;
 
 /**
+ * 详情页回复
  * author: zhu on 2017/8/24 16:06
  * email: mackkilled@gmail.com
  */
@@ -154,13 +156,15 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
      * @param pItem
      */
     protected void setCommentList(BaseViewHolder helper, ArtVideoCommentInfoMultiItemEntity pItem) {
-        ArtVideoCommentInfo item = pItem.videoCommentInfo;
+        final ArtVideoCommentInfo item = pItem.videoCommentInfo;
         ArtVideoUserInfo userInfo = item.getSenderInfo();
 
         helper.setText(R.id.detail_comment_content, item.getCommentContent());
         helper.setText(R.id.time, DateUtil.getTime(item.getCommentTime(),"yyyy-MM-dd HH:mm"));
 
-        ImageLoaderUtils.loadViewImage(activity,(ImageView) helper.getView(R.id.detail_comment_icon),userInfo.getUserIconThumburl(),R.drawable.head_placeholder, R.drawable.icon_wode, ImageStyleType.CropCircle);
+        AvatorView avatorView = helper.getView(R.id.detail_comment_icon);
+        avatorView.setUserInfo(userInfo, false);
+
         helper.setText(R.id.detail_comment_name, userInfo.getUserName());
 
         //点赞
@@ -174,6 +178,12 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
             helper.setVisible(R.id.detail_comment_reply_ll, true);
             if (pItem.commentReplyList.size() > 2) {
                 helper.setVisible(R.id.detail_comment_findall, true);
+                helper.getView(R.id.detail_comment_findall).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TaskController.openVideoList((Activity) activity, item.getCommentId(), getVideoNumber());
+                    }
+                });
                 for (int i = 0; i < 2; i++) {
                     commentReplyList.add(pItem.commentReplyList.get(i));
                 }
@@ -246,6 +256,17 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
         this.requestUnicode = requestUnicode;
     }
 
+    public String getVideoNumber() {
+        return videoNumber;
+    }
+
+    public void setVideoNumber(String videoNumber) {
+        this.videoNumber = videoNumber;
+    }
+
     private String requestUnicode;
+
+    // 视屏编号
+    private String videoNumber;
 
 }

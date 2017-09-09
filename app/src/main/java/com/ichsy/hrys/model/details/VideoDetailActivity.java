@@ -231,7 +231,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
                 if (commentDialog != null) {
                     commentDialog = null;
                 }
-                commentDialog = getHeaderViewDialo(getContext(), position);
+                commentDialog = getCommentDialog(getContext(), position);
                 commentDialog.show();
             }
         });
@@ -261,12 +261,12 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
     }
 
     /**
-     * 获取头像选择的弹框
+     * 获取评论弹窗
      *
      * @param context
      * @return
      */
-    public Dialog getHeaderViewDialo(final Context context, final int position) {
+    public Dialog getCommentDialog(final Context context, final int position) {
         SimpleDialogViewThree view = new SimpleDialogViewThree(context);
         view.getTopTV().setText("回复");
         view.getCenterTV().setText("复制");
@@ -355,7 +355,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
                 }
                 //评论列表
                 if (result.videoCommentList != null && result.videoCommentList.size() > 0) {
-                    mData.addAll(getTodayRedPersonItemEntity(result.videoCommentList));
+                    mData.addAll(getCommentItemEntity(result.videoCommentList));
                 } else {
                     mAdapter.loadMoreEnd(true);
                     mData.add(new ArtVideoCommentInfoMultiItemEntity(NO_DATA));
@@ -378,11 +378,12 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
                 if (result.videoInfo != null) {
                     ArtVideoInfo artVideoInfo = result.videoInfo;
                     mArtTask = artVideoInfo;
+                    mAdapter.setVideoNumber(artVideoInfo.getVideoNumber());
                     setVideo(artVideoInfo);
                 }
             } else {
                 if (result.videoCommentList != null && result.videoCommentList.size() > 0) {
-                    mData.addAll(getTodayRedPersonItemEntity(result.videoCommentList));
+                    mData.addAll(getCommentItemEntity(result.videoCommentList));
                     if (result.videoCommentList.size() >= mRequestParams.pageOption.itemCount) {
                         mAdapter.loadMoreComplete();
                         return;
@@ -396,7 +397,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
     }
 
     // 评论列表
-    private List<ArtVideoCommentInfoMultiItemEntity> getTodayRedPersonItemEntity(List<ArtVideoCommentInfo> videoCommentInfoList) {
+    private List<ArtVideoCommentInfoMultiItemEntity> getCommentItemEntity(List<ArtVideoCommentInfo> videoCommentInfoList) {
         List<ArtVideoCommentInfoMultiItemEntity> list = new ArrayList<>();
         for (ArtVideoCommentInfo commentList : videoCommentInfoList) {
             ArtVideoCommentInfoMultiItemEntity entity = new ArtVideoCommentInfoMultiItemEntity(COMMENT_LIST);

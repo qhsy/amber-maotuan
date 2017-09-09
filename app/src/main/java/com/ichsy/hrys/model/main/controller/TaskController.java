@@ -19,6 +19,7 @@ import com.ichsy.hrys.entity.request.ArtVideoOperationOfCollectingInput;
 import com.ichsy.hrys.entity.response.ArtCommentThumbsUpDownResult;
 import com.ichsy.hrys.entity.response.BaseResponse;
 import com.ichsy.hrys.model.base.CommonWebViewActivity;
+import com.ichsy.hrys.model.details.CommentListActivity;
 import com.ichsy.hrys.model.details.VideoDetailActivity;
 import com.ichsy.hrys.model.login.LoginEvent;
 import com.ichsy.hrys.model.login.LoginParams;
@@ -37,6 +38,17 @@ public class TaskController {
         Bundle bundle = new Bundle();
         bundle.putSerializable(StringConstant.TASK_OBJ, data);
         IntentUtils.startActivity(context, VideoDetailActivity.class, bundle);
+    }
+
+
+    /**
+     * 跳转全部回复
+     */
+    public static void openVideoList(Activity context, String commentId, String videoNumber) {
+        Bundle bundle = new Bundle();
+        bundle.putString(StringConstant.COMMENT_ID, commentId);
+        bundle.putString(StringConstant.VIDEO_NUMBER, videoNumber);
+        IntentUtils.startActivity(context, CommentListActivity.class, bundle);
     }
 
     /**

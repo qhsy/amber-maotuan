@@ -5,6 +5,7 @@ import com.ichsy.hrys.config.config.ServiceConfig;
 import com.ichsy.hrys.entity.request.ArtCensusVideoPlayInput;
 import com.ichsy.hrys.entity.request.ArtCommentThumbsUpDownInput;
 import com.ichsy.hrys.entity.request.ArtDeleteVideoCommentInput;
+import com.ichsy.hrys.entity.request.ArtGetVideoCommentInfoInput;
 import com.ichsy.hrys.entity.request.ArtGetVideoInfoInput;
 import com.ichsy.hrys.entity.request.ArtGetVideoListInputEntity;
 import com.ichsy.hrys.entity.request.ArtPersonalHomepageInput;
@@ -22,6 +23,7 @@ import com.ichsy.hrys.entity.request.ModifyUserInfoRequestEntity;
 import com.ichsy.hrys.entity.request.OnlyPageRequestEntity;
 import com.ichsy.hrys.entity.response.ArtCommentThumbsUpDownResult;
 import com.ichsy.hrys.entity.response.ArtGetPersonalInfoResult;
+import com.ichsy.hrys.entity.response.ArtGetVideoCommentInfoResult;
 import com.ichsy.hrys.entity.response.ArtGetVideoInfoResult;
 import com.ichsy.hrys.entity.response.ArtGetVideoListResult;
 import com.ichsy.hrys.entity.response.ArtGetVideoNotifactionMessagResult;
@@ -128,6 +130,10 @@ public interface RequestInterface {
     // 删除评论回复接口
     @POST(ServiceConfig.SEND_VIDEO_COMMENT)
     Observable<BaseResponse> deleteVideoComment(@Body ArtDeleteVideoCommentInput entity);
+
+    // 全部回复
+    @POST(ServiceConfig.GET_COMMENT_ALL_REPLY)
+    Observable<ArtGetVideoCommentInfoResult> getVideoCommentInfo(@Body ArtGetVideoCommentInfoInput entity);
 
     // 统计视频播放次数
     @POST(ServiceConfig.VIDEO_PLAYCOUNT)

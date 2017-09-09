@@ -272,10 +272,15 @@ public interface StringConstant {
     //评论的评论
     String COMMENT_USER = "dzsd4029100100110002";
 
-    //视屏的评论
+    //主的评论
     String COMMENT_COMMENT = "0";
     //评论人
     String COMMENT_REPLY = "1";
+
+    //跳转评论列表
+    String COMMENT_ID = "comment_id";
+    //视屏编号
+    String VIDEO_NUMBER = "video_number";
 
     /**
      * 跳转查看头像页面的数据传递

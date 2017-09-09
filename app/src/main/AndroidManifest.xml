@@ -92,6 +92,9 @@
                   android:screenOrientation="portrait"
                   android:theme="@style/Theme.AppCompat.Translucent"/>
 
+        <activity android:name=".model.details.CommentListActivity" />
+
+
         <activity android:name=".model.person.PersonalInfoActivity" />
         <activity android:name=".model.user.MyNotifactionActivity" />
         <activity android:name=".model.user.MyCollectionsActivity" />

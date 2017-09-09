@@ -6,11 +6,12 @@
               android:background="@color/color_white"
               android:padding="15dp">
 
-    <ImageView
+    <com.ichsy.hrys.common.view.AvatorView
         android:id="@+id/detail_comment_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/icon_wode"/>
+        android:background="@drawable/icon_wode"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,6 +83,7 @@
             android:layout_marginTop="15dp"
             android:background="@color/color_standard_32"
             android:orientation="vertical"
+            android:visibility="gone"
             android:padding="15dp">
 
             <android.support.v7.widget.RecyclerView

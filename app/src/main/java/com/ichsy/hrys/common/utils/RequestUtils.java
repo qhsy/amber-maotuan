@@ -8,6 +8,7 @@ import com.ichsy.hrys.config.config.ServiceConfig;
 import com.ichsy.hrys.entity.request.ArtCensusVideoPlayInput;
 import com.ichsy.hrys.entity.request.ArtCommentThumbsUpDownInput;
 import com.ichsy.hrys.entity.request.ArtDeleteVideoCommentInput;
+import com.ichsy.hrys.entity.request.ArtGetVideoCommentInfoInput;
 import com.ichsy.hrys.entity.request.ArtGetVideoInfoInput;
 import com.ichsy.hrys.entity.request.ArtGetVideoListInputEntity;
 import com.ichsy.hrys.entity.request.ArtPersonalHomepageInput;
@@ -252,6 +253,20 @@ public class RequestUtils {
                 reuqestUnicode
                 ,RequestService.getInstance().taskThumbsUpDown(requestEntity)
                 ,ServiceConfig.VIDEO_THUMBSUPDOWN
+                ,listener);
+    }
+
+    /**
+     * 获取回复列表
+     * @param reuqestUnicode
+     * @param requestEntity
+     * @param listener
+     */
+    public static void getVideoCommentListInfo(String reuqestUnicode, ArtGetVideoCommentInfoInput requestEntity, RequestListener listener){
+        sendRequest(
+                reuqestUnicode
+                ,RequestService.getInstance().getVideoCommentInfo(requestEntity)
+                ,ServiceConfig.GET_COMMENT_ALL_REPLY
                 ,listener);
     }
 

@@ -69,7 +69,7 @@ public interface ServiceConfig {
     /**
      * 是点赞video
      */
-    String VIDEO_THUMBSUPDOWN = "/api/artshortvideo/commetThumbsUpDown";
+    String VIDEO_THUMBSUPDOWN = "/api/artshortvideo/commentThumbsUpDown";
 
     /**
      * 获取首页视频列表
@@ -87,9 +87,15 @@ public interface ServiceConfig {
     String SEND_VIDEO_COMMENT = "/api/artshortvideo/sendVideoComment";
 
     /**
-     *删除评论回复接口
+     * 删除评论回复接口
      */
-    String DELETE_VIDEO_COMMENT="/api/artshortvideo/deleteVideoComment";
+    String DELETE_VIDEO_COMMENT = "/api/artshortvideo/deleteVideoComment";
+
+    /**
+     * 获取全部回复
+     */
+    String GET_COMMENT_ALL_REPLY = "/api/artshortvideo/getVideoCommentInfo";
+
 
     /**
      * 统计视频播放次数接口
