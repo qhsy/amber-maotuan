@@ -201,7 +201,7 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
                 String userName = mAdapter.getData().get(position).videoReplyInfo.getReplySenderUserInfo().getUserName();
                 commentEntity.publishType = COMMENT_REPLY;
                 commentEntity.commentId = mAdapter.getData().get(position).videoReplyInfo.getCommentId();
-                commentEntity.receiverCode = mAdapter.getData().get(position).videoReplyInfo.getReplyReceiverUserInfo().getUserCode();
+                commentEntity.receiverCode = mAdapter.getData().get(position).videoReplyInfo.getReplySenderUserInfo().getUserCode();
                 ToastUtils.showShortToast("commentEntity.publishType:" + commentEntity.publishType);
                 cvCommentLayer.getEditText().setHint("回复:" + userName);
                 showKeyBoard(cvCommentLayer.getEditText());
@@ -218,6 +218,7 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
         view.getLastTV().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                headerViewDialog.dismiss();
                 ArtDeleteVideoCommentInput entity = new ArtDeleteVideoCommentInput();
                 entity.commentId = mAdapter.getData().get(position).videoReplyInfo.getReplyId();
                 RequestUtils.deleteVideoComment(getRequestUnicode(), entity, new SimpleRequestListener(){

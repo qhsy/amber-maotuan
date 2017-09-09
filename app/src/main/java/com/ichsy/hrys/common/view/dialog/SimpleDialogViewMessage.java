@@ -12,30 +12,28 @@ import com.ichsy.hrys.R;
  * 两个功能按键
  *
  */
-public class SimpleDialogView extends LinearLayout {
+public class SimpleDialogViewMessage extends LinearLayout {
     /**
      *
      */
     private TextView topTV,centerTV,bottomTV;
 
-    public SimpleDialogView(Context context, AttributeSet attrs) {
+    public SimpleDialogViewMessage(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public SimpleDialogView(Context context) {
+    public SimpleDialogViewMessage(Context context) {
         super(context);
         init(context);
     }
 
     private void  init(Context context){
 
-        View.inflate(context, R.layout.view_simpledialogview,this);
+        View.inflate(context, R.layout.view_simpledialogview_message,this);
         topTV = (TextView) findViewById(R.id.tv_viewsimpledialogview_topitem);
         centerTV = (TextView) findViewById(R.id.tv_viewsimpledialogview_centreitem);
         bottomTV = (TextView) findViewById(R.id.tv_viewsimpledialogview_bottomitem);
-
-
     }
 
 

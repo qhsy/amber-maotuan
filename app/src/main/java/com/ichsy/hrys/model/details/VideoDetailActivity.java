@@ -298,6 +298,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         view.getLastTV().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                headerViewDialog.dismiss();
                 ArtDeleteVideoCommentInput entity = new ArtDeleteVideoCommentInput();
                 entity.commentId = mAdapter.getData().get(position).videoCommentInfo.getCommentId();
                 RequestUtils.deleteVideoComment(getRequestUnicode(), entity, new SimpleRequestListener(){
@@ -402,6 +403,8 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         for (ArtVideoCommentInfo commentList : videoCommentInfoList) {
             ArtVideoCommentInfoMultiItemEntity entity = new ArtVideoCommentInfoMultiItemEntity(COMMENT_LIST);
             entity.videoCommentInfo = commentList;
+            if (commentList.getCommentReplyList() != null && commentList.getCommentReplyList().size() > 0)
+            entity.commentReplyList.addAll(commentList.getCommentReplyList());
             list.add(entity);
         }
         return list;

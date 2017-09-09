@@ -172,25 +172,27 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
 
 
         //回复列表 只显示两条
-        if (pItem.commentReplyList.size() > 0) {
-            List<ArtVideoReplyInfo> commentReplyList = new ArrayList<>();
-            commentReplyList.clear();
-            helper.setVisible(R.id.detail_comment_reply_ll, true);
-            if (pItem.commentReplyList.size() > 2) {
+        int replySize = pItem.commentReplyList.size();
+        if (replySize > 0) {
+            if (replySize > 2) {
                 helper.setVisible(R.id.detail_comment_findall, true);
-                helper.getView(R.id.detail_comment_findall).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TaskController.openVideoList((Activity) activity, item.getCommentId(), getVideoNumber());
-                    }
-                });
-                for (int i = 0; i < 2; i++) {
-                    commentReplyList.add(pItem.commentReplyList.get(i));
-                }
-                setCommentReplyAdapter((RecyclerView) helper.getView(R.id.detail_comment_reply_list), commentReplyList);
             } else {
                 helper.setVisible(R.id.detail_comment_findall, false);
             }
+            List<ArtVideoReplyInfo> commentReplyList = new ArrayList<>();
+            commentReplyList.clear();
+            helper.setVisible(R.id.detail_comment_reply_ll, true);
+            helper.getView(R.id.detail_comment_findall).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TaskController.openVideoList((Activity) activity, item.getCommentId(), getVideoNumber());
+                }
+            });
+            for (int i = 0; i < replySize; i++) {
+                if (replySize > 2) return;
+                commentReplyList.add(pItem.commentReplyList.get(i));
+            }
+            setCommentReplyAdapter((RecyclerView) helper.getView(R.id.detail_comment_reply_list), commentReplyList);
         } else {
             helper.setVisible(R.id.detail_comment_reply_ll, false);
         }

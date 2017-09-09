@@ -1,7 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_white"
+    android:padding="15dp">
 
+    <com.ichsy.hrys.common.view.AvatorView
+        android:id="@+id/detail_comment_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/icon_wode"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/detail_comment_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="mackkill"
+                    android:textColor="@color/color_btn_gray2"
+                    android:textSize="@dimen/textsize_13"/>
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="2017-4-15 12:25"
+                    android:textColor="@color/color_btn_gray2"
+                    android:textSize="@dimen/textsize_13"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/detail_comment_thumbsup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/icon_yizan"
+                android:drawablePadding="3dp"
+                android:gravity="center"
+                android:text="625"
+                android:textColor="@color/text_gray_blue"
+                android:textSize="@dimen/textsize_13"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <com.ichsy.hrys.common.view.FolderTextView
+            android:id="@+id/detail_comment_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="3dp"
+            android:text=""
+            android:textColor="@color/color_btn_black"
+            android:textSize="@dimen/textsize_14"
+            app:canFoldAgain="false"
+            app:foldLine="4"
+            app:tailTextColor="@color/color_blue1"
+            app:unFoldText="全部"/>
+
+        <LinearLayout
+            android:id="@+id/detail_comment_reply_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@color/color_standard_32"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/detail_comment_mine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的评论："
+                android:textColor="@color/color_btn_gray2"
+                android:textSize="@dimen/textsize_12"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

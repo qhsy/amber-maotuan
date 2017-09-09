@@ -34,6 +34,7 @@ import zz.mk.utilslibrary.ToastUtils;
 import static com.ichsy.hrys.R.id.refresh;
 
 /**
+ * 我的收藏
  * author: zhu on 2017/8/25 14:20
  * email: mackkilled@gmail.com
  */
