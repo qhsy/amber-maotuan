@@ -4,9 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/baserecyclerviewlibrary/baserecyclerviewlibrary.iml" filepath="$PROJECT_DIR$/baserecyclerviewlibrary/baserecyclerviewlibrary.iml" />
-      <module fileurl="file://$PROJECT_DIR$/baserecyclerviewlibrary/baserecyclerviewlibrary.iml" filepath="$PROJECT_DIR$/baserecyclerviewlibrary/baserecyclerviewlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/centerbus/centerbus.iml" filepath="$PROJECT_DIR$/centerbus/centerbus.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gsyVideoPlayer/gsyVideoPlayer.iml" filepath="$PROJECT_DIR$/gsyVideoPlayer/gsyVideoPlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/gsyVideoPlayer/gsyVideoPlayer.iml" filepath="$PROJECT_DIR$/gsyVideoPlayer/gsyVideoPlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/gsyVideoPlayer-java/gsyVideoPlayer-java.iml" filepath="$PROJECT_DIR$/gsyVideoPlayer-java/gsyVideoPlayer-java.iml" />
       <module fileurl="file://$PROJECT_DIR$/maotuan.iml" filepath="$PROJECT_DIR$/maotuan.iml" />
