@@ -19,6 +19,7 @@ public class SimpleDialogViewThree extends LinearLayout {
      *
      */
     private TextView topTV,centerTV,lastTV,bottomTV;
+    private View devide1, devide2;
 
     public SimpleDialogViewThree(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -36,6 +37,8 @@ public class SimpleDialogViewThree extends LinearLayout {
         topTV = (TextView) findViewById(R.id.tv_viewsimpledialogview_topitem);
         centerTV = (TextView) findViewById(R.id.tv_viewsimpledialogview_centreitem);
         lastTV = (TextView) findViewById(R.id.tv_viewsimpledialogview_lastitem);
+        devide1 = findViewById(R.id.divide_1);
+        devide2 = findViewById(R.id.divide_2);
         bottomTV = (TextView) findViewById(R.id.tv_viewsimpledialogview_bottomitem);
     }
 
@@ -44,31 +47,23 @@ public class SimpleDialogViewThree extends LinearLayout {
         return topTV;
     }
 
-    public void setTopTV(TextView topTV) {
-        this.topTV = topTV;
-    }
-
     public TextView getCenterTV() {
         return centerTV;
-    }
-
-    public void setCenterTV(TextView centerTV) {
-        this.centerTV = centerTV;
     }
 
     public TextView getLastTV() {
         return lastTV;
     }
 
-    public void setLastTV(TextView lastTV) {
-        this.lastTV = lastTV;
-    }
-
     public TextView getBottomTV() {
         return bottomTV;
     }
 
-    public void setBottomTV(TextView bottomTV) {
-        this.bottomTV = bottomTV;
+    public View getDevide1() {
+        return devide1;
+    }
+
+    public View getDevide2() {
+        return devide2;
     }
 }

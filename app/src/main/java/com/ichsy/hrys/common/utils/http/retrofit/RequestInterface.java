@@ -128,7 +128,7 @@ public interface RequestInterface {
     Observable<BaseResponse> sendVideoComment(@Body ArtSendVideoCommentInput entity);
 
     // 删除评论回复接口
-    @POST(ServiceConfig.SEND_VIDEO_COMMENT)
+    @POST(ServiceConfig.DELETE_VIDEO_COMMENT)
     Observable<BaseResponse> deleteVideoComment(@Body ArtDeleteVideoCommentInput entity);
 
     // 全部回复

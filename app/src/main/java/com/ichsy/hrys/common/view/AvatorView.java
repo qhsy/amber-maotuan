@@ -14,8 +14,6 @@ import com.ichsy.hrys.common.utils.imageloadutils.ImageStyleType;
 import com.ichsy.hrys.entity.ArtVideoUserInfo;
 import com.ichsy.hrys.model.main.controller.TaskController;
 
-import static com.ichsy.hrys.AppApplication.mContext;
-
 /**
  * 用户头像使用（内部维护了头像的点击事件统一跳转到PersonActivity页面,出入一个UserInfo实体data数据）
  * author: ihesen on 2016/5/12 11:10
@@ -69,7 +67,7 @@ public class AvatorView extends AppCompatImageView implements View.OnClickListen
                 UMAnalyticsUtils.onEvent(getContext(), eventID);
             }
 
-            TaskController.openPersionInfo((Activity) mContext, mUserInfo.getUserCode());
+            TaskController.openPersionInfo((Activity) v.getContext(), mUserInfo.getUserCode());
         }
     }
 

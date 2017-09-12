@@ -3,10 +3,16 @@ package com.ichsy.hrys.common.view.video;
 import android.content.Context;
 import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.ichsy.hrys.R;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 
 /**
@@ -16,7 +22,8 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 public class PictureGSYVideoPlayer extends StandardGSYVideoPlayer {
 
-//    private RelativeLayout mPreviewLayout;
+    private RelativeLayout mPreviewLayout;
+    private RelativeLayout mPreviewLayout1;
 
 //    private SeekBar seekBar;
 //    private View currentView;
@@ -41,7 +48,10 @@ public class PictureGSYVideoPlayer extends StandardGSYVideoPlayer {
     }
 
     private void initView() {
-//        mPreviewLayout = (RelativeLayout) findViewById(R.id.pic_layout);
+        mPreviewLayout = (RelativeLayout) findViewById(R.id.video_rootview);
+        mPreviewLayout1 = (RelativeLayout) findViewById(R.id.thumb);
+        mPreviewLayout1.setBackgroundResource(R.drawable.roundcorner_rect_white_82px);
+        mPreviewLayout.setBackgroundResource(R.drawable.roundcorner_rect_white_82px);
 //        seekBar = getProgressBar();
     }
 
@@ -49,6 +59,20 @@ public class PictureGSYVideoPlayer extends StandardGSYVideoPlayer {
     public int getLayoutId() {
         return R.layout.video_seekbar_picture;
     }
+
+    @Override
+    protected void resolveFullVideoShow(Context context, GSYBaseVideoPlayer gsyVideoPlayer, FrameLayout frameLayout) {
+        frameLayout.setBackgroundResource(R.drawable.roundcorner_rect_white_82px);
+        super.resolveFullVideoShow(context, gsyVideoPlayer, frameLayout);
+    }
+
+    @Override
+    protected void resolveNormalVideoShow(View oldF, ViewGroup vp, GSYVideoPlayer gsyVideoPlayer) {
+        vp.setBackgroundResource(R.drawable.roundcorner_rect_white_82px);
+        super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer);
+    }
+
+
 
     @Override
     protected void insertPictureOnSeekBar() {

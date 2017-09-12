@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/rl_rootview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/devide_gray">
+
+    <com.ichsy.hrys.common.view.refreshview.RefreshLay
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:addStatesFromChildren="true">
+
+        <com.ichsy.hrys.common.view.ScrollingPauseLoadImageRecyclerView
+            android:id="@+id/main_item_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@null"
+            android:scrollbars="vertical"/>
+    </com.ichsy.hrys.common.view.refreshview.RefreshLay>
+
+    <com.ichsy.hrys.common.view.CommentView
+        android:id="@+id/cv_comment_layer"
+        android:layout_width="match_parent"
+        android:layout_height="50.5dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
+</RelativeLayout>

@@ -13,6 +13,7 @@ public class ArtVideoCommentInfo {
     private String commentId; //评论的Id ,
     private ArtVideoUserInfo senderInfo; //发送评论的用户信息
     private int thumbsUp; //点赞数
+    private boolean thumbStatus; // 点赞状态 ,
     private List<ArtVideoReplyInfo> commentReplyList; //回复列表
 
     public String getCommentContent() {
@@ -69,5 +70,13 @@ public class ArtVideoCommentInfo {
 
     public void setCommentReplyList(List<ArtVideoReplyInfo> commentReplyList) {
         this.commentReplyList = commentReplyList;
+    }
+
+    public boolean isThumbStatus() {
+        return thumbStatus;
+    }
+
+    public void setThumbStatus(boolean thumbStatus) {
+        this.thumbStatus = thumbStatus;
     }
 }

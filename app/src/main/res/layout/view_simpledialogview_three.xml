@@ -19,6 +19,7 @@
             android:textColor="@color/color_text_mediumcolor"
             android:textSize="@dimen/textsize_17"/>
         <View
+            android:id="@+id/divide_1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/color_standard_14"
@@ -31,6 +32,7 @@
             android:textColor="@color/color_text_mediumcolor"
             android:textSize="@dimen/textsize_17"/>
         <View
+            android:id="@+id/divide_2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/color_standard_14"

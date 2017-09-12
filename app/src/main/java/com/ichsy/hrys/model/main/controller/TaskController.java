@@ -103,7 +103,9 @@ public class TaskController {
                 @Override
                 public void onHttpRequestComplete(String url, HttpContext httpContext) {
                     BaseResponse result = httpContext.getResponseObject();
-                    callBack.onResult(result != null && result.status == 1, collectOption);
+                    if (result != null) {
+                        callBack.onResult(result.status == 1, collectOption);
+                    }
                 }
             });
             return true;
@@ -118,7 +120,7 @@ public class TaskController {
      * 是否点赞
      *
      */
-    public static boolean zanTask(Context context, String requestUnicode, String commentId, final boolean zanOption, final CollectCallBack callBack) {
+    public static boolean zanTask(Context context, String requestUnicode, String commentId, final boolean zanOption, final PraiseCallBack callBack) {
         if (LoginUtils.isLogin(context)) {
             ArtCommentThumbsUpDownInput entity = new ArtCommentThumbsUpDownInput ();
             entity.commentId = commentId;
@@ -132,7 +134,9 @@ public class TaskController {
                 @Override
                 public void onHttpRequestComplete(String url, HttpContext httpContext) {
                     ArtCommentThumbsUpDownResult result = httpContext.getResponseObject();
-                    callBack.onResult(result != null && result.status == 1, zanOption);
+                    if (result != null) {
+                        callBack.onResult(result, zanOption);
+                    }
                 }
             });
             return true;
@@ -151,5 +155,15 @@ public class TaskController {
          * @param collectOption 是什么操作（true:收藏操作  false:取消收藏操作）
          */
         void onResult(boolean collcetResult, boolean collectOption);
+    }
+
+    public interface PraiseCallBack {
+        /**
+         * 点赞回调
+         *
+         * @param result
+         * @param PraiseOption 是什么操作（true:赞操作  false:取消赞操作）
+         */
+        void onResult(ArtCommentThumbsUpDownResult result, boolean PraiseOption);
     }
 }

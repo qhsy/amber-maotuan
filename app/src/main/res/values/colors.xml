@@ -6,6 +6,7 @@
 
     <color name="color_blue">#5b76d2</color>
     <color name="color_blue1">#819af0</color>
+    <color name="color_blue2">#6e89e5</color>
     <!-- tittle栏 背景颜色-->
     <color name="color_tittle_bg">#ffffff</color>
 
@@ -27,7 +28,7 @@
     <color name="color_btn_gray">#9d9d9d</color>
     <color name="color_btn_gray2">#9c9c9c</color>
 
-    <color name="color_text_gold">#cba163</color>
+    <color name="color_text_gold">#fedc8a</color>
 
     <color name="color_btn_black">#333333</color>
 
@@ -75,6 +76,7 @@
     <color name="color_standard_30">#e9e9e9</color>
     <color name="color_standard_31">#cc4f4f</color>
     <color name="color_standard_32">#f3f3f3</color>
+    <color name="color_standard_33">#bbc5e8</color>
     <!-- 公用颜色 End -->
 
     <color name="color_withdrawsuccesscolor">#cccccc</color>

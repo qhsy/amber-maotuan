@@ -11,7 +11,7 @@ public class ArtVideoReplyInfo {
     private String replyId;//  回复Id ,
     private ArtVideoUserInfo replyReceiverUserInfo;//  回复接受者信息 ,
     private ArtVideoUserInfo replySenderUserInfo;//  回复发送者信息 ,
-    private String replyTime;//  回复的时间
+    private long replyTime;//  回复的时间
 
     public String getCommentId() {
         return commentId;
@@ -53,11 +53,11 @@ public class ArtVideoReplyInfo {
         this.replySenderUserInfo = replySenderUserInfo;
     }
 
-    public String getReplyTime() {
+    public long getReplyTime() {
         return replyTime;
     }
 
-    public void setReplyTime(String replyTime) {
+    public void setReplyTime(long replyTime) {
         this.replyTime = replyTime;
     }
 }

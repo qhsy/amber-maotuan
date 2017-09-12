@@ -2,6 +2,7 @@ package com.ichsy.hrys.model.details;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import com.ichsy.hrys.common.utils.http.HttpContext;
 import com.ichsy.hrys.common.utils.http.SimpleRequestListener;
 import com.ichsy.hrys.common.view.CommentView;
 import com.ichsy.hrys.common.view.ScrollingPauseLoadImageRecyclerView;
+import com.ichsy.hrys.common.view.dialog.CommonDialog;
 import com.ichsy.hrys.common.view.dialog.SimpleDialogViewThree;
 import com.ichsy.hrys.common.view.refreshview.RefreshLay;
 import com.ichsy.hrys.config.constants.StringConstant;
@@ -43,7 +45,6 @@ import zz.mk.utilslibrary.ToastUtils;
 import zz.mk.utilslibrary.system.InputMethodUtils;
 
 import static com.ichsy.hrys.R.id.refresh;
-import static com.ichsy.hrys.config.constants.StringConstant.COMMENT_COMMENT;
 import static com.ichsy.hrys.config.constants.StringConstant.COMMENT_REPLY;
 import static com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity.COMMENT_LIST;
 import static com.ichsy.hrys.entity.ArtVideoCommentInfoMultiItemEntity.COMMENT_NUM;
@@ -56,7 +57,7 @@ import static zz.mk.utilslibrary.system.InputMethodUtils.isShouldHideInput;
  * Created by zhu on 2017/9/8.
  */
 
-public class CommentListActivity extends BaseActivity implements RefreshLay.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnLayoutChangeListener{
+public class CommentListActivity extends BaseActivity implements RefreshLay.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnLayoutChangeListener {
     @BindView(R.id.rl_rootview)
     View mRootView;
     @BindView(R.id.main_item_list)
@@ -85,6 +86,10 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
     @Override
     public void logic() {
         showDefaultTittle("全部回复");
+        setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_blue));
+        getCenterTittleView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_white));
+        setLeftDrawable(R.drawable.icon_back_white);
+
         setParams();
         setCommentAdapter();
     }
@@ -99,7 +104,7 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
         mRequestParams.pageOption.itemCount = 10;
         mRequestParams.commentId = getIntent().getStringExtra(StringConstant.COMMENT_ID);
         //默认评论顶部
-        commentEntity.publishType = COMMENT_COMMENT;
+        commentEntity.publishType = COMMENT_REPLY;
         videoNumber = getIntent().getStringExtra(StringConstant.VIDEO_NUMBER);
     }
 
@@ -120,31 +125,26 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
     public void loadListener() {
         mRootView.addOnLayoutChangeListener(this);
 
-        cvCommentLayer.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        cvCommentLayer.getEditText().setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    if (!LoginUtils.isLogin(context)) {
-                        LoginParams params = new LoginParams(context, LoginEvent.LOGIN);
-                        CenterEventBus.getInstance().postTask(params);
-                        return;
-                    }
+            public boolean onTouch(View v, MotionEvent event) {
+                if (!LoginUtils.isLogin(context)) {
+                    LoginParams params = new LoginParams(context, LoginEvent.LOGIN);
+                    CenterEventBus.getInstance().postTask(params);
                 }
-                ToastUtils.showShortToast("commentEntity.publishType:" + commentEntity.publishType);
+                commentEntity.commentId = mAdapter.getData().get(0).videoCommentInfo.getCommentId();
+                commentEntity.receiverCode = mAdapter.getData().get(0).videoCommentInfo.getSenderInfo().getUserCode();
+                return false;
             }
         });
 
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (position == 0 || position == 1 || position == 2) return;
+                if (position == 1 || position == 2) return;
                 if (!LoginUtils.isLogin(context)) {
                     LoginParams params = new LoginParams(context, LoginEvent.LOGIN);
                     CenterEventBus.getInstance().postTask(params);
-                    return;
-                }
-                if ((SharedPreferencesUtils.getUserInfo(context).getUserCode()).equals(mAdapter.getData().get(position).videoReplyInfo.getReplySenderUserInfo().getUserCode())) {
-                    ToastUtils.showShortToast("不能回复自己!");
                     return;
                 }
 
@@ -193,16 +193,30 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
         view.getLastTV().setText("删除");
         view.getBottomTV().setText("取消");
 
+        if (isMyself(position)) {
+            view.getLastTV().setVisibility(View.VISIBLE);
+            view.getDevide2().setVisibility(View.VISIBLE);
+        } else {
+            view.getLastTV().setVisibility(View.GONE);
+            view.getDevide2().setVisibility(View.GONE);
+        }
+
         final Dialog headerViewDialog = DialogUtils.getBottomDialog(context, view, true);
         view.getTopTV().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 headerViewDialog.dismiss();
-                String userName = mAdapter.getData().get(position).videoReplyInfo.getReplySenderUserInfo().getUserName();
+                String userName = "";
+                if (position == 0) {
+                    userName = mAdapter.getData().get(position).videoCommentInfo.getSenderInfo().getUserName();
+                    commentEntity.commentId = mAdapter.getData().get(position).videoCommentInfo.getCommentId();
+                    commentEntity.receiverCode = mAdapter.getData().get(position).videoCommentInfo.getSenderInfo().getUserCode();
+                } else {
+                    userName = mAdapter.getData().get(position).videoReplyInfo.getReplySenderUserInfo().getUserName();
+                    commentEntity.commentId = mAdapter.getData().get(position).videoReplyInfo.getCommentId();
+                    commentEntity.receiverCode = mAdapter.getData().get(position).videoReplyInfo.getReplySenderUserInfo().getUserCode();
+                }
                 commentEntity.publishType = COMMENT_REPLY;
-                commentEntity.commentId = mAdapter.getData().get(position).videoReplyInfo.getCommentId();
-                commentEntity.receiverCode = mAdapter.getData().get(position).videoReplyInfo.getReplySenderUserInfo().getUserCode();
-                ToastUtils.showShortToast("commentEntity.publishType:" + commentEntity.publishType);
                 cvCommentLayer.getEditText().setHint("回复:" + userName);
                 showKeyBoard(cvCommentLayer.getEditText());
             }
@@ -218,19 +232,34 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
         view.getLastTV().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                headerViewDialog.dismiss();
-                ArtDeleteVideoCommentInput entity = new ArtDeleteVideoCommentInput();
-                entity.commentId = mAdapter.getData().get(position).videoReplyInfo.getReplyId();
-                RequestUtils.deleteVideoComment(getRequestUnicode(), entity, new SimpleRequestListener(){
+                final CommonDialog callDialog = new CommonDialog(context, CommonDialog.CommonDialogViewType.TWO);
+                callDialog.setTittleAndContent("温馨提示", "是否要删除该评论？");
+                callDialog.getCloseBtn().setVisibility(View.GONE);
+                callDialog.getLeftButton().setText("否");
+                callDialog.getRightButton().setText("是");
+                callDialog.getRightButton().setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onHttpRequestComplete(String url, HttpContext httpContext) {
-                        BaseResponse result = httpContext.getResponseObject();
-                        if (result.status == 1) {
-                            onRefresh();
-                            ToastUtils.showShortToast("删除成功！");
-                        }
+                    public void onClick(View v) {
+                        callDialog.dismiss();
+                        ArtDeleteVideoCommentInput entity = new ArtDeleteVideoCommentInput();
+                        entity.commentId = mAdapter.getData().get(position).videoReplyInfo.getReplyId();
+                        RequestUtils.deleteVideoComment(getRequestUnicode(), entity, new SimpleRequestListener() {
+                            @Override
+                            public void onHttpRequestComplete(String url, HttpContext httpContext) {
+                                BaseResponse result = httpContext.getResponseObject();
+                                if (result.status == 1) {
+                                    onRefresh();
+                                    ToastUtils.showShortToast("删除成功！");
+                                } else {
+                                    ToastUtils.showShortToast("删除成功！");
+                                }
+                                headerViewDialog.dismiss();
+                            }
+                        });
                     }
                 });
+
+
             }
         });
         view.getBottomTV().setOnClickListener(new View.OnClickListener() {
@@ -241,6 +270,14 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
         });
 
         return headerViewDialog;
+    }
+
+    private boolean isMyself(int position) {
+        if (position == 0) {
+            return (SharedPreferencesUtils.getUserInfo(context).getUserCode()).equals(mAdapter.getData().get(position).videoCommentInfo.getSenderInfo().getUserCode());
+        } else {
+            return (SharedPreferencesUtils.getUserInfo(context).getUserCode()).equals(mAdapter.getData().get(position).videoReplyInfo.getReplySenderUserInfo().getUserCode());
+        }
     }
 
     @Override
@@ -370,8 +407,9 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
         } else if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > 0)) {
             cvCommentLayer.clearContent();
             cvCommentLayer.resetHintContent();
-            commentEntity.publishType = COMMENT_COMMENT;
-            ToastUtils.showShortToast("收起");
+            commentEntity.commentId = mAdapter.getData().get(0).videoCommentInfo.getCommentId();
+            commentEntity.receiverCode = mAdapter.getData().get(0).videoCommentInfo.getSenderInfo().getUserCode();
+            commentEntity.publishType = COMMENT_REPLY;
         }
     }
 }

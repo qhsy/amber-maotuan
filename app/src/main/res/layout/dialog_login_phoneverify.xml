@@ -1,96 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/shape_white_circular"
-    android:orientation="vertical"
-    android:layout_marginLeft="11dp"
-    android:layout_marginRight="11dp"
-    >
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/shape_white_circular"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="30dp"
-        >
+        android:layout_height="40dp"
+        android:background="@drawable/login_dialog_top_corner">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="23dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
             android:text="@string/login_loginphoneverify_tip"
-            android:textColor="@color/color_text_deepcolor"
-            android:textSize="@dimen/textsize_20" />
+            android:textColor="@color/color_text_gold"
+            android:textSize="@dimen/textsize_14"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/login_bear"/>
 
         <Button
             android:id="@+id/btn_dialoglogin_close"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="11dp"
-            android:layout_marginTop="11dp"
-            android:background="@drawable/icon_guanbi" />
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/icon_close1"/>
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/et_dialoglogin_phone"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:textSize="@dimen/textsize_14"
-        android:layout_marginTop="30dp"
-        android:hint="@string/login_loginphonehint"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:textColorHint="@color/color_btn_gray2"
-        android:textColor="@color/color_btn_black"
-        android:background="@drawable/oneline_downbkg_white"
-        android:maxLength="11"
-        android:inputType="phone"
-        />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:background="@drawable/oneline_downbkg_white">
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_dialog_bottom_white_corner"
+        android:orientation="vertical"
+        android:padding="20dp">
+
         <EditText
-            android:id="@+id/ev_dialoglogin_verifycode"
+            android:id="@+id/et_dialoglogin_phone"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:textSize="@dimen/textsize_14"
-            android:layout_marginTop="15dp"
-            android:textColorHint="@color/color_btn_gray2"
+            android:background="@drawable/login_dialog_gray_roundcorner"
+            android:hint="@string/login_loginphonehint"
+            android:inputType="phone"
+            android:paddingLeft="15dp"
+            android:maxLength="11"
             android:textColor="@color/color_btn_black"
-            android:hint="@string/login_loginverifycodehint"
-            android:background="@null"
-            android:inputType="number"
-            android:maxLength="6"
-            />
-        <Button
-            android:id="@+id/btn_dialog_getverify"
-            android:layout_width="88dp"
+            android:textColorHint="@color/color_btn_gray2"
+            android:textSize="@dimen/textsize_14"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/shape_rectbtn__grayborder"
-            android:textColor="@color/color_blue"
-            android:textSize="@dimen/textsize_14"
-            android:text="@string/login_getverify"
-            />
-    </RelativeLayout>
-    
-    <TextView
-        android:id="@+id/tv_dialoglogin_login"
-        android:layout_width="158dp"
-        android:layout_height="39dp"
-        android:text="加入毛团儿"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="23dp"
-        android:gravity="center"
-        android:textSize="@dimen/textsize_16"
-        android:textColor="@color/white"
-        android:background="@drawable/shape_btn_roundcorner_fullblue_0px"
-        android:layout_marginBottom="16dp"
-        />
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/ev_dialoglogin_verifycode"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="15dp"
+                android:background="@drawable/login_dialog_gray_left_roundcorner"
+                android:hint="@string/login_loginverifycodehint"
+                android:inputType="number"
+                android:maxLength="6"
+                android:textColor="@color/color_btn_black"
+                android:textColorHint="@color/color_btn_gray2"
+                android:textSize="@dimen/textsize_14"/>
+
+            <Button
+                android:id="@+id/btn_dialog_getverify"
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/login_dialog_gray_right_roundcorner"
+                android:text="@string/login_getverify"
+                android:textColor="@color/color_text_gold"
+                android:textSize="@dimen/textsize_14"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_dialoglogin_login"
+            android:layout_width="158dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/shape_btn_roundcorner_fullblue_0px"
+            android:gravity="center"
+            android:text="加入毛团儿"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_16"/>
+    </LinearLayout>
 </LinearLayout>

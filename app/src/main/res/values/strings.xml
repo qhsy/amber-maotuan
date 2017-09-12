@@ -8,10 +8,10 @@
 
     <!-- Strings related to login -->
     <string name="login_loginphonehint">请输入手机号</string>
-    <string name="login_loginverifycodehint">请输入短信验证码</string>
-    <string name="login_loginphoneverify_tip">短信验证码登录</string>
+    <string name="login_loginverifycodehint">请填写验证码</string>
+    <string name="login_loginphoneverify_tip">短信验证登录</string>
     <string name="login_getverify">获取验证码</string>
-    <string name="loading">正在加载中...</string>
+    <string name="loading">正在加载中</string>
 
     <string name="string_tips_phonenumerror">请正确填写手机号</string>
     <string name="string_tips_addresspostcodeerror">请正确填写6位邮编</string>
@@ -37,9 +37,12 @@
     <string name="string_geek_dialoglable_count">(%1$d/6)</string>
 
     <string name="task_product_post_num">共%1$d篇相关内容</string>
-    <!-- 任务收藏 -->
+    <!-- 视频收藏 -->
     <string name="collect_cancel">已取消收藏</string>
     <string name="collect_success">收藏成功</string>
+    <!-- 视频点赞 -->
+    <string name="zan_cancel">已取消赞</string>
+    <string name="zan_success">点赞成功</string>
 
     <!-- 任务操作状态 -->
     <string name="task_daishenhezizhi">待审核资质</string>

@@ -175,6 +175,25 @@ public class ImageLoaderUtils {
         loadViewImage(context,img,sourceId,defaultDrawableID,defaultErrorDrawableId,defaultDrawableID,null,type);
 
     }
+
+    /**
+     *
+     * @param img
+     * @param sourceId
+     * @param defaultDrawableID 默认图ID
+     */
+    public static void loadViewRoundCornerImage(@NonNull Context context, @NonNull ImageView img, @NonNull Object sourceId, int defaultDrawableID, int defaultErrorDrawableId, int raduis) {
+        Glide.with(context)
+                .load(sourceId)
+                .diskCacheStrategy(cacheStrategy)
+                .centerCrop()
+                .placeholder(defaultDrawableID)
+                .error(defaultErrorDrawableId)
+                .crossFade(animationTime)
+                .bitmapTransform(new RoundedCornersTransformation(mContext, raduis, 0, RoundedCornersTransformation.CornerType.ALL))
+                .into(img);
+    }
+
     /**
      * @param img
      * @param sourceId

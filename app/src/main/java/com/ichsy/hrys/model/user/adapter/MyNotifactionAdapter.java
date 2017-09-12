@@ -43,7 +43,6 @@ public class MyNotifactionAdapter extends BaseQuickAdapter<ArtVideoNotifactionMe
         ArtVideoUserInfo senderInfo = pItem.getReplySenderUserInfo();
         ArtVideoUserInfo receiverInfo = pItem.getReplyReceiverUserInfo();
         ArtVideoCommentMessage videoCommentMessage = pItem.getCommentMessage();
-        helper.setVisible(R.id.detail_comment_reply_ll, false);
         //头像
         AvatorView avatorView = helper.getView(R.id.detail_comment_icon);
         avatorView.setUserInfo(senderInfo, true);
@@ -52,14 +51,13 @@ public class MyNotifactionAdapter extends BaseQuickAdapter<ArtVideoNotifactionMe
         //时间
         helper.setText(R.id.time, DateUtil.getTime(pItem.getReplyTime(), "yyyy-MM-dd HH:mm"));
         //回复内容
-        TextParser mTextParser = TextParser.getInstance();
         int mTextSize = 13;
-        mTextParser.append("回复 ", mTextSize, ContextCompat.getColor(mContext, R.color.color_text_mediumcolor));
-        mTextParser.append("我 ：", mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_gray2));
-        mTextParser.append(pItem.getReplyContent(), mTextSize, ContextCompat.getColor(mContext, R.color.color_text_mediumcolor));
-        mTextParser.parse((TextView) helper.getView(R.id.detail_comment_content));
+        TextParser.getInstance().append("回复 ", mTextSize, ContextCompat.getColor(mContext, R.color.color_text_mediumcolor))
+        .append("我 ：", mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_gray2))
+        .append(pItem.getReplyContent(), mTextSize, ContextCompat.getColor(mContext, R.color.color_text_mediumcolor))
+        .parse((TextView) helper.getView(R.id.detail_comment_content));
         //我的评论
-        TextParser.getInstance().append("我的评论： ", 16, ContextCompat.getColor(mContext, R.color.color_btn_black)).append(videoCommentMessage.getCommentContent(), 16, ContextCompat.getColor(mContext, R.color.color_btn_gray2)).parse((TextView) helper.getView(R.id.detail_comment_mine));
+        TextParser.getInstance().append("我的评论： ", mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_black)).append(videoCommentMessage.getCommentContent(), mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_gray2)).parse((TextView) helper.getView(R.id.detail_comment_mine));
     }
 
     /**

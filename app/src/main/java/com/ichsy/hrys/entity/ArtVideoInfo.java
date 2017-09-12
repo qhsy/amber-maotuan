@@ -21,6 +21,9 @@ public class ArtVideoInfo implements Serializable {
     private String videoUrl; // 视频url ,
     private ArtVideoUserInfo videoUserInfo; //视频发布人
 
+    //视频是否自动播放
+    public boolean isAutoPlay = false;
+
     public String getVideoCaption() {
         return videoCaption == null ? "" : videoCaption;
     }

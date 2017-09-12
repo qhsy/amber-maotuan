@@ -111,9 +111,9 @@ public class CommentListAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommen
         int mTextSize = 13;
 
         if (receiverInfo != null) {
-            mTextParser.append("回复 ", mTextSize, ContextCompat.getColor(mContext, R.color.color_text_mediumcolor));
-            mTextParser.append(receiverInfo.getUserName()+" ", mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_gray2));
-            mTextParser.append(videoReplyInfo.getReplyContent(), mTextSize, ContextCompat.getColor(mContext, R.color.color_text_mediumcolor));
+            mTextParser.append("回复 ", mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_black));
+            mTextParser.append(receiverInfo.getUserName()+" ：", mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_gray2));
+            mTextParser.append(videoReplyInfo.getReplyContent(), mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_black));
             mTextParser.parse((TextView) helper.getView(R.id.detail_comment_content));
         }
     }

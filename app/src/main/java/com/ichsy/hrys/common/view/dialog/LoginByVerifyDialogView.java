@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,6 +28,7 @@ import com.ichsy.hrys.model.login.LoginEvent;
 import com.ichsy.hrys.model.login.LoginManager;
 
 import zz.mk.utilslibrary.LogUtil;
+import zz.mk.utilslibrary.ScreenUtil;
 import zz.mk.utilslibrary.ToastUtils;
 import zz.mk.utilslibrary.net.NetUtil;
 
@@ -87,6 +87,7 @@ public class LoginByVerifyDialogView extends Dialog implements View.OnClickListe
         this.context = context;
         setContentView(R.layout.dialog_login_phoneverify);
         initView();
+        this.setCanceledOnTouchOutside(false);
         closeBtn.setOnClickListener(this);
         getVerifyCodeBtn.setOnClickListener(this);
         loginInTv.setOnClickListener(this);
@@ -185,8 +186,17 @@ public class LoginByVerifyDialogView extends Dialog implements View.OnClickListe
     }
     private void  initStyle(){
         Window window = getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setLayout((int) (ScreenUtil.getScreenWidth(getContext()) * 0.8), android.view.WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
+
+//        Window dialogWindow = getWindow();
+//        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+//
+//        DisplayMetrics d = context.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
+//        lp.width = (int) (d.widthPixels * 0.74);
+////		lp.y = ScreenUtil.px2dip(context, 160);
+//
+//        dialogWindow.setAttributes(lp);
     }
 
 

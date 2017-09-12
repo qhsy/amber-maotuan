@@ -48,6 +48,8 @@ public class ArtVideoCommentInfoMultiItemEntity extends MultiItemEntity{
 
     public ArtVideoReplyInfo videoReplyInfo = new ArtVideoReplyInfo(); // 回复相信息
 
+    public ArtPageResults pageResults = new ArtPageResults(); //分页
+
     public ArtVideoCommentInfoMultiItemEntity(int itemType) {
         super(itemType);
     }

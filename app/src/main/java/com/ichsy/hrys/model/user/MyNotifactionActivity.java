@@ -80,7 +80,7 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
     private Dialog commentDialog;
     @Override
     public void loadLayout() {
-        setContentView(R.layout.activity_comment_list);
+        setContentView(R.layout.activity_message_list);
     }
 
     @Override
@@ -133,7 +133,6 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
                         return;
                     }
                 }
-                ToastUtils.showShortToast("commentEntity.publishType:" + commentEntity.publishType);
             }
         });
 
@@ -145,7 +144,6 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
                     CenterEventBus.getInstance().postTask(params);
                     return;
                 }
-
                 if (commentDialog != null) {
                     commentDialog = null;
                 }
@@ -193,13 +191,13 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
         view.getTopTV().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cvCommentLayer.setVisibility(View.VISIBLE);
                 headerViewDialog.dismiss();
                 String userName = mAdapter.getData().get(position).getReplySenderUserInfo().getUserName();
                 commentEntity.publishType = COMMENT_REPLY;
                 commentEntity.videoId = mAdapter.getData().get(position).getCommentMessage().getVideoId();
                 commentEntity.commentId = mAdapter.getData().get(position).getCommentMessage().getCommentId();
                 commentEntity.receiverCode = mAdapter.getData().get(position).getReplySenderUserInfo().getUserCode();
-                ToastUtils.showShortToast("commentEntity.publishType:" + commentEntity.publishType);
                 cvCommentLayer.getEditText().setHint("回复:" + userName);
                 showKeyBoard(cvCommentLayer.getEditText());
                 headerViewDialog.dismiss();
@@ -341,7 +339,7 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
             cvCommentLayer.clearContent();
             cvCommentLayer.resetHintContent();
             commentEntity.publishType = COMMENT_COMMENT;
-            ToastUtils.showShortToast("收起");
+            cvCommentLayer.setVisibility(View.GONE);
         }
     }
 }

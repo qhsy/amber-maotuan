@@ -27,7 +27,7 @@
             android:hint="请输入评论"
             android:textColorHint="@color/color_btn_gray2"
             android:textColor="@color/color_btn_black"
-            android:maxLength="140"
+            android:maxLength="144"
             android:paddingLeft="10dp"
             android:textSize="@dimen/textsize_14"/>
 

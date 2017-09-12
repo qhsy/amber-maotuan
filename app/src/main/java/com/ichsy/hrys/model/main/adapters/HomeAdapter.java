@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -19,6 +21,9 @@ import com.ichsy.hrys.model.main.controller.TaskController;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+
+import zz.mk.utilslibrary.LogUtil;
+import zz.mk.utilslibrary.ScreenUtil;
 
 /**
  * author: zhu on 2017/4/14 17:21
@@ -43,7 +48,6 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
         final ArtVideoUserInfo mUserInfo = item.getVideoUserInfo();
         gsyVideoPlayer = helper.getView(R.id.video_item_player);
         setVideoPlay(helper, item, gsyVideoPlayer);
-//        ImageLoaderUtils.loadViewImage(mContext, (ImageView) helper.getView(R.id.item_videourl), item.getVideoCover(), R.drawable.list_placeholder,R.drawable.list_placeholder,ImageStyleType.RoundedCorners);
 
         ImageLoaderUtils.loadViewImage(mContext, (ImageView) helper.getView(R.id.item_usericon), mUserInfo.getUserIconThumburl(), R.drawable.head_placeholder,R.drawable.icon_wode,ImageStyleType.CropCircle);
         helper.setText(R.id.item_videotime, item.getVideoLong());
@@ -77,19 +81,24 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
     public void setVideoPlay(final BaseViewHolder helper, ArtVideoInfo pItem, final PictureGSYVideoPlayer gsyVideoPlayer) {
 
         gsyVideoOptionBuilder = new GSYVideoOptionBuilder();
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ScreenUtil.dip2px(mContext, 100));
         ImageView imageView = new ImageView(mContext);
-        ImageLoaderUtils.loadViewImage(mContext, imageView, pItem.getVideoCover(), R.drawable.list_placeholder,R.drawable.list_placeholder,ImageStyleType.RoundedCorners);
+        imageView.setLayoutParams(lp);
+        imageView.setAdjustViewBounds(true);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        ImageLoaderUtils.loadViewRoundCornerImage(mContext, imageView, pItem.getVideoCover(), R.drawable.list_placeholder,R.drawable.list_placeholder, 22);
 
         gsyVideoOptionBuilder
                 .setIsTouchWiget(false)
                 .setThumbImageView(imageView)
                 .setUrl(pItem.getVideoUrl())
                 .setCacheWithPlay(true)
-                .setRotateViewAuto(true)
-                .setLockLand(true)
+                .setRotateViewAuto(false)
+                .setLockLand(false)
                 .setPlayTag(TAG)
                 .setShowFullAnimation(true)
-                .setNeedLockFull(true)
+                .setNeedLockFull(false)
                 .setPlayPosition(helper.getLayoutPosition())
                 .setStandardVideoAllCallBack(new SampleListener() {
                     @Override
@@ -135,6 +144,10 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
             }
         });
 //        gsyVideoPlayer.getStartButton().setVisibility(View.GONE);
+        LogUtil.zLog().e("*************************************** auto: "+pItem.isAutoPlay);
+        if (pItem.isAutoPlay) {
+            gsyVideoPlayer.startPlayLogic();
+        }
     }
 
     /**

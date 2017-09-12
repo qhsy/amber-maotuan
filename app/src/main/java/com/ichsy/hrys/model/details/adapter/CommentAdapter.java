@@ -2,7 +2,8 @@ package com.ichsy.hrys.model.details.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ichsy.hrys.R;
 import com.ichsy.hrys.common.utils.RequestUtils;
@@ -26,6 +28,7 @@ import com.ichsy.hrys.entity.ArtVideoInfo;
 import com.ichsy.hrys.entity.ArtVideoReplyInfo;
 import com.ichsy.hrys.entity.ArtVideoUserInfo;
 import com.ichsy.hrys.entity.request.ArtSendVideoCommentInput;
+import com.ichsy.hrys.entity.response.ArtCommentThumbsUpDownResult;
 import com.ichsy.hrys.entity.response.BaseResponse;
 import com.ichsy.hrys.model.details.VideoDetailActivity;
 import com.ichsy.hrys.model.main.controller.TaskController;
@@ -89,8 +92,8 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
         final ArtVideoInfo artVideoInfo = item.videoInfo;
         final ImageView mDetailCollect = helper.getView(R.id.detail_collect);
         //收藏状态初始化
-        setCollectStatus(mDetailCollect, item.collected);
         collectStatus = item.collected;
+        setCollectStatus(mDetailCollect, collectStatus);
 
         //视屏标题
         helper.setText(R.id.detail_title, artVideoInfo.getVideoCaption());
@@ -146,7 +149,7 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
      */
     protected void setCommentNo(BaseViewHolder helper, ArtVideoCommentInfoMultiItemEntity pItem) {
         //评论数目
-        TextParser.getInstance().append("评论  (", 16).append(pItem.commentCount + "", 16, Color.parseColor("#5b76d2")).append(")", 16).parse((TextView) helper.getView(R.id.detail_list_comment));
+        TextParser.getInstance().append("评论  (", 16).append(pItem.commentCount + "", 16, ContextCompat.getColor(mContext, R.color.color_blue)).append(")", 16).parse((TextView) helper.getView(R.id.detail_list_comment));
 
     }
 
@@ -155,7 +158,7 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
      * @param helper
      * @param pItem
      */
-    protected void setCommentList(BaseViewHolder helper, ArtVideoCommentInfoMultiItemEntity pItem) {
+    protected void setCommentList(BaseViewHolder helper, final ArtVideoCommentInfoMultiItemEntity pItem) {
         final ArtVideoCommentInfo item = pItem.videoCommentInfo;
         ArtVideoUserInfo userInfo = item.getSenderInfo();
 
@@ -167,32 +170,35 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
 
         helper.setText(R.id.detail_comment_name, userInfo.getUserName());
 
-        //点赞
-        TextView zan = helper.getView(R.id.detail_comment_thumbsup);
+        //点赞 初始化状态
+        final TextView zan = helper.getView(R.id.detail_comment_thumbsup);
+        zan.setText(item.getThumbsUp()+"");
+        zan.setVisibility(View.VISIBLE);
+        zanStatus = item.isThumbStatus();
+        setZanStatus(zan, zanStatus);
 
-
-        //回复列表 只显示两条
-        int replySize = pItem.commentReplyList.size();
+        //回复列表 只显示两条；点击跳转更多
+        int replySize = item.getCommentReplyList().size();
         if (replySize > 0) {
-            if (replySize > 2) {
-                helper.setVisible(R.id.detail_comment_findall, true);
-            } else {
-                helper.setVisible(R.id.detail_comment_findall, false);
-            }
             List<ArtVideoReplyInfo> commentReplyList = new ArrayList<>();
             commentReplyList.clear();
             helper.setVisible(R.id.detail_comment_reply_ll, true);
-            helper.getView(R.id.detail_comment_findall).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TaskController.openVideoList((Activity) activity, item.getCommentId(), getVideoNumber());
-                }
-            });
-            for (int i = 0; i < replySize; i++) {
-                if (replySize > 2) return;
-                commentReplyList.add(pItem.commentReplyList.get(i));
+            if (item.pageResults.isMore) {
+                helper.setVisible(R.id.detail_comment_findall, true);
+                helper.getView(R.id.detail_comment_reply_ll).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TaskController.openVideoList((Activity) activity, item.getCommentId(), getVideoNumber());
+                    }
+                });
+            } else {
+                helper.setVisible(R.id.detail_comment_findall, false);
             }
-            setCommentReplyAdapter((RecyclerView) helper.getView(R.id.detail_comment_reply_list), commentReplyList);
+
+            for (int i = 0; i < replySize; i++) {
+                commentReplyList.add(item.getCommentReplyList().get(i));
+            }
+            setCommentReplyAdapter((RecyclerView) helper.getView(R.id.detail_comment_reply_list), commentReplyList, item.getCommentId(),item.pageResults.isMore);
         } else {
             helper.setVisible(R.id.detail_comment_reply_ll, false);
         }
@@ -200,10 +206,20 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
         zan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TaskController.zanTask(activity, getRequestUnicode(), "", false, new TaskController.CollectCallBack() {
-                    @Override
-                    public void onResult(boolean collcetResult, boolean collectOption) {
+                TaskController.zanTask(activity, getRequestUnicode(), pItem.videoCommentInfo.getCommentId(), !zanStatus, new TaskController.PraiseCallBack() {
 
+                    @Override
+                    public void onResult(ArtCommentThumbsUpDownResult result, boolean PraiseOption) {
+                        if (result.status == 1) {
+                            zan.setText(result.thumbsUpNum+"");
+                            zanStatus = PraiseOption;
+                            setZanStatus(zan, PraiseOption);
+                            if (PraiseOption) {
+                                ToastUtils.showShortToast(activity.getString(R.string.zan_success));
+                            } else {
+                                ToastUtils.showShortToast(activity.getString(R.string.zan_cancel));
+                            }
+                        }
                     }
                 });
             }
@@ -211,13 +227,21 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
     }
 
     // 回复列表
-    private void setCommentReplyAdapter(RecyclerView mRecyclerView, List<ArtVideoReplyInfo> commentReplyList) {
+    private void setCommentReplyAdapter(RecyclerView mRecyclerView, List<ArtVideoReplyInfo> commentReplyList, final String commentId, final boolean isMore) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         CommentReplyAdapter mAdapter = new CommentReplyAdapter(mContext);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setNewData(commentReplyList);
+
+        if (!isMore) return;
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                TaskController.openVideoList((Activity) activity, commentId, getVideoNumber());
+            }
+        });
     }
 
     /**
@@ -248,6 +272,24 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommentInf
      */
     protected void setCollectStatus(View view, boolean collection) {
         view.setSelected(collection);
+    }
+
+    /**
+     * 点赞状态
+     *
+     * @return
+     */
+
+    protected void setZanStatus(TextView textView, boolean isZan) {
+        textView.setSelected(isZan);
+        Drawable drawable;
+        if (isZan) {
+            drawable = ContextCompat.getDrawable(mContext, R.drawable.icon_yizan);
+        } else {
+            drawable = ContextCompat.getDrawable(mContext, R.drawable.icon_zan);
+        }
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        textView.setCompoundDrawables(drawable, null, null, null);
     }
 
     public String getRequestUnicode() {

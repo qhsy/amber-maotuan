@@ -18,6 +18,7 @@ import com.ichsy.hrys.common.utils.http.HttpContext;
 import com.ichsy.hrys.common.utils.otto.OttoController;
 import com.ichsy.hrys.common.utils.otto.OttoEventEntity;
 import com.ichsy.hrys.common.utils.otto.OttoEventType;
+import com.ichsy.hrys.common.view.CustomLoadMoreView;
 import com.ichsy.hrys.common.view.DividerItemDecoration;
 import com.ichsy.hrys.common.view.ScrollingPauseLoadImageRecyclerView;
 import com.ichsy.hrys.common.view.convenientbanner.ConvenientBanner;
@@ -91,6 +92,8 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
         homeAdapter = new HomeAdapter(getContext());
         mRecyclerView.setAdapter(homeAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST, hasHeadView()));
+
+        homeAdapter.setLoadMoreView(new CustomLoadMoreView());
         refreshLay.getRefreshHeader().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_blue));
 
         refreshLay.setRefreshListener(this);
@@ -127,6 +130,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
                     int position = GSYVideoManager.instance().getPlayPosition();
                     //对应的播放列表TAG
                     if (GSYVideoManager.instance().getPlayTag().equals(HomeAdapter.TAG) && (position < firstVisibleItem || position > lastVisibleItem)) {
+                        homeAdapter.getData().get(position).isAutoPlay = false;
                         GSYVideoManager.onPause();
                     }
                     if (!recyclerView.canScrollVertically(-1)) {
@@ -136,6 +140,8 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
                     } else if (dy < 0) {
                         //onScrolledUp 上滑
                         if (position > firstVisibleItem && position < lastVisibleItem) {
+                            homeAdapter.getData().get(position).isAutoPlay = true;
+                            homeAdapter.notifyDataSetChanged();
                             GSYVideoManager.onResume();
                         }
                     } else if (dy > 0) {
@@ -209,7 +215,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
                         return;
                     }
                 }
-                homeAdapter.loadMoreEnd(true);
+                homeAdapter.loadMoreEnd();
             }
         }
     }

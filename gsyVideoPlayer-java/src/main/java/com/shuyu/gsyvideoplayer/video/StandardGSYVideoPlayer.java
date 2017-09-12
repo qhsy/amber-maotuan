@@ -396,7 +396,7 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
     protected void changeUiToNormal() {
         Debuger.printfLog("changeUiToNormal");
 
-        setViewShowState(mTopContainer, VISIBLE);
+        setViewShowState(mTopContainer, INVISIBLE);
         setViewShowState(mBottomContainer, INVISIBLE);
         setViewShowState(mStartButton, VISIBLE);
         setViewShowState(mLoadingProgressBar, INVISIBLE);
