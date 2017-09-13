@@ -29,7 +29,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import zz.mk.utilslibrary.ScreenUtil;
-import zz.mk.utilslibrary.ToastUtils;
 
 import static com.ichsy.hrys.R.id.refresh;
 
@@ -121,7 +120,7 @@ public class MyCollectionsActivity extends BaseActivity implements RefreshLay.On
     public void onHttpRequestSuccess(String url, HttpContext httpContext) {
         super.onHttpRequestSuccess(url, httpContext);
         GetCollcetionListResponseEntity result = httpContext.getResponseObject();
-        if (result.status == 1) {
+        if (checkResponse(httpContext)) {
             if (mRequestParams.pageOption.pageNum == 0) {
                 collecteVideoList.clear();
                 boolean videoList = result.collecteVideoList != null && result.collecteVideoList.size() > 0;
@@ -130,17 +129,15 @@ public class MyCollectionsActivity extends BaseActivity implements RefreshLay.On
                 }
                 mAdapter.setNewData(collecteVideoList);
             } else {
-                if (result.collecteVideoList != null && result.collecteVideoList.size() > 0) {
-                    mAdapter.addData(result.collecteVideoList);
-                    if (result.collecteVideoList.size() >= mRequestParams.pageOption.itemCount) {
-                        mAdapter.loadMoreComplete();
-                        return;
+                if (result.pageResults.isMore) {
+                    if (result.collecteVideoList != null && result.collecteVideoList.size() > 0) {
+                        mAdapter.addData(result.collecteVideoList);
                     }
+                    mAdapter.loadMoreComplete();
+                } else {
+                    mAdapter.loadMoreEnd();
                 }
-                mAdapter.loadMoreEnd();
             }
-        } else {
-            ToastUtils.showShortToast(result.getError());
         }
     }
 

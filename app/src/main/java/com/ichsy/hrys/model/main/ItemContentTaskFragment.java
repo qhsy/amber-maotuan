@@ -238,14 +238,14 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
                     homeAdapter.setNewData(result.videoList);
                 }
             } else {
-                if (result.videoList != null && result.videoList.size() > 0) {
-                    homeAdapter.addData(result.videoList);
-                    if (result.videoList.size() >= mRequestParams.pageOption.itemCount) {
-                        homeAdapter.loadMoreComplete();
-                        return;
+                if (result.pageResults.isMore) {
+                    if (result.videoList != null && result.videoList.size() > 0) {
+                        homeAdapter.addData(result.videoList);
                     }
+                    homeAdapter.loadMoreComplete();
+                } else {
+                    homeAdapter.loadMoreEnd(true);
                 }
-                homeAdapter.loadMoreEnd();
             }
         }
     }

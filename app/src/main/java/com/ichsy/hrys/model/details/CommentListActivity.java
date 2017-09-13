@@ -138,9 +138,9 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
             }
         });
 
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (position == 1 || position == 2) return;
                 if (!LoginUtils.isLogin(context)) {
                     LoginParams params = new LoginParams(context, LoginEvent.LOGIN);
@@ -155,6 +155,7 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
                 commentDialog.show();
             }
         });
+
         cvCommentLayer.setOnSendCommentListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -318,15 +319,15 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
                 mAdapter.setNewData(mData);
 
             } else {
-                List<ArtVideoReplyInfo> replyInfoList = result.commentInfo.getCommentReplyList();
-                if (replyInfoList != null && replyInfoList.size() > 0) {
-                    mData.addAll(getCommentItemEntity(replyInfoList));
-                    if (replyInfoList.size() >= mRequestParams.pageOption.itemCount) {
-                        mAdapter.loadMoreComplete();
-                        return;
+                if (result.commentInfo.pageResults.isMore) {
+                    List<ArtVideoReplyInfo> replyInfoList = result.commentInfo.getCommentReplyList();
+                    if (replyInfoList != null && replyInfoList.size() > 0) {
+                        mAdapter.addData(getCommentItemEntity(replyInfoList));
                     }
+                    mAdapter.loadMoreComplete();
+                } else {
+                    mAdapter.loadMoreEnd();
                 }
-                mAdapter.loadMoreEnd();
             }
         }
     }

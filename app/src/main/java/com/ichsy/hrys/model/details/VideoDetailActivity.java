@@ -267,7 +267,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         view.getLastTV().setText("删除");
         view.getBottomTV().setText("取消");
 
-        if ((SharedPreferencesUtils.getUserInfo(context).getUserCode()).equals(mAdapter.getData().get(position).videoCommentInfo.getSenderInfo().getUserCode())) {
+        if (isMyself(position)) {
             view.getLastTV().setVisibility(View.VISIBLE);
             view.getDevide2().setVisibility(View.VISIBLE);
         } else {
@@ -337,6 +337,10 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         return headerViewDialog;
     }
 
+    private boolean isMyself(int position) {
+        return SharedPreferencesUtils.getUserInfo(context).getUserCode().equals(mAdapter.getData().get(position).videoCommentInfo.getSenderInfo().getUserCode());
+    }
+
     @Override
     public void request() {
         if (checkNet()) {
@@ -397,14 +401,15 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
                     setVideo(artVideoInfo);
                 }
             } else {
-                if (result.videoCommentList != null && result.videoCommentList.size() > 0) {
-                    mData.addAll(getCommentItemEntity(result.videoCommentList));
-                    if (result.videoCommentList.size() >= mRequestParams.pageOption.itemCount) {
-                        mAdapter.loadMoreComplete();
-                        return;
+                if (result.pageResults.isMore) {
+                    if (result.videoCommentList != null && result.videoCommentList.size() > 0) {
+                        mData.addAll(getCommentItemEntity(result.videoCommentList));
+                        mAdapter.addData(mData);
                     }
+                    mAdapter.loadMoreComplete();
+                } else {
+                    mAdapter.loadMoreEnd(true);
                 }
-                mAdapter.loadMoreEnd(true);
             }
         }
     }
@@ -415,9 +420,6 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
         for (ArtVideoCommentInfo commentList : videoCommentInfoList) {
             ArtVideoCommentInfoMultiItemEntity entity = new ArtVideoCommentInfoMultiItemEntity(COMMENT_LIST);
             entity.videoCommentInfo = commentList;
-            if (commentList.getCommentReplyList() != null && commentList.getCommentReplyList().size() > 0) {
-                entity.commentReplyList.addAll(commentList.getCommentReplyList());
-            }
             entity.pageResults = commentList.pageResults;
             list.add(entity);
         }

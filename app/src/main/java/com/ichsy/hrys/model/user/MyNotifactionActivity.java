@@ -136,9 +136,9 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
             }
         });
 
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (!LoginUtils.isLogin(context)) {
                     LoginParams params = new LoginParams(context, LoginEvent.LOGIN);
                     CenterEventBus.getInstance().postTask(params);
@@ -258,14 +258,14 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
                 }
                 mAdapter.setNewData(mData);
             } else {
-                if (result.videoNotifactionMessageList != null && result.videoNotifactionMessageList.size() > 0) {
-                    mData.addAll(result.videoNotifactionMessageList);
-                    if (result.videoNotifactionMessageList.size() >= mRequestParams.pageOption.itemCount) {
-                        mAdapter.loadMoreComplete();
-                        return;
+                if (result.pageResults.isMore) {
+                    if (result.videoNotifactionMessageList != null && result.videoNotifactionMessageList.size() > 0) {
+                        mAdapter.addData(result.videoNotifactionMessageList);
                     }
+                    mAdapter.loadMoreComplete();
+                } else {
+                    mAdapter.loadMoreEnd();
                 }
-                mAdapter.loadMoreEnd();
             }
         }
     }

@@ -88,6 +88,8 @@ public class CommentListAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommen
         helper.setText(R.id.time, DateUtil.getTime(item.getCommentTime(),"yyyy-MM-dd HH:mm"));
         //内容
         helper.setText(R.id.detail_comment_content, item.getCommentContent());
+
+        helper.addOnClickListener(R.id.rootview);
     }
 
     /**
@@ -109,13 +111,14 @@ public class CommentListAdapter extends BaseMultiItemQuickAdapter<ArtVideoCommen
         //内容
         TextParser mTextParser = TextParser.getInstance();
         int mTextSize = 13;
-
+        helper.getView(R.id.detail_comment_content).setClickable(false);
         if (receiverInfo != null) {
             mTextParser.append("回复 ", mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_black));
             mTextParser.append(receiverInfo.getUserName()+" ：", mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_gray2));
             mTextParser.append(videoReplyInfo.getReplyContent(), mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_black));
             mTextParser.parse((TextView) helper.getView(R.id.detail_comment_content));
         }
+        helper.addOnClickListener(R.id.detail_comment_content).addOnClickListener(R.id.rootview);
     }
 
 

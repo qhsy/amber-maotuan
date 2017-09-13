@@ -27,7 +27,6 @@ import com.ichsy.hrys.model.person.view.PersonalInfoHeadView;
 
 import butterknife.BindView;
 import zz.mk.utilslibrary.ScreenUtil;
-import zz.mk.utilslibrary.ToastUtils;
 
 /**
  * 个人主页
@@ -107,23 +106,21 @@ public class PersonalInfoActivity extends BaseActivity implements RefreshLay.OnR
     public void onHttpRequestSuccess(String url, HttpContext httpContext) {
         super.onHttpRequestSuccess(url, httpContext);
         ArtGetPersonalInfoResult result = httpContext.getResponseObject();
-        if (result.status == 1) {
+        if (checkResponse(httpContext)) {
             if (mRequestParams.pageOption.pageNum == 0) {
                 mUserInfo = result.userInfo;
                 mAdapter.getData().clear();
                 updateFirstPageUI(result);
             } else {
-                if (result.videoContentList != null && result.videoContentList.size() > 0) {
-                    mAdapter.addData(result.videoContentList);
-                    if (result.videoContentList.size() >= mRequestParams.pageOption.itemCount) {
-                        mAdapter.loadMoreComplete();
-                        return;
+                if (result.pageresults.isMore) {
+                    if (result.videoContentList != null && result.videoContentList.size() > 0) {
+                        mAdapter.addData(result.videoContentList);
                     }
+                    mAdapter.loadMoreComplete();
+                } else {
+                    mAdapter.loadMoreEnd();
                 }
-                mAdapter.loadMoreEnd();
             }
-        } else {
-            ToastUtils.showShortToast(result.getError());
         }
     }
 

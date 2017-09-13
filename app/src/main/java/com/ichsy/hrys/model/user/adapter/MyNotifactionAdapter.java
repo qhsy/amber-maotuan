@@ -58,6 +58,8 @@ public class MyNotifactionAdapter extends BaseQuickAdapter<ArtVideoNotifactionMe
         .parse((TextView) helper.getView(R.id.detail_comment_content));
         //我的评论
         TextParser.getInstance().append("我的评论： ", mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_black)).append(videoCommentMessage.getCommentContent(), mTextSize, ContextCompat.getColor(mContext, R.color.color_btn_gray2)).parse((TextView) helper.getView(R.id.detail_comment_mine));
+
+        helper.addOnClickListener(R.id.detail_comment_content).addOnClickListener(R.id.detail_comment_mine).addOnClickListener(R.id.rootview);
     }
 
     /**
