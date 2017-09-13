@@ -13,7 +13,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ichsy.hrys.R;
 import com.ichsy.hrys.common.utils.imageloadutils.ImageLoaderUtils;
 import com.ichsy.hrys.common.utils.imageloadutils.ImageStyleType;
-import com.ichsy.hrys.common.view.video.PictureGSYVideoPlayer;
+import com.ichsy.hrys.common.view.video.HomeGSYVideoPlayer;
 import com.ichsy.hrys.common.view.video.SampleListener;
 import com.ichsy.hrys.entity.ArtVideoInfo;
 import com.ichsy.hrys.entity.ArtVideoUserInfo;
@@ -22,7 +22,6 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
-import zz.mk.utilslibrary.LogUtil;
 import zz.mk.utilslibrary.ScreenUtil;
 
 /**
@@ -36,7 +35,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
     private boolean isCanClick = true;
     Context activity;
     GSYVideoOptionBuilder gsyVideoOptionBuilder;
-    PictureGSYVideoPlayer gsyVideoPlayer;
+    HomeGSYVideoPlayer gsyVideoPlayer;
 
     public HomeAdapter(Context context) {
         super(R.layout.item_home_fragment);
@@ -78,7 +77,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
      * @param pItem
      * @param gsyVideoPlayer
      */
-    public void setVideoPlay(final BaseViewHolder helper, ArtVideoInfo pItem, final PictureGSYVideoPlayer gsyVideoPlayer) {
+    public void setVideoPlay(final BaseViewHolder helper, ArtVideoInfo pItem, final HomeGSYVideoPlayer gsyVideoPlayer) {
 
         gsyVideoOptionBuilder = new GSYVideoOptionBuilder();
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ScreenUtil.dip2px(mContext, 100));
@@ -99,6 +98,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
                 .setPlayTag(TAG)
                 .setShowFullAnimation(true)
                 .setNeedLockFull(false)
+                .setThumbPlay(true)
                 .setPlayPosition(helper.getLayoutPosition())
                 .setStandardVideoAllCallBack(new SampleListener() {
                     @Override
@@ -114,6 +114,12 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
                     @Override
                     public void onClickStartIcon(String url, Object... objects) {
                         super.onClickStartIcon(url, objects);
+                        helper.setVisible(R.id.item_videotime, false);
+                    }
+
+                    @Override
+                    public void onClickStartThumb(String url, Object... objects) {
+                        super.onClickStartThumb(url, objects);
                         helper.setVisible(R.id.item_videotime, false);
                     }
 
@@ -144,10 +150,6 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
             }
         });
 //        gsyVideoPlayer.getStartButton().setVisibility(View.GONE);
-        LogUtil.zLog().e("*************************************** auto: "+pItem.isAutoPlay);
-        if (pItem.isAutoPlay) {
-            gsyVideoPlayer.startPlayLogic();
-        }
     }
 
     /**
@@ -165,7 +167,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
         isCanClick = canClick;
     }
 
-    public PictureGSYVideoPlayer getGsyVideoPlayer() {
+    public HomeGSYVideoPlayer getGsyVideoPlayer() {
         return gsyVideoPlayer;
     }
 }

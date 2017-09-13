@@ -18,6 +18,7 @@ import android.view.WindowManager;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.file.Md5FileNameGenerator;
+import com.shuyu.gsyvideoplayer.GSYRenderView;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.GSYMediaPlayerListener;
@@ -582,6 +583,7 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
         int mVideoWidth = GSYVideoManager.instance().getCurrentVideoWidth();
         int mVideoHeight = GSYVideoManager.instance().getCurrentVideoHeight();
         if (mVideoWidth != 0 && mVideoHeight != 0) {
+            ResizeGSYRenderView(mTextureView);
             mTextureView.requestLayout();
         }
     }
@@ -737,6 +739,11 @@ public abstract class GSYVideoView extends GSYTextureRenderView implements GSYMe
      * 开始播放
      */
     public abstract void startPlayLogic();
+
+    /**
+     * 修改播放器尺寸
+     */
+    public abstract void ResizeGSYRenderView(GSYRenderView mTextureView);
 
     /************************* 公开接口 *************************/
 

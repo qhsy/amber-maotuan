@@ -2,11 +2,17 @@ package com.ichsy.hrys.common.view.video;
 
 import android.content.Context;
 import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.ichsy.hrys.R;
+import com.ichsy.hrys.common.utils.TextureVideoViewOutlineProvider;
+import com.shuyu.gsyvideoplayer.GSYRenderView;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+
+import zz.mk.utilslibrary.ScreenUtil;
 
 
 /**
@@ -14,19 +20,21 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
  * email: mackkilled@gmail.com
  */
 
-public class PictureGSYVideoPlayer extends StandardGSYVideoPlayer {
-//    private SeekBar seekBar;
-//    private View currentView;
+public class HomeGSYVideoPlayer extends StandardGSYVideoPlayer {
 
-    public PictureGSYVideoPlayer(Context context, Boolean fullFlag) {
+    private RelativeLayout mRootView;
+    private RelativeLayout mThumb;
+    private RelativeLayout mSurface;
+
+    public HomeGSYVideoPlayer(Context context, Boolean fullFlag) {
         super(context, fullFlag);
     }
 
-    public PictureGSYVideoPlayer(Context context) {
+    public HomeGSYVideoPlayer(Context context) {
         super(context);
     }
 
-    public PictureGSYVideoPlayer(Context context, AttributeSet attrs) {
+    public HomeGSYVideoPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -38,11 +46,32 @@ public class PictureGSYVideoPlayer extends StandardGSYVideoPlayer {
     }
 
     private void initView() {
+        mRootView = (RelativeLayout) findViewById(R.id.video_rootview);
+        mThumb = (RelativeLayout) findViewById(R.id.thumb);
+        mSurface = (RelativeLayout) findViewById(R.id.surface_container);
+        mRootView.setBackgroundResource(R.drawable.roundcorner_rect_black_82px);
+        mThumb.setBackgroundResource(R.drawable.roundcorner_rect_black_82px);
+        mSurface.setBackgroundResource(R.drawable.roundcorner_rect_black_82px);
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.video_seekbar_picture_normal;
+        if (mIfCurrentIsFullscreen) {
+            return R.layout.video_seekbar_picture_land;
+        } else {
+            return R.layout.video_seekbar_picture_normal;
+        }
+    }
+
+    @Override
+    public void ResizeGSYRenderView(GSYRenderView mTextureView) {
+        super.ResizeGSYRenderView(mTextureView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mTextureView.getShowView() != null) {
+                mTextureView.getShowView().setOutlineProvider(new TextureVideoViewOutlineProvider(ScreenUtil.dip2px(getActivityContext(), 9)));
+                mTextureView.getShowView().setClipToOutline(true);
+            }
+        }
     }
 
     @Override

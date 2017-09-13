@@ -136,4 +136,7 @@ public class GSYRenderView {
         return (typeChanged) ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT;
     }
 
+    public View getShowView() {
+        return mShowView;
+    }
 }

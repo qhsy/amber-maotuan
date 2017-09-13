@@ -41,8 +41,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import zz.mk.utilslibrary.LogUtil;
 import zz.mk.utilslibrary.ScreenUtil;
 
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING;
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_SETTLING;
 import static com.ichsy.hrys.R.id.refresh;
 
 
@@ -113,39 +117,65 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             int firstVisibleItem, lastVisibleItem;
+            boolean scrollState = false;
             
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                LogUtil.zLog().e("*************************************** onScrollStateChanged");
+                switch (newState) {
+                    case SCROLL_STATE_IDLE:
+                        scrollState = false;
+                        break;
+                    case SCROLL_STATE_DRAGGING:
+                        scrollState = true;
+                        break;
+                    case SCROLL_STATE_SETTLING:
+                        scrollState = true;
+                        break;
+                }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                LogUtil.zLog().e("*************************************** onScrolled");
                 firstVisibleItem   = layoutManager.findFirstVisibleItemPosition();
                 lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                 //大于0说明有播放
-                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                LogUtil.zLog().e("*************************************** getPlayPosition(): "+GSYVideoManager.instance().getPlayPosition());
+                if (GSYVideoManager.instance().getPlayPosition() >= 0 && !scrollState) {
                     //当前播放的位置
                     int position = GSYVideoManager.instance().getPlayPosition();
                     //对应的播放列表TAG
                     if (GSYVideoManager.instance().getPlayTag().equals(HomeAdapter.TAG) && (position < firstVisibleItem || position > lastVisibleItem)) {
-                        homeAdapter.getData().get(position).isAutoPlay = false;
+//                        homeAdapter.getData().get(position).isAutoPlay = false;
                         GSYVideoManager.onPause();
                     }
+                    LogUtil.zLog().e("*************************************** position: "+position);
                     if (!recyclerView.canScrollVertically(-1)) {
+                        LogUtil.zLog().e("*************************************** toTop");
+//                        homeAdapter.getData().get(position).isAutoPlay = true;
                         //toTop
                     } else if (!recyclerView.canScrollVertically(1)) {
+                        LogUtil.zLog().e("*************************************** toBottom");
                         //toBottom
                     } else if (dy < 0) {
                         //onScrolledUp 上滑
                         if (position > firstVisibleItem && position < lastVisibleItem) {
-                            homeAdapter.getData().get(position).isAutoPlay = true;
-                            homeAdapter.notifyDataSetChanged();
-                            GSYVideoManager.onResume();
+//                            homeAdapter.getData().get(position - 1).isAutoPlay = true;
+//                            homeAdapter.notifyDataSetChanged();
+//                            GSYVideoManager.onResume();
+                        } else {
+//                            homeAdapter.getData().get(position).isAutoPlay = false;
                         }
                     } else if (dy > 0) {
                         //onScrolledDown 下滑
+//                        homeAdapter.getData().get(position + 1).isAutoPlay = true;
+//                        homeAdapter.notifyDataSetChanged();
+//                        GSYVideoManager.onResume();
+                    } else {
+//                        homeAdapter.getData().get(position).isAutoPlay = false;
                     }
                 }
 

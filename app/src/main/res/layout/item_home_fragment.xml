@@ -20,7 +20,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@mipmap/ic_launcher" />-->
-        <com.ichsy.hrys.common.view.video.PictureGSYVideoPlayer
+        <com.ichsy.hrys.common.view.video.HomeGSYVideoPlayer
             android:id="@+id/video_item_player"
             android:layout_width="match_parent"
             android:layout_height="186dp"

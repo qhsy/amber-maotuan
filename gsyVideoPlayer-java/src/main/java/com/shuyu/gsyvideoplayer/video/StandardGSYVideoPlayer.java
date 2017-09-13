@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.shuyu.gsyvideoplayer.GSYRenderView;
 import com.shuyu.gsyvideoplayer.R;
 import com.shuyu.gsyvideoplayer.listener.StandardVideoAllCallBack;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
@@ -134,6 +135,15 @@ public class StandardGSYVideoPlayer extends GSYVideoPlayer {
         }
         prepareVideo();
         startDismissControlViewTimer();
+    }
+
+    /**
+     * 修改播放器尺寸
+     * @param mTextureView
+     */
+    @Override
+    public void ResizeGSYRenderView(GSYRenderView mTextureView) {
+
     }
 
     /**
