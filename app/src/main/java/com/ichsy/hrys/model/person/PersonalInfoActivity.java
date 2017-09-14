@@ -112,10 +112,10 @@ public class PersonalInfoActivity extends BaseActivity implements RefreshLay.OnR
                 mAdapter.getData().clear();
                 updateFirstPageUI(result);
             } else {
+                if (result.videoContentList != null && result.videoContentList.size() > 0) {
+                    mAdapter.addData(result.videoContentList);
+                }
                 if (result.pageresults.isMore) {
-                    if (result.videoContentList != null && result.videoContentList.size() > 0) {
-                        mAdapter.addData(result.videoContentList);
-                    }
                     mAdapter.loadMoreComplete();
                 } else {
                     mAdapter.loadMoreEnd();

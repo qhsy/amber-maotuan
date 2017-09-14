@@ -58,7 +58,7 @@ import static zz.mk.utilslibrary.system.InputMethodUtils.isShouldHideInput;
  * email: mackkilled@gmail.com
  */
 
-public class MyNotifactionActivity extends BaseActivity implements RefreshLay.OnRefreshListener, OnReceiveOttoEventInterface, BaseQuickAdapter.RequestLoadMoreListener, View.OnLayoutChangeListener{
+public class MyNotifactionActivity extends BaseActivity implements RefreshLay.OnRefreshListener, OnReceiveOttoEventInterface, BaseQuickAdapter.RequestLoadMoreListener, View.OnLayoutChangeListener {
     @BindView(R.id.rl_rootview)
     View mRootView;
     @BindView(R.id.main_item_list)
@@ -78,6 +78,7 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
     ArtSendVideoCommentInput commentEntity;
 
     private Dialog commentDialog;
+
     @Override
     public void loadLayout() {
         setContentView(R.layout.activity_message_list);
@@ -88,7 +89,7 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
         OttoController.register(this);
         showDefaultTittle("我的消息");
 
-        setBackgroundColor(ContextCompat.getColor(getContext(),R.color.color_blue));
+        setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_blue));
         getCenterTittleView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_white));
         setLeftDrawable(R.drawable.icon_back_white);
 
@@ -109,7 +110,7 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new MyNotifactionAdapter(getContext(),  mData);
+        mAdapter = new MyNotifactionAdapter(getContext(), mData);
         mRecyclerView.setAdapter(mAdapter);
         refreshLay.setRefreshListener(this);
         mAdapter.setOnLoadMoreListener(this, mRecyclerView);
@@ -209,7 +210,7 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
                 headerViewDialog.dismiss();
                 ArtVideoInfo data = new ArtVideoInfo();
                 data.setVideoNumber(mAdapter.getData().get(position).getCommentMessage().getVideoId());
-                TaskController.openVideoDetail(getContext(),data);
+                TaskController.openVideoDetail(getContext(), data);
             }
         });
         view.getBottomTV().setOnClickListener(new View.OnClickListener() {
@@ -237,7 +238,6 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
     }
 
 
-
     @Override
     public void onHttpRequestBegin(String url) {
         super.onHttpRequestBegin(url);
@@ -258,10 +258,10 @@ public class MyNotifactionActivity extends BaseActivity implements RefreshLay.On
                 }
                 mAdapter.setNewData(mData);
             } else {
+                if (result.videoNotifactionMessageList != null && result.videoNotifactionMessageList.size() > 0) {
+                    mAdapter.addData(result.videoNotifactionMessageList);
+                }
                 if (result.pageResults.isMore) {
-                    if (result.videoNotifactionMessageList != null && result.videoNotifactionMessageList.size() > 0) {
-                        mAdapter.addData(result.videoNotifactionMessageList);
-                    }
                     mAdapter.loadMoreComplete();
                 } else {
                     mAdapter.loadMoreEnd();

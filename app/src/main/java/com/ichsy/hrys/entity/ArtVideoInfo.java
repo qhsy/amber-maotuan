@@ -24,6 +24,9 @@ public class ArtVideoInfo implements Serializable {
     //视频是否自动播放
     public boolean isAutoPlay = false;
 
+    //时长显隐
+    public boolean isTime = true;
+
     public String getVideoCaption() {
         return videoCaption == null ? "" : videoCaption;
     }

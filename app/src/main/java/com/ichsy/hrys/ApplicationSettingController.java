@@ -19,7 +19,7 @@ public class ApplicationSettingController {
     /**
      * 打包环境
      */
-    public static final PackMode package_mode = PackMode.BETA;
+    public static final PackMode package_mode = PackMode.PRODUCT;
     /**
      * bugly是否可用
      */

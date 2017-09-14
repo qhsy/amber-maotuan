@@ -1,8 +1,10 @@
 package com.ichsy.hrys.model.main;
 
+import android.graphics.Rect;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import com.ichsy.hrys.common.view.convenientbanner.ConvenientBanner;
 import com.ichsy.hrys.common.view.convenientbanner.holder.CBViewHolderCreator;
 import com.ichsy.hrys.common.view.convenientbanner.listener.OnItemClickListener;
 import com.ichsy.hrys.common.view.refreshview.RefreshLay;
+import com.ichsy.hrys.common.view.video.HomeGSYVideoPlayer;
 import com.ichsy.hrys.config.constants.StringConstant;
 import com.ichsy.hrys.entity.ArtVideoPromotionDetail;
 import com.ichsy.hrys.entity.request.ArtGetVideoListInputEntity;
@@ -41,7 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import zz.mk.utilslibrary.LogUtil;
 import zz.mk.utilslibrary.ScreenUtil;
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING;
@@ -55,7 +57,7 @@ import static com.ichsy.hrys.R.id.refresh;
  * email: mackkilled@gmail.com
  */
 
-public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener,OnReceiveOttoEventInterface {
+public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener, OnReceiveOttoEventInterface {
     @BindView(R.id.main_item_list)
     ScrollingPauseLoadImageRecyclerView mRecyclerView;
     @BindView(refresh)
@@ -106,6 +108,8 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
         addEmptyView();
     }
 
+    public int firstVisibleItem, lastVisibleItem, visibleCount;
+
     @Override
     public void loadListener() {
         homeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -116,21 +120,21 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
         });
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            int firstVisibleItem, lastVisibleItem;
+
             boolean scrollState = false;
-            
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                LogUtil.zLog().e("*************************************** onScrollStateChanged");
                 switch (newState) {
-                    case SCROLL_STATE_IDLE:
+                    case SCROLL_STATE_IDLE: //滚动停止
                         scrollState = false;
+//                        autoPlayVideo(recyclerView);
                         break;
-                    case SCROLL_STATE_DRAGGING:
+                    case SCROLL_STATE_DRAGGING: //手指拖动
                         scrollState = true;
                         break;
-                    case SCROLL_STATE_SETTLING:
+                    case SCROLL_STATE_SETTLING: //惯性滚动
                         scrollState = true;
                         break;
                 }
@@ -139,48 +143,45 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                LogUtil.zLog().e("*************************************** onScrolled");
-                firstVisibleItem   = layoutManager.findFirstVisibleItemPosition();
+                firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
                 lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                visibleCount = lastVisibleItem - firstVisibleItem;
+
                 //大于0说明有播放
-                LogUtil.zLog().e("*************************************** getPlayPosition(): "+GSYVideoManager.instance().getPlayPosition());
-                if (GSYVideoManager.instance().getPlayPosition() >= 0 && !scrollState) {
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
                     //当前播放的位置
                     int position = GSYVideoManager.instance().getPlayPosition();
                     //对应的播放列表TAG
                     if (GSYVideoManager.instance().getPlayTag().equals(HomeAdapter.TAG) && (position < firstVisibleItem || position > lastVisibleItem)) {
-//                        homeAdapter.getData().get(position).isAutoPlay = false;
+                        homeAdapter.getData().get(position).isTime = true;
+                        homeAdapter.notifyItemChanged(position);
                         GSYVideoManager.onPause();
                     }
-                    LogUtil.zLog().e("*************************************** position: "+position);
-                    if (!recyclerView.canScrollVertically(-1)) {
-                        LogUtil.zLog().e("*************************************** toTop");
-//                        homeAdapter.getData().get(position).isAutoPlay = true;
-                        //toTop
-                    } else if (!recyclerView.canScrollVertically(1)) {
-                        LogUtil.zLog().e("*************************************** toBottom");
-                        //toBottom
-                    } else if (dy < 0) {
-                        //onScrolledUp 上滑
-                        if (position > firstVisibleItem && position < lastVisibleItem) {
-//                            homeAdapter.getData().get(position - 1).isAutoPlay = true;
-//                            homeAdapter.notifyDataSetChanged();
-//                            GSYVideoManager.onResume();
-                        } else {
-//                            homeAdapter.getData().get(position).isAutoPlay = false;
-                        }
-                    } else if (dy > 0) {
-                        //onScrolledDown 下滑
-//                        homeAdapter.getData().get(position + 1).isAutoPlay = true;
-//                        homeAdapter.notifyDataSetChanged();
-//                        GSYVideoManager.onResume();
-                    } else {
-//                        homeAdapter.getData().get(position).isAutoPlay = false;
+                }
+            }
+
+
+        });
+    }
+
+    private void autoPlayVideo(RecyclerView view) {
+        for (int i = 0; i < visibleCount; i++) {
+            if (view != null && view.getChildAt(i) != null && view.getChildAt(i).findViewById(R.id.video_item_player) != null) {
+                HomeGSYVideoPlayer homeGSYVideoPlayer = (HomeGSYVideoPlayer) view.getChildAt(i).findViewById(R.id.video_item_player);
+                Rect rect = new Rect();
+                homeGSYVideoPlayer.getLocalVisibleRect(rect);
+                int videoheight3 = homeGSYVideoPlayer.getHeight();
+                Log.e("videoTest", "i=" + i + "===" + "videoheight3:" + videoheight3 + "===" + "rect.top:" + rect.top + "===" + "rect.bottom:" + rect.bottom);
+                if (rect.top == 0 && rect.bottom == videoheight3) {
+                    if (homeGSYVideoPlayer.getCurrentState() == homeGSYVideoPlayer.CURRENT_STATE_NORMAL || homeGSYVideoPlayer.getCurrentState() == homeGSYVideoPlayer.CURRENT_STATE_ERROR) {
+                        homeGSYVideoPlayer.getStartButton().performClick();
                     }
+                    return;
                 }
 
             }
-        });
+        }
+        GSYVideoPlayer.releaseAllVideos();
     }
 
     @Override
@@ -238,10 +239,10 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
                     homeAdapter.setNewData(result.videoList);
                 }
             } else {
+                if (result.videoList != null && result.videoList.size() > 0) {
+                    homeAdapter.addData(result.videoList);
+                }
                 if (result.pageResults.isMore) {
-                    if (result.videoList != null && result.videoList.size() > 0) {
-                        homeAdapter.addData(result.videoList);
-                    }
                     homeAdapter.loadMoreComplete();
                 } else {
                     homeAdapter.loadMoreEnd(true);
@@ -252,24 +253,25 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
 
     /**
      * 控制banner高度
+     *
      * @param result
      */
     private void bindBannerData(ArtGetVideoListResult result) {
         if (bannerMainLayout != null) {
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) bannerMainLayout.getLayoutParams();
-        if (result.promotionPhotoList != null) {
-            bannerinfoList.clear();
-            if (result.promotionPhotoList.size() > 0) {
-                lp.height = ScreenUtil.dip2px(getContext(), 192);
-                bannerinfoList.addAll(result.promotionPhotoList);
-                mTopBanner.notifyDataSetChanged();
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) bannerMainLayout.getLayoutParams();
+            if (result.promotionPhotoList != null) {
+                bannerinfoList.clear();
+                if (result.promotionPhotoList.size() > 0) {
+                    lp.height = ScreenUtil.dip2px(getContext(), 192);
+                    bannerinfoList.addAll(result.promotionPhotoList);
+                    mTopBanner.notifyDataSetChanged();
+                } else {
+                    lp.height = ScreenUtil.dip2px(getContext(), 0.5f);
+                }
             } else {
                 lp.height = ScreenUtil.dip2px(getContext(), 0.5f);
             }
-        } else {
-            lp.height = ScreenUtil.dip2px(getContext(), 0.5f);
-        }
-        bannerMainLayout.setLayoutParams(lp);
+            bannerMainLayout.setLayoutParams(lp);
         }
     }
 
@@ -307,6 +309,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
 
     /**
      * 是否添加headview
+     *
      * @return
      */
     private boolean hasHeadView() {
@@ -318,6 +321,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
      */
     List<ArtVideoPromotionDetail> bannerinfoList = new ArrayList<>();
     RelativeLayout bannerMainLayout;
+
     private View getHeadView(final List<ArtVideoPromotionDetail> bannerinfoList) {
         View headView = LayoutInflater.from(getActivity()).inflate(R.layout.home_headview, (ViewGroup) mRecyclerView.getParent(), false);
         mTopBanner = (ConvenientBanner) headView.findViewById(R.id.banner);
@@ -329,9 +333,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
             public BannerImageHolderView createHolder() {
                 return localImageHolderView;
             }
-        }, bannerinfoList).setPageIndicator(
-                new int[]{R.drawable.point_normal, R.drawable.point_read})
-                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT);
+        }, bannerinfoList).setPageIndicator(new int[]{R.drawable.point_normal, R.drawable.point_read}).setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.ALIGN_PARENT_RIGHT);
         mTopBanner.startTurning(5000);
 
         mTopBanner.setOnItemClickListener(new OnItemClickListener() {
@@ -347,16 +349,14 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
     public void onResume() {
         super.onResume();
         GSYVideoManager.onResume();
-        if (mTopBanner != null)
-            mTopBanner.startTurning(5000);
+        if (mTopBanner != null) mTopBanner.startTurning(5000);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         GSYVideoManager.onPause();
-        if (mTopBanner != null)
-            mTopBanner.stopTurning();
+        if (mTopBanner != null) mTopBanner.stopTurning();
     }
 
     @Subscribe

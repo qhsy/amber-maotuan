@@ -401,11 +401,11 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
                     setVideo(artVideoInfo);
                 }
             } else {
+                if (result.videoCommentList != null && result.videoCommentList.size() > 0) {
+                    mData.addAll(getCommentItemEntity(result.videoCommentList));
+                    mAdapter.notifyDataSetChanged();
+                }
                 if (result.pageResults.isMore) {
-                    if (result.videoCommentList != null && result.videoCommentList.size() > 0) {
-                        mData.addAll(getCommentItemEntity(result.videoCommentList));
-                        mAdapter.addData(mData);
-                    }
                     mAdapter.loadMoreComplete();
                 } else {
                     mAdapter.loadMoreEnd(true);
@@ -459,6 +459,7 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
     @Override
     public void onHttpRequestComplete(String url, HttpContext httpContext) {
         super.onHttpRequestComplete(url, httpContext);
+        mRootView.setVisibility(View.VISIBLE);
         hiddenLoadingDialog();
         refreshLay.refreshComplete();
     }

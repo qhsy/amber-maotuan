@@ -29,6 +29,7 @@ import com.jakewharton.rxbinding.view.RxView;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -153,10 +154,12 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
         return view;
     }
 
+    private Unbinder unbinder;
+
     protected void setContentView(int resid) {
         contentView = View.inflate(mContentView.getContext(), resid, mGroupContent);
         contentView.setClickable(true);
-        ButterKnife.bind(this, contentView);
+        unbinder = ButterKnife.bind(this, contentView);
     }
 
     private void initView() {
@@ -554,6 +557,12 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
         if (isCancleAllRequest){
             clearAllRequest();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     /**

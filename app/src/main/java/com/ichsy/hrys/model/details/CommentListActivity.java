@@ -319,11 +319,11 @@ public class CommentListActivity extends BaseActivity implements RefreshLay.OnRe
                 mAdapter.setNewData(mData);
 
             } else {
+                List<ArtVideoReplyInfo> replyInfoList = result.commentInfo.getCommentReplyList();
+                if (replyInfoList != null && replyInfoList.size() > 0) {
+                    mAdapter.addData(getCommentItemEntity(replyInfoList));
+                }
                 if (result.commentInfo.pageResults.isMore) {
-                    List<ArtVideoReplyInfo> replyInfoList = result.commentInfo.getCommentReplyList();
-                    if (replyInfoList != null && replyInfoList.size() > 0) {
-                        mAdapter.addData(getCommentItemEntity(replyInfoList));
-                    }
                     mAdapter.loadMoreComplete();
                 } else {
                     mAdapter.loadMoreEnd();

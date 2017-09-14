@@ -6,12 +6,15 @@ import android.view.View;
 
 import com.ichsy.hrys.common.utils.DialogUtils;
 import com.ichsy.hrys.common.utils.SharedPreferencesUtils;
+import com.ichsy.hrys.common.view.CommentView;
 import com.ichsy.hrys.common.view.dialog.SimpleDialogViewThree;
 
 /**
  * 评论弹窗
  */
 public class CommentController {
+
+    public CommentView cvCommentLayer;
 
     /**
      * 获取评论弹窗

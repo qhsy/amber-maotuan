@@ -38,7 +38,7 @@ import static com.ichsy.hrys.R.id.refresh;
  * email: mackkilled@gmail.com
  */
 
-public class MyCollectionsActivity extends BaseActivity implements RefreshLay.OnRefreshListener, OnReceiveOttoEventInterface, BaseQuickAdapter.RequestLoadMoreListener{
+public class MyCollectionsActivity extends BaseActivity implements RefreshLay.OnRefreshListener, OnReceiveOttoEventInterface, BaseQuickAdapter.RequestLoadMoreListener {
     @BindView(R.id.main_item_list)
     ScrollingPauseLoadImageRecyclerView mRecyclerView;
     @BindView(refresh)
@@ -107,7 +107,6 @@ public class MyCollectionsActivity extends BaseActivity implements RefreshLay.On
     }
 
 
-
     @Override
     public void onHttpRequestBegin(String url) {
         super.onHttpRequestBegin(url);
@@ -129,10 +128,10 @@ public class MyCollectionsActivity extends BaseActivity implements RefreshLay.On
                 }
                 mAdapter.setNewData(collecteVideoList);
             } else {
+                if (result.collecteVideoList != null && result.collecteVideoList.size() > 0) {
+                    mAdapter.addData(result.collecteVideoList);
+                }
                 if (result.pageResults.isMore) {
-                    if (result.collecteVideoList != null && result.collecteVideoList.size() > 0) {
-                        mAdapter.addData(result.collecteVideoList);
-                    }
                     mAdapter.loadMoreComplete();
                 } else {
                     mAdapter.loadMoreEnd();

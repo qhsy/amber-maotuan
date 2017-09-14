@@ -3,6 +3,7 @@ package com.ichsy.hrys.model.main.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -37,6 +38,8 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
     GSYVideoOptionBuilder gsyVideoOptionBuilder;
     HomeGSYVideoPlayer gsyVideoPlayer;
 
+    private int oldPosition;
+
     public HomeAdapter(Context context) {
         super(R.layout.item_home_fragment);
         this.activity = context;
@@ -44,11 +47,14 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
 
     @Override
     protected void convert(BaseViewHolder helper, ArtVideoInfo item) {
+        Log.i("fuyong", "convert");
         final ArtVideoUserInfo mUserInfo = item.getVideoUserInfo();
         gsyVideoPlayer = helper.getView(R.id.video_item_player);
         setVideoPlay(helper, item, gsyVideoPlayer);
 
         ImageLoaderUtils.loadViewImage(mContext, (ImageView) helper.getView(R.id.item_usericon), mUserInfo.getUserIconThumburl(), R.drawable.head_placeholder,R.drawable.icon_wode,ImageStyleType.CropCircle);
+
+        helper.setVisible(R.id.item_videotime, item.isTime);
         helper.setText(R.id.item_videotime, item.getVideoLong());
         if (TextUtils.isEmpty(item.getVideoCaption())) {
             helper.setVisible(R.id.item_description, false);
@@ -77,7 +83,7 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
      * @param pItem
      * @param gsyVideoPlayer
      */
-    public void setVideoPlay(final BaseViewHolder helper, ArtVideoInfo pItem, final HomeGSYVideoPlayer gsyVideoPlayer) {
+    public void setVideoPlay(final BaseViewHolder helper, final ArtVideoInfo pItem, final HomeGSYVideoPlayer gsyVideoPlayer) {
 
         gsyVideoOptionBuilder = new GSYVideoOptionBuilder();
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ScreenUtil.dip2px(mContext, 100));
@@ -114,13 +120,17 @@ public class HomeAdapter extends BaseQuickAdapter<ArtVideoInfo, BaseViewHolder> 
                     @Override
                     public void onClickStartIcon(String url, Object... objects) {
                         super.onClickStartIcon(url, objects);
-                        helper.setVisible(R.id.item_videotime, false);
+                        pItem.isTime = false;
+                        helper.setVisible(R.id.item_videotime, pItem.isTime);
+                        pItem.isTime = true;
                     }
 
                     @Override
                     public void onClickStartThumb(String url, Object... objects) {
                         super.onClickStartThumb(url, objects);
-                        helper.setVisible(R.id.item_videotime, false);
+                        pItem.isTime = false;
+                        helper.setVisible(R.id.item_videotime, pItem.isTime);
+                        pItem.isTime = true;
                     }
 
                     @Override
