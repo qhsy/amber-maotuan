@@ -4,7 +4,6 @@ import android.graphics.Rect;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,8 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ichsy.hrys.R;
-import com.ichsy.hrys.common.interfaces.OnReceiveOttoEventInterface;
 import com.ichsy.hrys.common.utils.RequestUtils;
 import com.ichsy.hrys.common.utils.http.HttpContext;
-import com.ichsy.hrys.common.utils.otto.OttoController;
-import com.ichsy.hrys.common.utils.otto.OttoEventEntity;
-import com.ichsy.hrys.common.utils.otto.OttoEventType;
 import com.ichsy.hrys.common.view.CustomLoadMoreView;
 import com.ichsy.hrys.common.view.DividerItemDecoration;
 import com.ichsy.hrys.common.view.ScrollingPauseLoadImageRecyclerView;
@@ -38,7 +33,6 @@ import com.ichsy.hrys.model.main.adapters.HomeAdapter;
 import com.ichsy.hrys.model.main.controller.TaskController;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
-import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +51,7 @@ import static com.ichsy.hrys.R.id.refresh;
  * email: mackkilled@gmail.com
  */
 
-public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener, OnReceiveOttoEventInterface {
+public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
     @BindView(R.id.main_item_list)
     ScrollingPauseLoadImageRecyclerView mRecyclerView;
     @BindView(refresh)
@@ -83,7 +77,6 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
 
     @Override
     public void logic() {
-        OttoController.register(this);
         mRequestParams = new ArtGetVideoListInputEntity();
         if (getArguments() != null) {
             mRequestParams.type = getArguments().getString(StringConstant.ITEM_TYPE, "");
@@ -170,9 +163,8 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
                 HomeGSYVideoPlayer homeGSYVideoPlayer = (HomeGSYVideoPlayer) view.getChildAt(i).findViewById(R.id.video_item_player);
                 Rect rect = new Rect();
                 homeGSYVideoPlayer.getLocalVisibleRect(rect);
-                int videoheight3 = homeGSYVideoPlayer.getHeight();
-                Log.e("videoTest", "i=" + i + "===" + "videoheight3:" + videoheight3 + "===" + "rect.top:" + rect.top + "===" + "rect.bottom:" + rect.bottom);
-                if (rect.top == 0 && rect.bottom == videoheight3) {
+                int videoheight = homeGSYVideoPlayer.getHeight();
+                if (rect.top == 0 && rect.bottom == videoheight) {
                     if (homeGSYVideoPlayer.getCurrentState() == homeGSYVideoPlayer.CURRENT_STATE_NORMAL || homeGSYVideoPlayer.getCurrentState() == homeGSYVideoPlayer.CURRENT_STATE_ERROR) {
                         homeGSYVideoPlayer.getStartButton().performClick();
                     }
@@ -298,6 +290,7 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
     public void onHttpRequestComplete(String url, HttpContext httpContext) {
         super.onHttpRequestComplete(url, httpContext);
         hiddenLoadingDialog();
+        if (refreshLay != null)
         refreshLay.refreshComplete();
     }
 
@@ -359,19 +352,10 @@ public class ItemContentTaskFragment extends BaseFragment implements RefreshLay.
         if (mTopBanner != null) mTopBanner.stopTurning();
     }
 
-    @Subscribe
-    @Override
-    public void OnReceiveEvent(OttoEventEntity eventEntity) {
-        if (eventEntity.getType() == OttoEventType.TASK_COLLECT_STATUS) {
-//            onRefresh();
-        }
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         GSYVideoPlayer.releaseAllVideos();
-        OttoController.unregister(this);
     }
 
 }
