@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -196,7 +198,7 @@ public class ModifyUserInfoActivity extends BaseActivity implements OnReceiveOtt
                             UMAnalyticsUtils.onEvent(getContext(), "1360001");
                             showHeadViewDialog();
                         } else {
-                            ToastUtils.showShortToast("请开启您的 “相机” 访问权限！");
+                            showMissingPermissionDialog();
                         }
                     }
                 });
@@ -231,6 +233,38 @@ public class ModifyUserInfoActivity extends BaseActivity implements OnReceiveOtt
         iconDialog = MyUserInfoController.getHeaderViewDialo(context);
     }
 
+    // 显示缺失权限提示
+    public void showMissingPermissionDialog() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle(R.string.basic_help);
+        builder.setMessage(R.string.basic_string_help_text);
+
+        // 拒绝, 退出应用
+        builder.setNegativeButton(R.string.basic_quit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.setPositiveButton(R.string.basic_settings, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startAppSettings();
+            }
+        });
+
+        builder.setCancelable(false);
+
+        builder.show();
+    }
+
+    // 启动应用的设置
+    public void startAppSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + getPackageName()));
+        startActivity(intent);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

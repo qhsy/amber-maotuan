@@ -7,7 +7,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.Map;
 
-import zz.mk.utilslibrary.LogUtil;
 import zz.mk.utilslibrary.system.AppUtils;
 
 /**
@@ -24,7 +23,6 @@ public class UMAnalyticsUtils {
      */
     public static void  initUM(Context context){
         channelId = AppUtils.getChannel(context);
-        LogUtil.zLog().e("channel Code : " + channelId);
         MobclickAgent.UMAnalyticsConfig config = new MobclickAgent.UMAnalyticsConfig(
                 context
                 , UMShareConstant.UMKEY

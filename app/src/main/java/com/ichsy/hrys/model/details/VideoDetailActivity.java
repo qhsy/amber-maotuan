@@ -460,8 +460,8 @@ public class VideoDetailActivity extends BaseActivity implements RefreshLay.OnRe
     public void onHttpRequestComplete(String url, HttpContext httpContext) {
         super.onHttpRequestComplete(url, httpContext);
         mRootView.setVisibility(View.VISIBLE);
-        hiddenLoadingDialog();
         refreshLay.refreshComplete();
+        hiddenLoadingDialog();
     }
 
     private void addEmptyView() {

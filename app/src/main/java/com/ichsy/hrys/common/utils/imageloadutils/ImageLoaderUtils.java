@@ -46,7 +46,6 @@ import jp.wasabeef.glide.transformations.gpu.SketchFilterTransformation;
 import jp.wasabeef.glide.transformations.gpu.SwirlFilterTransformation;
 import jp.wasabeef.glide.transformations.gpu.ToonFilterTransformation;
 import jp.wasabeef.glide.transformations.gpu.VignetteFilterTransformation;
-import zz.mk.utilslibrary.LogUtil;
 import zz.mk.utilslibrary.bitmap.BitmapUtil;
 
 import static com.ichsy.hrys.AppApplication.mContext;
@@ -474,14 +473,12 @@ public class ImageLoaderUtils {
                         loadingInfo.setLocalUrl("file://"+filePath +  "AmberLoading.jpg");
 
                         SharedPreferencesUtils.setLoadingInfo(context,loadingInfo);
-                        LogUtil.zLog().e("AmberLoading");
 
                     }
 
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
-                        LogUtil.zLog().e("failure");
                     }
                 });
     }

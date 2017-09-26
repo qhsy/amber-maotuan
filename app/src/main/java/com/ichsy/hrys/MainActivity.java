@@ -2,6 +2,7 @@ package com.ichsy.hrys;
 
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,7 +23,6 @@ import com.ichsy.hrys.common.utils.http.HttpContext;
 import com.ichsy.hrys.common.utils.imageloadutils.ImageLoaderUtils;
 import com.ichsy.hrys.common.utils.otto.OttoController;
 import com.ichsy.hrys.common.view.DividerItemDecoration;
-import com.ichsy.hrys.common.view.ScrollingPauseLoadImageRecyclerView;
 import com.ichsy.hrys.entity.ArtUserInfo;
 import com.ichsy.hrys.entity.response.BaseResponse;
 import com.ichsy.hrys.entity.response.GetUserAccountInfoResponseEntity;
@@ -61,7 +61,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.usercenter_login)
     TextView usercenterLogin;
     @BindView(R.id.usercenter_list)
-    ScrollingPauseLoadImageRecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
 
     UserCenterGridAdapter userAdapter;
     List<UserCenterItemBean> itemList;
@@ -106,7 +106,8 @@ public class MainActivity extends BaseActivity {
         } else {
             usercenterLogin.setText("立即登录");
         }
-        ImageLoaderUtils.loadCircleWhite(getContext(), usercenterIcon, mUserInfo.getUserIconThumburl());
+
+        ImageLoaderUtils.loadCircleWhite(getContext().getApplicationContext(), usercenterIcon, mUserInfo.getUserIconThumburl());
     }
 
     private void initUserCenter() {

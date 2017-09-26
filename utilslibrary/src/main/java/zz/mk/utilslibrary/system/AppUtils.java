@@ -1,7 +1,9 @@
 package zz.mk.utilslibrary.system;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -182,6 +184,14 @@ public class AppUtils {
     }
 
     public static String getChannel(Context context) {
-        return WalleChannelReader.getChannel(context.getApplicationContext());
+        return WalleChannelReader.getChannel(context.getApplicationContext(), "maotuan");
+    }
+
+    public static boolean isDestroy(Activity activity) {
+        if (activity == null || activity.isFinishing() || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -70,4 +70,9 @@
     <!-- 任务详情 参与人数 入选人数-->
     <string name="task_detail_partcount">已有%1$d人报名</string>
     <string name="task_detail_select_count">已有%1$d入选</string>
+
+    <string name="basic_settings">设置</string>
+    <string name="basic_help">帮助</string>
+    <string name="basic_string_help_text">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。</string>
+    <string name="basic_quit">退出</string>
 </resources>

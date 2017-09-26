@@ -43,7 +43,7 @@ import zz.mk.utilslibrary.Utils;
 */
 public class AppApplication extends Application {
 
-    public static Context mContext;
+    public static Application mContext;
 
     @Override
     public void onCreate() {
@@ -116,6 +116,8 @@ public class AppApplication extends Application {
     }
 
     public static Context getAppContext() {
-        return mContext;
+        if (mContext == null)
+            return null;
+        return mContext.getApplicationContext();
     }
 }
