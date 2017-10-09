@@ -349,7 +349,6 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
     public void setLeftDrawable(int drawableID) {
         customTittleView.setVisibility(View.VISIBLE);
         customTittleView.setTextViewDrawableResource(0,drawableID,0); // 设置左图标
-
     }
 
 
