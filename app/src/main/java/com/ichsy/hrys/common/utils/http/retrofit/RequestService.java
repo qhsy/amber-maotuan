@@ -23,7 +23,7 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import zz.mk.utilslibrary.LogUtil;
 
@@ -68,7 +68,7 @@ public class RequestService {
         Retrofit adapter = new Retrofit.Builder()
                 .baseUrl(ClentConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // 添加Rx适配器
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // 添加Rx适配器
                 .client(client)
                 .build();
         requestInterface = adapter.create(RequestInterface.class);

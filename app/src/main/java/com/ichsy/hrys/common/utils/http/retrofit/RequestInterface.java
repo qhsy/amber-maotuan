@@ -36,9 +36,9 @@ import com.ichsy.hrys.entity.response.GetUserAccountInfoResponseEntity;
 import com.ichsy.hrys.entity.response.GetVerifyCodeResponseEntity;
 import com.ichsy.hrys.entity.response.LoginResponseEntity;
 
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
-import rx.Observable;
 
 /**
  * 请求工具类

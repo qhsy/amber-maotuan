@@ -28,14 +28,14 @@ public class RequestController {
      * 存储当前进行的所有请求
      * key -----  界面所在内存地址+请求链接
      */
-    private Map<String, RequestSubscriber> requestSubscriberMap = new HashMap<>();
+    private Map<String, RequestObserver> requestSubscriberMap = new HashMap<>();
 
     /**
      * 添加请求
      * @param tag
      * @param subscriber
      */
-    public void  addRequest(@NonNull String tag, @NonNull RequestSubscriber subscriber){
+    public void  addRequest(@NonNull String tag, @NonNull RequestObserver subscriber){
 
         //判断是否存在 存在则 取消
         if (requestSubscriberMap.size()>0 && requestSubscriberMap.containsKey(tag)){
@@ -61,9 +61,9 @@ public class RequestController {
      * @param tag 界面内存的地址
      */
     public void removeAllRelativeRequest(@NonNull String tag){
-        Iterator<Map.Entry<String, RequestSubscriber>> it = requestSubscriberMap.entrySet().iterator();
+        Iterator<Map.Entry<String, RequestObserver>> it = requestSubscriberMap.entrySet().iterator();
         while(it.hasNext()){
-            Map.Entry<String, RequestSubscriber> entry=it.next();
+            Map.Entry<String, RequestObserver> entry=it.next();
             String requestTag=entry.getKey();
             if (requestTag.contains(tag)){
 
@@ -76,10 +76,10 @@ public class RequestController {
     }
 
     private void unRegistRequest(String requestTag){
-        RequestSubscriber requestSubscriber = requestSubscriberMap.get(requestTag);
-        if (requestSubscriber != null && !requestSubscriber.isUnsubscribed())
+        RequestObserver requestObserver = requestSubscriberMap.get(requestTag);
+        if (requestObserver != null)
         {
-            requestSubscriber.unsubscribe();
+            requestObserver.dispose();
         }
     }
 

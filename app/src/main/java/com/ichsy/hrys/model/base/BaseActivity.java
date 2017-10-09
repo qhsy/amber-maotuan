@@ -36,15 +36,16 @@ import com.ichsy.hrys.config.constants.StringConstant;
 import com.ichsy.hrys.entity.response.BaseResponse;
 import com.ichsy.hrys.model.login.LoginEvent;
 import com.ichsy.hrys.model.login.LoginParams;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import zz.mk.utilslibrary.ToastUtils;
 import zz.mk.utilslibrary.net.NetUtil;
 
@@ -78,7 +79,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
      * 加载框
      */
     ProgressDialog progressDialog;
-    private Subscription loadingDialogSubscribe;
+
+    private Disposable disposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -330,10 +332,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
 
             RxView.clicks(findViewById(id))
                     .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                    .subscribe(new Action1<Void>() {
+                    .subscribe(new Consumer<Object>() {
                         @Override
-                        public void call(Void aVoid) {
-
+                        public void accept(@NonNull Object o) throws Exception {
                             onViewClick(id);
                         }
                     });
@@ -345,10 +346,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
 
             RxView.clicks(view)
                     .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                    .subscribe(new Action1<Void>() {
+                    .subscribe(new Consumer<Object>() {
                         @Override
-                        public void call(Void aVoid) {
-
+                        public void accept(@NonNull Object o) throws Exception {
                             onViewClick(view.getId());
                         }
                     });
@@ -385,12 +385,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
             hiddenLoadingDialog();
         }
 
-        loadingDialogSubscribe = Observable.timer(200, TimeUnit.MILLISECONDS)
+        disposable = Observable.timer(200, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
+                .subscribe(new Consumer<Long>() {
                     @Override
-                    public void call(Long aLong) {
+                    public void accept(@NonNull Long aLong) throws Exception {
                         if(progressDialog != null){
                             progressDialog.show();
                         }
@@ -402,8 +402,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
      * 隐藏加载框
      */
     public void hiddenLoadingDialog() {
-        if (loadingDialogSubscribe != null && !loadingDialogSubscribe.isUnsubscribed()){
-            loadingDialogSubscribe.unsubscribe();
+        if (disposable != null && !disposable.isDisposed()){
+            disposable.dispose();
         }
         if (progressDialog != null ) {
             progressDialog.dismiss();
@@ -547,10 +547,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
      * @param v
      */
     public void showKeyBoard(final View v) {
-
-        Observable.timer(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
+        Observable.timer(300, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread()).subscribe(new Consumer<Long>() {
             @Override
-            public void call(Long aLong) {
+            public void accept(Long aLong) throws Exception {
                 v.setFocusable(true);
                 v.setFocusableInTouchMode(true);
                 v.requestFocus();

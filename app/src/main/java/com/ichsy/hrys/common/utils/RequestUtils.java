@@ -3,7 +3,7 @@ package com.ichsy.hrys.common.utils;
 import com.ichsy.hrys.common.utils.http.RequestListener;
 import com.ichsy.hrys.common.utils.http.retrofit.RequestController;
 import com.ichsy.hrys.common.utils.http.retrofit.RequestService;
-import com.ichsy.hrys.common.utils.http.retrofit.RequestSubscriber;
+import com.ichsy.hrys.common.utils.http.retrofit.RequestObserver;
 import com.ichsy.hrys.config.config.ServiceConfig;
 import com.ichsy.hrys.entity.request.ArtCensusVideoPlayInput;
 import com.ichsy.hrys.entity.request.ArtCommentThumbsUpDownInput;
@@ -26,9 +26,10 @@ import com.ichsy.hrys.entity.request.ModifyUserInfoRequestEntity;
 import com.ichsy.hrys.entity.request.OnlyPageRequestEntity;
 import com.ichsy.hrys.entity.response.BaseResponse;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * 功能： 所有的请求 统一管理
@@ -306,13 +307,13 @@ public class RequestUtils {
      * @param listener  请求回调
      */
     private static void sendRequest(String reuqestUnicode, Observable<? extends BaseResponse> obervable, String url, RequestListener listener){
-        RequestSubscriber requestSubscriber = new RequestSubscriber(reuqestUnicode,url, listener);
-        RequestController.getInstance().addRequest(reuqestUnicode+url,requestSubscriber);
+        RequestObserver requestObserver = new RequestObserver(reuqestUnicode,url, listener);
+        RequestController.getInstance().addRequest(reuqestUnicode+url, requestObserver);
 
         obervable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(requestSubscriber);
+                .subscribe(requestObserver);
     }
     /**
      * 移除当前view相关的所有的请求

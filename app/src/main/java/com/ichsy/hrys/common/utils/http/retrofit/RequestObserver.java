@@ -5,15 +5,16 @@ import com.ichsy.hrys.common.utils.http.HttpContext;
 import com.ichsy.hrys.common.utils.http.RequestListener;
 import com.ichsy.hrys.entity.response.BaseResponse;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import zz.mk.utilslibrary.LogUtil;
 
 /**
  * 功能：请求的回调  此处是为了记录请求过程的信息
- * ＊创建者：赵然 on 16/4/21 15:54
- * ＊
  */
-public class RequestSubscriber extends Subscriber<Object> {
+public class RequestObserver implements Observer<Object> {
     private HttpContext httpContext = new HttpContext();
     private RequestListener callbackInterface;
     private String requestUrl;
@@ -21,35 +22,29 @@ public class RequestSubscriber extends Subscriber<Object> {
     private boolean  isCancle = false;
     private String reuqestUnicode;
 
-    public  RequestSubscriber(String reuqestUnicode, String requestUrl, RequestListener callbackInterface){
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    public RequestObserver(String reuqestUnicode, String requestUrl, RequestListener callbackInterface){
         this.requestUrl = requestUrl;
         this.callbackInterface = callbackInterface;
         this.reuqestUnicode = reuqestUnicode+requestUrl;
-
     }
-    public  RequestSubscriber(String reuqestUnicode, String requestUrl, Object requestTag, RequestListener callbackInterface){
+
+    public RequestObserver(String reuqestUnicode, String requestUrl, Object requestTag, RequestListener callbackInterface){
         this.requestUrl = requestUrl;
         httpContext.setRequestTag(requestTag);
         this.callbackInterface = callbackInterface;
         this.reuqestUnicode = reuqestUnicode+requestUrl;
 
     }
-    @Override
-    public void onStart() {
-        super.onStart();
 
+    @Override
+    public void onSubscribe(@NonNull Disposable d) {
         if (httpContext == null) httpContext = new HttpContext();
         if (callbackInterface != null){
             callbackInterface.onHttpRequestBegin(requestUrl);
         }
-    }
-
-    @Override
-    public void onCompleted() {
-        RequestController.getInstance().removeRequest(reuqestUnicode);
-        if (callbackInterface != null){
-            callbackInterface.onHttpRequestComplete(requestUrl,httpContext);
-        }
+        compositeDisposable.add(d);
     }
 
     @Override
@@ -60,6 +55,16 @@ public class RequestSubscriber extends Subscriber<Object> {
             callbackInterface.onHttpRequestComplete(requestUrl,httpContext);
         }
     }
+
+    @Override
+    public void onComplete() {
+        RequestController.getInstance().removeRequest(reuqestUnicode);
+        if (callbackInterface != null){
+            callbackInterface.onHttpRequestComplete(requestUrl,httpContext);
+        }
+    }
+
+
 
     @Override
     public void onNext(Object t) {
@@ -90,6 +95,12 @@ public class RequestSubscriber extends Subscriber<Object> {
      */
     public void cancleRequest(){
         isCancle = true;
+    }
+
+    public void dispose() {
+        if (compositeDisposable != null && compositeDisposable.size() > 0) {
+            compositeDisposable.dispose();
+        }
     }
 
 }

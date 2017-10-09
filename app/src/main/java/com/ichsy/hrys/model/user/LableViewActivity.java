@@ -23,14 +23,14 @@ import com.ichsy.hrys.entity.response.GetDomainLableListResponseEntity;
 import com.ichsy.hrys.model.base.BaseActivity;
 import com.ichsy.hrys.model.user.adapter.AllLableGridAdapter;
 import com.ichsy.hrys.model.user.adapter.LableGridAdapter;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 import zz.mk.utilslibrary.ToastUtils;
 
 
@@ -83,9 +83,9 @@ public class LableViewActivity extends BaseActivity {
         showDefaultTittle("标签");
         openUMAnlyse("137");
         getRightTittleView().setText("完成");
-        RxView.clicks(getRightTittleView()).throttleFirst(1500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+        RxView.clicks(getRightTittleView()).throttleFirst(1500, TimeUnit.MILLISECONDS).subscribe(new Consumer<Object>() {
             @Override
-            public void call(Void aVoid) {
+            public void accept(Object o) throws Exception {
                 if (selectedLablesDatas.size() == 0) {
                     ToastUtils.showShortToast("请至少选择一个标签");
                 } else {
@@ -94,7 +94,6 @@ public class LableViewActivity extends BaseActivity {
                     finish();
                 }
             }
-
         });
         if (getIntent() != null) {
             userInfo = (ArtUserInfo) getIntent().getSerializableExtra(StringConstant.USERINFO);
