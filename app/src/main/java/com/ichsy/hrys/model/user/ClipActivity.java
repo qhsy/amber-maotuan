@@ -31,10 +31,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import butterknife.BindView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 import zz.mk.utilslibrary.FileUtil;
@@ -144,16 +148,24 @@ public class ClipActivity extends BaseActivity {
      * 大小处理
      *
      */
+    Disposable disposable;
+
     private void dealImage() {
 
-        Subscriber<Bitmap> subscriber = new Subscriber<Bitmap>() {
+        final Observer<Bitmap> subscriber = new Observer<Bitmap>() {
+
             @Override
-            public void onCompleted() {
+            public void onError(Throwable e) {
 
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
 
             }
 
@@ -164,15 +176,15 @@ public class ClipActivity extends BaseActivity {
                 hiddenLoadingDialog();
             }
         };
-        Observable<Bitmap> observable = Observable.create(new Observable.OnSubscribe<Bitmap>() {
+
+        Observable<Bitmap> observable = Observable.create(new ObservableOnSubscribe<Bitmap>() {
             @Override
-            public void call(Subscriber<? super Bitmap> subscriber) {
+            public void subscribe(@NonNull ObservableEmitter<Bitmap> e) throws Exception {
                 bmp = getBitmap(imagPath);
-                subscriber.onNext(bmp);
-                subscriber.onCompleted();
+                e.onNext(bmp);
+                e.onComplete();
             }
         });
-
 
 
         observable.subscribeOn(Schedulers.io())
@@ -186,14 +198,20 @@ public class ClipActivity extends BaseActivity {
      */
     private void dealClipImag() {
 
-        Subscriber<String> subscriber = new Subscriber<String>() {
+        Observer<String> observer = new Observer<String>() {
+
             @Override
-            public void onCompleted() {
+            public void onError(Throwable e) {
 
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
 
             }
 
@@ -230,9 +248,7 @@ public class ClipActivity extends BaseActivity {
                             }
 
                         }
-
                         FileUtil.deleteDirectory(s);
-
                     }
 
                     @Override
@@ -242,9 +258,10 @@ public class ClipActivity extends BaseActivity {
                 });
             }
         };
-        Observable<String> observable = Observable.create(new Observable.OnSubscribe<String>() {
+
+        Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            public void call(final Subscriber<? super String> subscriber) {
+            public void subscribe(@NonNull final ObservableEmitter<String> s) throws Exception {
                 Bitmap bitmap = imageView.clip();
                 if (bitmap != null) {
                     //上传头像
@@ -269,9 +286,8 @@ public class ClipActivity extends BaseActivity {
                                 @Override
                                 public void onSuccess(File file) {
                                     // TODO 压缩成功后调用，返回压缩后的图片文件
-                                    subscriber.onStart();
-                                    subscriber.onNext(file.getPath());
-                                    subscriber.onCompleted();
+                                    s.onNext(file.getPath());
+                                    s.onComplete();
                                 }
 
                                 @Override
@@ -287,7 +303,7 @@ public class ClipActivity extends BaseActivity {
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
+                .subscribe(observer);
     }
 
     private void  dealWithIcon(String imgUrl){
@@ -296,7 +312,6 @@ public class ClipActivity extends BaseActivity {
         OttoController.post(mUserInfo, OttoEventType.OTTO_MODIFY_USERINFO,"");
         hiddenLoadingDialog();
         finish();
-
     }
     private void dealWithUserBg(String imgUrl){
 

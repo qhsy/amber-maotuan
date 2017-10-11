@@ -40,9 +40,9 @@ import com.ichsy.hrys.entity.MarsterFieldEntity;
 import com.ichsy.hrys.entity.request.ModifyUserInfoRequestEntity;
 import com.ichsy.hrys.model.base.BaseActivity;
 import com.ichsy.hrys.model.user.controller.MyUserInfoController;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-import com.tbruyelle.rxpermissions.RxPermissions;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 import zz.mk.utilslibrary.ToastUtils;
 
 /**
@@ -88,11 +88,11 @@ public class ModifyUserInfoActivity extends BaseActivity implements OnReceiveOtt
         openUMAnlyse("136");
 
         getRightTittleView().setText("提交");
-        RxView.clicks(getRightTittleView()).throttleFirst(1500, TimeUnit.MILLISECONDS).subscribe(new Action1<Void>() {
+
+        RxView.clicks(getRightTittleView()).throttleFirst(1000, TimeUnit.MILLISECONDS).subscribe(new Consumer<Object>() {
             @Override
-            public void call(Void aVoid) {
+            public void accept(Object o) throws Exception {
                 sendModifyRequest();
-                UMAnalyticsUtils.onEvent(getContext(), "1360006");
             }
         });
 
@@ -191,9 +191,9 @@ public class ModifyUserInfoActivity extends BaseActivity implements OnReceiveOtt
             case R.id.iv_modifyuserinfoactivity_icon:
             case R.id.rl_activitymodifyuserinfo_head:
                 RxPermissions rxPermissions = new RxPermissions(this);
-                rxPermissions.request(android.Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Action1<Boolean>() {
+                rxPermissions.request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Consumer<Boolean>() {
                     @Override
-                    public void call(Boolean aBoolean) {
+                    public void accept(Boolean aBoolean) throws Exception {
                         if (aBoolean) {
                             UMAnalyticsUtils.onEvent(getContext(), "1360001");
                             showHeadViewDialog();

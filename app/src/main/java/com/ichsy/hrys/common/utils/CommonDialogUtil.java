@@ -1,9 +1,9 @@
 package com.ichsy.hrys.common.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -19,13 +19,12 @@ import com.ichsy.hrys.common.view.dialog.CommonDialog;
 import com.ichsy.hrys.common.view.dialog.SimpleDialogView;
 import com.ichsy.hrys.entity.ArtPic;
 import com.ichsy.hrys.model.person.adapter.PicPagerAdapter;
-import com.tbruyelle.rxpermissions.Permission;
-import com.tbruyelle.rxpermissions.RxPermissions;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
 import java.util.List;
 
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 import zz.mk.utilslibrary.FileUtil;
 import zz.mk.utilslibrary.ScreenUtil;
 import zz.mk.utilslibrary.ToastUtils;
@@ -197,9 +196,17 @@ public class CommonDialogUtil {
         callDialog.getRightButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum));
-                context.startActivity(intent);
-                callDialog.dismiss();
+                rxPermissions.request(Manifest.permission.CALL_PHONE).subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum));
+                            context.startActivity(intent);
+                            callDialog.dismiss();
+                        }
+                    }
+                });
+
             }
         });
     }

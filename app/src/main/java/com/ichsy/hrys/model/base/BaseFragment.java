@@ -24,15 +24,15 @@ import com.ichsy.hrys.common.utils.http.RequestListener;
 import com.ichsy.hrys.common.view.CommonExceptionView;
 import com.ichsy.hrys.common.view.CustomTittleView;
 import com.ichsy.hrys.entity.response.BaseResponse;
-import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import zz.mk.utilslibrary.LogUtil;
 import zz.mk.utilslibrary.ToastUtils;
 import zz.mk.utilslibrary.net.NetUtil;
@@ -74,7 +74,8 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
      * 加载框
      */
     ProgressDialog progressDialog;
-    private Subscription loadingDialogSubscribe;
+
+    private Disposable disposable;
 
     /**
      * 异常view
@@ -201,47 +202,6 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
         return exceptionView;
     }
 
-    protected void setClickListeners(int... ids) {
-
-        for (final int id : ids) {
-
-            RxView.clicks(findViewById(id))
-                    .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                    .subscribe(new Action1<Void>() {
-                        @Override
-                        public void call(Void aVoid) {
-
-                            onViewClick(id);
-                        }
-                    });
-        }
-    }
-    protected void setClickListeners(View... views) {
-
-        for ( final View view : views) {
-
-            RxView.clicks(view)
-                    .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                    .subscribe(new Action1<Void>() {
-                        @Override
-                        public void call(Void aVoid) {
-
-                            onViewClick(view.getId());
-                        }
-                    });
-        }
-    }
-
-    /**
-     * 功能描述：无网点击回调
-     *
-     * @author 赵然
-     *            :
-     */
-    public void noNetCallBack() {
-        request();
-    }
-
     protected View findViewById(int id) {
         return mContentView.findViewById(id);
     }
@@ -349,6 +309,7 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
     public void setLeftDrawable(int drawableID) {
         customTittleView.setVisibility(View.VISIBLE);
         customTittleView.setTextViewDrawableResource(0,drawableID,0); // 设置左图标
+
     }
 
 
@@ -434,17 +395,17 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
             hiddenLoadingDialog();
         }
 
-        loadingDialogSubscribe = Observable.timer(1, TimeUnit.SECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        if(progressDialog != null){
-                            progressDialog.show();
+            disposable = Observable.timer(1000, TimeUnit.MILLISECONDS)
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(@NonNull Long aLong) throws Exception {
+                            if(progressDialog != null){
+                                progressDialog.show();
+                            }
                         }
-                    }
-                });
+                    });
         }
     }
 
@@ -452,8 +413,8 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
      * 隐藏加载框
      */
     public void hiddenLoadingDialog() {
-        if (loadingDialogSubscribe != null && !loadingDialogSubscribe.isUnsubscribed()){
-            loadingDialogSubscribe.unsubscribe();
+        if (disposable != null && !disposable.isDisposed()){
+            disposable.dispose();
         }
         if (progressDialog != null ) {
             progressDialog.dismiss();
