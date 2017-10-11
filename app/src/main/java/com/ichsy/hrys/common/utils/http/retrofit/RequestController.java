@@ -82,6 +82,4 @@ public class RequestController {
             requestObserver.dispose();
         }
     }
-
-
 }

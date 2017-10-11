@@ -18,30 +18,29 @@ public class RequestObserver implements Observer<Object> {
     private HttpContext httpContext = new HttpContext();
     private RequestListener callbackInterface;
     private String requestUrl;
-    private boolean  isDealed = false;
-    private boolean  isCancle = false;
+    private boolean isDealed = false;
+    private boolean isCancle = false;
     private String reuqestUnicode;
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public RequestObserver(String reuqestUnicode, String requestUrl, RequestListener callbackInterface){
+    public RequestObserver(String reuqestUnicode, String requestUrl, RequestListener callbackInterface) {
         this.requestUrl = requestUrl;
         this.callbackInterface = callbackInterface;
-        this.reuqestUnicode = reuqestUnicode+requestUrl;
+        this.reuqestUnicode = reuqestUnicode + requestUrl;
     }
 
-    public RequestObserver(String reuqestUnicode, String requestUrl, Object requestTag, RequestListener callbackInterface){
+    public RequestObserver(String reuqestUnicode, String requestUrl, Object requestTag, RequestListener callbackInterface) {
         this.requestUrl = requestUrl;
         httpContext.setRequestTag(requestTag);
         this.callbackInterface = callbackInterface;
-        this.reuqestUnicode = reuqestUnicode+requestUrl;
-
+        this.reuqestUnicode = reuqestUnicode + requestUrl;
     }
 
     @Override
     public void onSubscribe(@NonNull Disposable d) {
         if (httpContext == null) httpContext = new HttpContext();
-        if (callbackInterface != null){
+        if (callbackInterface != null) {
             callbackInterface.onHttpRequestBegin(requestUrl);
         }
         compositeDisposable.add(d);
@@ -49,51 +48,51 @@ public class RequestObserver implements Observer<Object> {
 
     @Override
     public void onError(Throwable e) {
-        LogUtil.zLog().e("onError ****************"+ e.getMessage());
-        if (callbackInterface != null){
-            callbackInterface.onHttpRequestFailed(requestUrl,httpContext,e);
-            callbackInterface.onHttpRequestComplete(requestUrl,httpContext);
+        LogUtil.zLog().e("onError ****************" + e.getMessage());
+        if (callbackInterface != null) {
+            callbackInterface.onHttpRequestFailed(requestUrl, httpContext, e);
+            callbackInterface.onHttpRequestComplete(requestUrl, httpContext);
         }
     }
 
     @Override
     public void onComplete() {
         RequestController.getInstance().removeRequest(reuqestUnicode);
-        if (callbackInterface != null){
-            callbackInterface.onHttpRequestComplete(requestUrl,httpContext);
+        if (callbackInterface != null) {
+            callbackInterface.onHttpRequestComplete(requestUrl, httpContext);
         }
     }
-
 
 
     @Override
     public void onNext(Object t) {
         httpContext.setResponseObject(t);
         LogUtil.zLog().e("onNext ********************************");
-        if (callbackInterface != null){
-            if (checkResutCode(t)){
+        if (callbackInterface != null) {
+            if (checkResutCode(t)) {
                 isDealed = false;
-                callbackInterface.onHttpRequestSuccess(requestUrl,httpContext);
-            }else{
+                callbackInterface.onHttpRequestSuccess(requestUrl, httpContext);
+            } else {
                 isDealed = true;
-                callbackInterface.onHttpResponseCodeException(requestUrl,httpContext,(((BaseResponse)t).status));
+                callbackInterface.onHttpResponseCodeException(requestUrl, httpContext, (((BaseResponse) t).status));
             }
         }
     }
 
     /**
      * 需要统一处理的异常信息  后期考虑 非1 全部这里返回处理
+     *
      * @param responseEntityObj
      */
-    private boolean checkResutCode(Object responseEntityObj){
-        BaseResponse  responseEntity = (BaseResponse) responseEntityObj;
+    private boolean checkResutCode(Object responseEntityObj) {
+        BaseResponse responseEntity = (BaseResponse) responseEntityObj;
         return 801 != responseEntity.status;
     }
 
     /**
      * 取消请求
      */
-    public void cancleRequest(){
+    public void cancleRequest() {
         isCancle = true;
     }
 
